@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:labo_flutter/project_detail_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -102,18 +103,29 @@ class TabPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: color,
-      body: Container(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(title,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold))
-            ],
-          ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(title,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold)
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                      builder: (context) =>
+                          ProjectDetailPage(title: title, color: color)
+                  ),
+                );
+              },
+              child: const Text('次へ'),
+            )
+          ],
         ),
       ),
     );
