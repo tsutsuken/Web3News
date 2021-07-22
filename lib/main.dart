@@ -97,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class TabPage extends StatelessWidget {
+class TabPage extends StatefulWidget {
   const TabPage({Key? key, required this.title, required this.color}) :
         super(key: key);
 
@@ -105,14 +105,20 @@ class TabPage extends StatelessWidget {
   final Color color;
 
   @override
+  _TabPageState createState() => _TabPageState();
+}
+
+class _TabPageState extends State<TabPage> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: color,
+      backgroundColor: widget.color,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(title,
+            Text(
+                widget.title,
                 style: const TextStyle(
                     color: Colors.white,
                     fontSize: 36,
@@ -124,7 +130,9 @@ class TabPage extends StatelessWidget {
                   context,
                   MaterialPageRoute<void>(
                       builder: (context) =>
-                          ProjectDetailPage(title: title, color: color)
+                          ProjectDetailPage(
+                              title: widget.title,
+                              color: widget.color)
                   ),
                 );
               },
