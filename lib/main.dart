@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:labo_flutter/views/tab_view.dart';
+import 'package:labo_flutter/views/home_view.dart';
+import 'package:labo_flutter/views/my_page_view.dart';
+import 'package:labo_flutter/views/playground_view.dart';
 
 void main() {
   runApp(
@@ -36,10 +38,25 @@ class RootView extends StatefulWidget {
 
 class _RootViewState extends State<RootView> {
   int currentIndex = 0;
-  final List<Widget> tabViews = [
-    const TabView(title: '左の画面', color: Colors.red),
-    const TabView(title: '真ん中の画面', color: Colors.green),
-    const TabView(title: '右の画面', color: Colors.cyan),
+  final List<Widget> childViews = [
+    const HomeView(),
+    const PlaygroundView(title: 'PlaygroundView', color: Colors.redAccent),
+    const MyPageView(),
+  ];
+
+  final List<BottomNavigationBarItem> navigationBarItems = const [
+    BottomNavigationBarItem(
+      icon: Icon(Icons.home),
+      label: 'ホーム',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.mail),
+      label: 'Playground',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.person),
+      label: 'マイページ',
+    ),
   ];
 
   void onTabTapped(int index) {
@@ -55,21 +72,11 @@ class _RootViewState extends State<RootView> {
         title: const Text('LaboFlutter'),
         backgroundColor: Colors.blue,
       ),
-      body: tabViews[currentIndex],
+      body: childViews[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         onTap: onTabTapped,
         currentIndex: currentIndex,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.mail),
-            label: 'Messages',
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile')
-        ],
+        items: navigationBarItems,
       ),
     );
   }

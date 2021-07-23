@@ -9,8 +9,9 @@ class Counter extends StateNotifier<int> {
   void increment() => state++;
 }
 
-class ProjectDetailView extends HookWidget {
-  const ProjectDetailView({Key? key, required this.title, required this.color})
+class PlaygroundDetailView extends HookWidget {
+  const PlaygroundDetailView(
+      {Key? key, required this.title, required this.color})
       : super(key: key);
 
   final String title;

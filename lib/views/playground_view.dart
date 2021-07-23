@@ -3,15 +3,15 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/models/album/album.dart';
 import 'package:labo_flutter/models/album/album_repository.dart';
-import 'package:labo_flutter/views/project_detail_view.dart';
+import 'package:labo_flutter/views/playground_detail_view.dart';
 
 final albumProvider = FutureProvider<Album>((ref) async {
   final albumRepository = ref.read(albumRepositoryProvider);
   return albumRepository.fetch();
 });
 
-class TabView extends HookWidget {
-  const TabView({Key? key, required this.title, required this.color})
+class PlaygroundView extends HookWidget {
+  const PlaygroundView({Key? key, required this.title, required this.color})
       : super(key: key);
 
   final String title;
@@ -38,7 +38,7 @@ class TabView extends HookWidget {
                   context,
                   MaterialPageRoute<void>(
                       builder: (context) =>
-                          ProjectDetailView(title: title, color: color)),
+                          PlaygroundDetailView(title: title, color: color)),
                 );
               },
               child: const Text('次へ'),
