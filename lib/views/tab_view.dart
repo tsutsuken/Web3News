@@ -3,16 +3,16 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/models/album/album.dart';
 import 'package:labo_flutter/models/album/album_repository.dart';
-import 'package:labo_flutter/pages/project_detail_page.dart';
+import 'package:labo_flutter/views/project_detail_view.dart';
 
 final albumProvider = FutureProvider<Album>((ref) async {
   final albumRepository = ref.read(albumRepositoryProvider);
   return albumRepository.fetch();
 });
 
-class TabPage extends HookWidget {
-  const TabPage({Key? key, required this.title, required this.color}) :
-        super(key: key);
+class TabView extends HookWidget {
+  const TabView({Key? key, required this.title, required this.color})
+      : super(key: key);
 
   final String title;
   final Color color;
@@ -27,23 +27,18 @@ class TabPage extends HookWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-                title,
+            Text(title,
                 style: const TextStyle(
                     color: Colors.white,
                     fontSize: 36,
-                    fontWeight: FontWeight.bold)
-            ),
+                    fontWeight: FontWeight.bold)),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute<void>(
                       builder: (context) =>
-                          ProjectDetailPage(
-                              title: title,
-                              color: color)
-                  ),
+                          ProjectDetailView(title: title, color: color)),
                 );
               },
               child: const Text('次へ'),
