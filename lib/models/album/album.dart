@@ -1,19 +1,17 @@
-class Album {
-  Album({
-    required this.userId,
-    required this.id,
-    required this.title,
-  });
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  factory Album.fromJson(Map<String, dynamic> json) {
-    return Album(
-      userId: json['userId'] as int,
-      id: json['id'] as int,
-      title: json['title'] as String,
-    );
-  }
+part 'album.freezed.dart';
+part 'album.g.dart';
 
-  final int userId;
-  final int id;
-  final String title;
+@freezed
+class Album with _$Album {
+  const factory Album({
+    required int userId,
+    required int id,
+    required String title,
+  }) = _Album;
+
+  factory Album.fromJson(Map<String, dynamic> json) => _$AlbumFromJson(json);
 }
+
