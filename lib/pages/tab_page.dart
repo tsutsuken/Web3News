@@ -1,20 +1,13 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:labo_flutter/models/album.dart';
+import 'package:labo_flutter/models/album/album.dart';
+import 'package:labo_flutter/models/album/album_repository.dart';
 import 'package:labo_flutter/pages/project_detail_page.dart';
-import 'package:http/http.dart' as http;
 
 final albumProvider = FutureProvider<Album>((ref) async {
-  final response =
-  await http.get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
-
-  if (response.statusCode == 200) {
-    return Album.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
-  } else {
-    throw Exception('Failed to load album');
-  }
+  final albumRepository = ref.read(albumRepositoryProvider);
+  return albumRepository.fetch();
 });
 
 class TabPage extends HookWidget {
