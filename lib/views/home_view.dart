@@ -1,14 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:labo_flutter/models/album/album.dart';
+import 'package:labo_flutter/models/album/album_repository.dart';
 
-class HomeView extends StatelessWidget {
+final albumListProvider = FutureProvider<List<Album>>((ref) async {
+  final albumRepository = ref.read(albumRepositoryProvider);
+  return albumRepository.fetchList();
+});
+
+class HomeView extends HookWidget {
   const HomeView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemBuilder: (BuildContext context, int index) {
-        return _listItem('いよいよ寿命？ 40年以上の使用に耐えたエアコン「霧ヶ峰」が懐かしすぎると話題に',
-            const Icon(Icons.settings));
+    final albumListAsyncValue = useProvider(albumListProvider);
+
+    return albumListAsyncValue.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stackTrace) => Center(child: Text(error.toString())),
+      data: (albumList) {
+        return RefreshIndicator(
+          onRefresh: () async {
+            print('onRefresh');
+          },
+          child: ListView.builder(
+            itemCount: albumList.length,
+            itemBuilder: (BuildContext context, int index) {
+              final itemTitle =
+                  albumList[index].title + albumList[index].id.toString();
+              return _listItem(itemTitle, const Icon(Icons.settings));
+            },
+          ),
+        );
       },
     );
   }
