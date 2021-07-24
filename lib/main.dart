@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/views/home_view.dart';
 import 'package:labo_flutter/views/my_page_view.dart';
 import 'package:labo_flutter/views/playground_view.dart';
 
-void main() {
+Future main() async {
+  await dotenv.load(fileName: '.env');
+
   runApp(
     const ProviderScope(
       child: MyApp(),
