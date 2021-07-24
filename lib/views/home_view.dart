@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:labo_flutter/models/album/album.dart';
-import 'package:labo_flutter/models/album/album_repository.dart';
+import 'package:labo_flutter/models/article/article.dart';
+import 'package:labo_flutter/models/article/article_repository.dart';
 
-final albumListProvider = FutureProvider<List<Album>>((ref) async {
-  final albumRepository = ref.read(albumRepositoryProvider);
-  return albumRepository.fetchList();
+final articleListProvider = FutureProvider<List<Article>>((ref) async {
+  final articleRepository = ref.read(articleRepositoryProvider);
+  return articleRepository.fetch();
 });
 
 class HomeView extends HookWidget {
@@ -14,21 +14,20 @@ class HomeView extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final albumListAsyncValue = useProvider(albumListProvider);
+    final articleListAsyncValue = useProvider(articleListProvider);
 
-    return albumListAsyncValue.when(
+    return articleListAsyncValue.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stackTrace) => Center(child: Text(error.toString())),
-      data: (albumList) {
+      data: (articleList) {
         return RefreshIndicator(
           onRefresh: () async {
             print('onRefresh');
           },
           child: ListView.builder(
-            itemCount: albumList.length,
+            itemCount: articleList.length,
             itemBuilder: (BuildContext context, int index) {
-              final itemTitle =
-                  albumList[index].title + albumList[index].id.toString();
+              final itemTitle = articleList[index].title;
               return _listItem(itemTitle, const Icon(Icons.settings));
             },
           ),
