@@ -27,8 +27,8 @@ class HomeView extends HookWidget {
           child: ListView.builder(
             itemCount: articleList.length,
             itemBuilder: (BuildContext context, int index) {
-              final itemTitle = articleList[index].title;
-              return _listItem(itemTitle, const Icon(Icons.settings));
+              final article = articleList[index];
+              return _articleListItem(article);
             },
           ),
         );
@@ -36,7 +36,7 @@ class HomeView extends HookWidget {
     );
   }
 
-  Widget _listItem(String title, Icon icon) {
+  Widget _articleListItem(Article article) {
     return GestureDetector(
       onTap: () {
         print('onTap');
@@ -49,12 +49,16 @@ class HomeView extends HookWidget {
           child: Row(
             children: <Widget>[
               Container(
-                margin: const EdgeInsets.all(0),
-                child: Image.network('http://placehold.jp/200x200.png'),
+                margin: const EdgeInsets.only(right: 8),
+                child: Image.network(
+                  article.urlToImage,
+                  fit: BoxFit.cover,
+                  width: 160,
+                ),
               ),
               Flexible(
                 child: Text(
-                  title,
+                  article.title,
                   style: const TextStyle(color: Colors.black, fontSize: 18),
                 ),
               ),
