@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/models/article/article.dart';
 import 'package:labo_flutter/models/article/article_repository.dart';
+import 'package:labo_flutter/views/article_detail_view.dart';
 
 final articleListProvider = FutureProvider<List<Article>>((ref) async {
   final articleRepository = ref.read(articleRepositoryProvider);
@@ -28,7 +29,7 @@ class HomeView extends HookWidget {
             itemCount: articleList.length,
             itemBuilder: (BuildContext context, int index) {
               final article = articleList[index];
-              return _articleListItem(article);
+              return _articleListItem(context, article);
             },
           ),
         );
@@ -36,10 +37,15 @@ class HomeView extends HookWidget {
     );
   }
 
-  Widget _articleListItem(Article article) {
+  Widget _articleListItem(BuildContext context, Article article) {
     return GestureDetector(
       onTap: () {
         print('onTap');
+        Navigator.push(
+          context,
+          MaterialPageRoute<void>(
+              builder: (context) => ArticleDetailView(articleUrl: article.url)),
+        );
       },
       child: Container(
           height: 120,
