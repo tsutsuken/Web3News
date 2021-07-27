@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "377806227720",
+    "project_id": "labo-flutter",
+    "storage_bucket": "labo-flutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:377806227720:android:68f8386e035aac021104bd",
+        "android_client_info": {
+          "package_name": "com.tsutsuken.labo_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "377806227720-2t4shff3k2p6p9fqp5h86fuaf9gfagj0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1yb6kUtKcBXNqZRCB3Mi4dyoLTEx7z8I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "377806227720-2t4shff3k2p6p9fqp5h86fuaf9gfagj0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "377806227720-8acvnc6kqmh1ceub4eo4bbvs5hogpsia.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tsutsuken.laboflutter.laboFlutter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

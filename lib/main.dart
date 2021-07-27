@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -7,6 +9,12 @@ import 'package:labo_flutter/views/playground_view.dart';
 
 Future main() async {
   await dotenv.load(fileName: '.env');
+
+  // Firebase
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  final userCredential = await FirebaseAuth.instance.signInAnonymously();
+  print('userCredential: $userCredential');
 
   runApp(
     const ProviderScope(
