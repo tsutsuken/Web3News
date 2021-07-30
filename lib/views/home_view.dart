@@ -23,7 +23,7 @@ class HomeView extends HookWidget {
       data: (articleList) {
         return RefreshIndicator(
           onRefresh: () async {
-            print('onRefresh');
+            await context.refresh(articleListProvider);
           },
           child: ListView.builder(
             itemCount: articleList.length,
