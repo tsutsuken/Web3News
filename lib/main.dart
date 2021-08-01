@@ -2,10 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:labo_flutter/graphql_api_client.dart';
 import 'package:labo_flutter/views/home_view.dart';
 import 'package:labo_flutter/views/my_page_view.dart';
 import 'package:labo_flutter/views/playground_view.dart';
+
+const graphqlEndpoint = 'https://api.spacex.land/graphql/';
 
 Future main() async {
   await dotenv.load(fileName: '.env');
@@ -15,6 +19,9 @@ Future main() async {
   await Firebase.initializeApp();
   final userCredential = await FirebaseAuth.instance.signInAnonymously();
   print('userCredential: $userCredential');
+
+  // GraphQL
+  await initHiveForFlutter();
 
   runApp(
     const ProviderScope(
@@ -29,12 +36,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'MaterialApp',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return GraphQLApiClient(
+      uri: graphqlEndpoint,
+      child: MaterialApp(
+        title: 'MaterialApp',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const RootView(title: 'RootView'),
       ),
-      home: const RootView(title: 'RootView'),
     );
   }
 }
