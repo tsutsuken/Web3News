@@ -7,7 +7,10 @@ ValueNotifier<GraphQLClient> clientFor({
 }) {
   final hasuraAdminSecret = dotenv.env['SECRET_HASURA_ADMIN_SECRET']!;
   final httpLink = HttpLink('https://labo-flutter.hasura.app/v1/graphql',
-      defaultHeaders: {'x-hasura-admin-secret': hasuraAdminSecret});
+      defaultHeaders: {
+        'x-hasura-admin-secret': hasuraAdminSecret,
+        'X-Hasura-Role': 'user'
+      });
 
   return ValueNotifier<GraphQLClient>(
     GraphQLClient(
