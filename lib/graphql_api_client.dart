@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-
-final AuthLink authLink = AuthLink(
-  getToken: () async => 'Bearer <YOUR_PERSONAL_ACCESS_TOKEN>',
-);
 
 ValueNotifier<GraphQLClient> clientFor({
   required String uri,
 }) {
-  final httpLink = HttpLink(uri);
-  final link = authLink.concat(httpLink);
+  final hasuraAdminSecret = dotenv.env['SECRET_HASURA_ADMIN_SECRET']!;
+  final httpLink = HttpLink('https://labo-flutter.hasura.app/v1/graphql',
+      defaultHeaders: {'x-hasura-admin-secret': hasuraAdminSecret});
 
   return ValueNotifier<GraphQLClient>(
     GraphQLClient(
       cache: GraphQLCache(store: HiveStore()),
-      link: link,
+      link: httpLink,
     ),
   );
 }

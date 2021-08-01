@@ -9,7 +9,7 @@ import 'package:labo_flutter/views/home_view.dart';
 import 'package:labo_flutter/views/my_page_view.dart';
 import 'package:labo_flutter/views/playground_view.dart';
 
-const graphqlEndpoint = 'https://api.spacex.land/graphql/';
+const graphqlEndpoint = 'https://labo-flutter.hasura.app/v1/graphql';
 
 Future main() async {
   await dotenv.load(fileName: '.env');

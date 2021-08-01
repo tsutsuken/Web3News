@@ -6,18 +6,11 @@ import 'package:labo_flutter/models/album/album.dart';
 import 'package:labo_flutter/models/album/album_repository.dart';
 import 'package:labo_flutter/views/playground_detail_view.dart';
 
-const String query = '''
+const String postsQuery = '''
 {
-  launchesPast(limit: 10) {
-    mission_name
-    launch_date_local
-    launch_site {
-      site_name_long
-    }
-    links {
-      article_link
-      video_link
-    }
+  posts {
+    id
+    text
   }
 }
 ''';
@@ -72,7 +65,7 @@ class PlaygroundView extends HookWidget {
             ),
             Query(
               options: QueryOptions(
-                document: gql(query),
+                document: gql(postsQuery),
                 pollInterval: const Duration(seconds: 10),
               ),
               builder: (QueryResult result,
@@ -85,17 +78,17 @@ class PlaygroundView extends HookWidget {
                   return const Text('Loading');
                 }
 
-                final launches = result.data?['launchesPast'] as List<dynamic>;
+                final posts = result.data?['posts'] as List<dynamic>;
                 return Flexible(
                   child: ListView.builder(
                       shrinkWrap: true,
-                      itemCount: launches.length,
+                      itemCount: posts.length,
                       itemBuilder: (BuildContext context, int index) {
-                        final dynamic launch = launches[index];
+                        final dynamic post = posts[index];
                         return ListTile(
-                          title: Text('${launch["mission_name"]}'),
+                          title: Text('${post["text"]}'),
                           trailing: const Icon(Icons.more_vert),
-                          subtitle: Text('${launch["launch_date_local"]}'),
+                          subtitle: Text('${post["id"]}'),
                           onTap: () {},
                         );
                       }),
