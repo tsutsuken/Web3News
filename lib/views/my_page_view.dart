@@ -12,6 +12,14 @@ const String postsQuery = '''
 }
 ''';
 
+const String insertPost = '''
+  mutation MyMutation(\$text: String!) {
+    insert_posts_one(object: {text: \$text}) {
+      id
+    }
+  }
+''';
+
 class MyPageView extends HookWidget {
   const MyPageView({Key? key}) : super(key: key);
 
@@ -46,6 +54,29 @@ class MyPageView extends HookWidget {
               ElevatedButton(
                   onPressed: createUserWithEmailAndPassword,
                   child: const Text('サインアップ')),
+              Mutation(
+                options: MutationOptions(
+                  document: gql(insertPost),
+                  onCompleted: (dynamic resultData) {
+                    print('resultData: $resultData');
+                  },
+                  onError: (e) {
+                    print('error: $e');
+                  },
+                ),
+                builder: (
+                  RunMutation runMutation,
+                  QueryResult? result,
+                ) {
+                  return FloatingActionButton(
+                    onPressed: () => runMutation(<String, dynamic>{
+                      'text': '本文',
+                    }),
+                    tooltip: 'Star',
+                    child: const Icon(Icons.add),
+                  );
+                },
+              ),
               Query(
                 options: QueryOptions(
                   document: gql(postsQuery),
