@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -17,8 +16,6 @@ Future main() async {
   // Firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  final userCredential = await FirebaseAuth.instance.signInAnonymously();
-  print('userCredential: $userCredential');
 
   // GraphQL
   await initHiveForFlutter();
