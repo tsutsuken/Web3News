@@ -12,9 +12,9 @@ const String postsQuery = '''
 }
 ''';
 
-const String insertPost = '''
-  mutation MyMutation(\$text: String!) {
-    insert_posts_one(object: {text: \$text}) {
+const String insertPostMutation = '''
+  mutation MyMutation(\$text: String!, \$user_id: String!) {
+    insert_posts_one(object: {text: \$text, user_id: \$user_id}) {
       id
     }
   }
@@ -26,6 +26,11 @@ class MyPageView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final currentUser = FirebaseAuth.instance.currentUser;
+
+    Future<void> getToken() async {
+      final token = await currentUser?.getIdToken(true);
+      print('token: $token');
+    }
 
     Future<UserCredential> createUserWithEmailAndPassword() async {
       try {
@@ -52,11 +57,21 @@ class MyPageView extends HookWidget {
               Text('currentUser: $currentUser'),
               const Text('MyPageView'),
               ElevatedButton(
+                onPressed: getToken,
+                child: const Text('トークンを取得'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  FirebaseAuth.instance.signOut();
+                },
+                child: const Text('サインアウト'),
+              ),
+              ElevatedButton(
                   onPressed: createUserWithEmailAndPassword,
                   child: const Text('サインアップ')),
               Mutation(
                 options: MutationOptions(
-                  document: gql(insertPost),
+                  document: gql(insertPostMutation),
                   onCompleted: (dynamic resultData) {
                     print('resultData: $resultData');
                   },
@@ -68,12 +83,12 @@ class MyPageView extends HookWidget {
                   RunMutation runMutation,
                   QueryResult? result,
                 ) {
-                  return FloatingActionButton(
+                  return ElevatedButton(
                     onPressed: () => runMutation(<String, dynamic>{
                       'text': '本文',
+                      'user_id': currentUser?.uid ?? '',
                     }),
-                    tooltip: 'Star',
-                    child: const Icon(Icons.add),
+                    child: const Text('Postを追加'),
                   );
                 },
               ),
