@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:labo_flutter/views/create_post_view.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ArticleDetailView extends StatefulWidget {
@@ -26,13 +27,36 @@ class _ArticleDetailViewState extends State<ArticleDetailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('ArticleDetailView'),
+      appBar: AppBar(
+        title: const Text('ArticleDetailView'),
+      ),
+      body: WebView(
+        initialUrl: widget.articleUrl,
+        javascriptMode: JavascriptMode.unrestricted,
+        gestureNavigationEnabled: true,
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.blue,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            IconButton(
+                color: Colors.white,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (context) => CreatePostView(
+                        articleUrl: widget.articleUrl,
+                      ),
+                      fullscreenDialog: true,
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.chat))
+          ],
         ),
-        body: WebView(
-          initialUrl: widget.articleUrl,
-          javascriptMode: JavascriptMode.unrestricted,
-          gestureNavigationEnabled: true,
-        ));
+      ),
+    );
   }
 }
