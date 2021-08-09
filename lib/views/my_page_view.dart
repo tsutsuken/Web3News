@@ -13,8 +13,8 @@ const String postsQuery = '''
 ''';
 
 const String insertPostMutation = '''
-  mutation MyMutation(\$text: String!, \$user_id: String!) {
-    insert_posts_one(object: {text: \$text, user_id: \$user_id}) {
+  mutation MyMutation(\$text: String!) {
+    insert_posts_one(object: {text: \$text}) {
       id
     }
   }
@@ -36,7 +36,7 @@ class MyPageView extends HookWidget {
       try {
         final userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
-                email: 'barry.allen@example.com',
+                email: 'ken08090930@example.com',
                 password: 'SuperSecretPassword!');
         return userCredential;
       } on FirebaseAuthException catch (e) {
@@ -86,7 +86,6 @@ class MyPageView extends HookWidget {
                   return ElevatedButton(
                     onPressed: () => runMutation(<String, dynamic>{
                       'text': '本文',
-                      'user_id': currentUser?.uid ?? '',
                     }),
                     child: const Text('Postを追加'),
                   );
