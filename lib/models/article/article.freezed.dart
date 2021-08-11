@@ -20,13 +20,8 @@ ArticleListResponse _$ArticleListResponseFromJson(Map<String, dynamic> json) {
 class _$ArticleListResponseTearOff {
   const _$ArticleListResponseTearOff();
 
-  _ArticleListResponse call(
-      {String status = '',
-      int totalResults = 0,
-      List<Article> articles = const <Article>[]}) {
+  _ArticleListResponse call({List<Article> articles = const <Article>[]}) {
     return _ArticleListResponse(
-      status: status,
-      totalResults: totalResults,
       articles: articles,
     );
   }
@@ -41,8 +36,6 @@ const $ArticleListResponse = _$ArticleListResponseTearOff();
 
 /// @nodoc
 mixin _$ArticleListResponse {
-  String get status => throw _privateConstructorUsedError;
-  int get totalResults => throw _privateConstructorUsedError;
   List<Article> get articles => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -56,7 +49,7 @@ abstract class $ArticleListResponseCopyWith<$Res> {
   factory $ArticleListResponseCopyWith(
           ArticleListResponse value, $Res Function(ArticleListResponse) then) =
       _$ArticleListResponseCopyWithImpl<$Res>;
-  $Res call({String status, int totalResults, List<Article> articles});
+  $Res call({List<Article> articles});
 }
 
 /// @nodoc
@@ -70,19 +63,9 @@ class _$ArticleListResponseCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? status = freezed,
-    Object? totalResults = freezed,
     Object? articles = freezed,
   }) {
     return _then(_value.copyWith(
-      status: status == freezed
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as String,
-      totalResults: totalResults == freezed
-          ? _value.totalResults
-          : totalResults // ignore: cast_nullable_to_non_nullable
-              as int,
       articles: articles == freezed
           ? _value.articles
           : articles // ignore: cast_nullable_to_non_nullable
@@ -98,7 +81,7 @@ abstract class _$ArticleListResponseCopyWith<$Res>
           $Res Function(_ArticleListResponse) then) =
       __$ArticleListResponseCopyWithImpl<$Res>;
   @override
-  $Res call({String status, int totalResults, List<Article> articles});
+  $Res call({List<Article> articles});
 }
 
 /// @nodoc
@@ -114,19 +97,9 @@ class __$ArticleListResponseCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? status = freezed,
-    Object? totalResults = freezed,
     Object? articles = freezed,
   }) {
     return _then(_ArticleListResponse(
-      status: status == freezed
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as String,
-      totalResults: totalResults == freezed
-          ? _value.totalResults
-          : totalResults // ignore: cast_nullable_to_non_nullable
-              as int,
       articles: articles == freezed
           ? _value.articles
           : articles // ignore: cast_nullable_to_non_nullable
@@ -138,38 +111,24 @@ class __$ArticleListResponseCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_ArticleListResponse implements _ArticleListResponse {
-  const _$_ArticleListResponse(
-      {this.status = '',
-      this.totalResults = 0,
-      this.articles = const <Article>[]});
+  const _$_ArticleListResponse({this.articles = const <Article>[]});
 
   factory _$_ArticleListResponse.fromJson(Map<String, dynamic> json) =>
       _$_$_ArticleListResponseFromJson(json);
 
-  @JsonKey(defaultValue: '')
-  @override
-  final String status;
-  @JsonKey(defaultValue: 0)
-  @override
-  final int totalResults;
   @JsonKey(defaultValue: const <Article>[])
   @override
   final List<Article> articles;
 
   @override
   String toString() {
-    return 'ArticleListResponse(status: $status, totalResults: $totalResults, articles: $articles)';
+    return 'ArticleListResponse(articles: $articles)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _ArticleListResponse &&
-            (identical(other.status, status) ||
-                const DeepCollectionEquality().equals(other.status, status)) &&
-            (identical(other.totalResults, totalResults) ||
-                const DeepCollectionEquality()
-                    .equals(other.totalResults, totalResults)) &&
             (identical(other.articles, articles) ||
                 const DeepCollectionEquality()
                     .equals(other.articles, articles)));
@@ -177,10 +136,7 @@ class _$_ArticleListResponse implements _ArticleListResponse {
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(status) ^
-      const DeepCollectionEquality().hash(totalResults) ^
-      const DeepCollectionEquality().hash(articles);
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(articles);
 
   @JsonKey(ignore: true)
   @override
@@ -195,18 +151,12 @@ class _$_ArticleListResponse implements _ArticleListResponse {
 }
 
 abstract class _ArticleListResponse implements ArticleListResponse {
-  const factory _ArticleListResponse(
-      {String status,
-      int totalResults,
-      List<Article> articles}) = _$_ArticleListResponse;
+  const factory _ArticleListResponse({List<Article> articles}) =
+      _$_ArticleListResponse;
 
   factory _ArticleListResponse.fromJson(Map<String, dynamic> json) =
       _$_ArticleListResponse.fromJson;
 
-  @override
-  String get status => throw _privateConstructorUsedError;
-  @override
-  int get totalResults => throw _privateConstructorUsedError;
   @override
   List<Article> get articles => throw _privateConstructorUsedError;
   @override
@@ -224,13 +174,13 @@ class _$ArticleTearOff {
   const _$ArticleTearOff();
 
   _Article call(
-      {String author = '',
+      {String id = '',
       String title = '',
       String url = '',
       String urlToImage = '',
       String publishedAt = ''}) {
     return _Article(
-      author: author,
+      id: id,
       title: title,
       url: url,
       urlToImage: urlToImage,
@@ -248,7 +198,7 @@ const $Article = _$ArticleTearOff();
 
 /// @nodoc
 mixin _$Article {
-  String get author => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get url => throw _privateConstructorUsedError;
   String get urlToImage => throw _privateConstructorUsedError;
@@ -264,7 +214,7 @@ abstract class $ArticleCopyWith<$Res> {
   factory $ArticleCopyWith(Article value, $Res Function(Article) then) =
       _$ArticleCopyWithImpl<$Res>;
   $Res call(
-      {String author,
+      {String id,
       String title,
       String url,
       String urlToImage,
@@ -281,16 +231,16 @@ class _$ArticleCopyWithImpl<$Res> implements $ArticleCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? author = freezed,
+    Object? id = freezed,
     Object? title = freezed,
     Object? url = freezed,
     Object? urlToImage = freezed,
     Object? publishedAt = freezed,
   }) {
     return _then(_value.copyWith(
-      author: author == freezed
-          ? _value.author
-          : author // ignore: cast_nullable_to_non_nullable
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String,
       title: title == freezed
           ? _value.title
@@ -318,7 +268,7 @@ abstract class _$ArticleCopyWith<$Res> implements $ArticleCopyWith<$Res> {
       __$ArticleCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String author,
+      {String id,
       String title,
       String url,
       String urlToImage,
@@ -336,16 +286,16 @@ class __$ArticleCopyWithImpl<$Res> extends _$ArticleCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? author = freezed,
+    Object? id = freezed,
     Object? title = freezed,
     Object? url = freezed,
     Object? urlToImage = freezed,
     Object? publishedAt = freezed,
   }) {
     return _then(_Article(
-      author: author == freezed
-          ? _value.author
-          : author // ignore: cast_nullable_to_non_nullable
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String,
       title: title == freezed
           ? _value.title
@@ -371,7 +321,7 @@ class __$ArticleCopyWithImpl<$Res> extends _$ArticleCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_Article implements _Article {
   const _$_Article(
-      {this.author = '',
+      {this.id = '',
       this.title = '',
       this.url = '',
       this.urlToImage = '',
@@ -382,7 +332,7 @@ class _$_Article implements _Article {
 
   @JsonKey(defaultValue: '')
   @override
-  final String author;
+  final String id;
   @JsonKey(defaultValue: '')
   @override
   final String title;
@@ -398,15 +348,15 @@ class _$_Article implements _Article {
 
   @override
   String toString() {
-    return 'Article(author: $author, title: $title, url: $url, urlToImage: $urlToImage, publishedAt: $publishedAt)';
+    return 'Article(id: $id, title: $title, url: $url, urlToImage: $urlToImage, publishedAt: $publishedAt)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _Article &&
-            (identical(other.author, author) ||
-                const DeepCollectionEquality().equals(other.author, author)) &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
             (identical(other.title, title) ||
                 const DeepCollectionEquality().equals(other.title, title)) &&
             (identical(other.url, url) ||
@@ -422,7 +372,7 @@ class _$_Article implements _Article {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(author) ^
+      const DeepCollectionEquality().hash(id) ^
       const DeepCollectionEquality().hash(title) ^
       const DeepCollectionEquality().hash(url) ^
       const DeepCollectionEquality().hash(urlToImage) ^
@@ -441,7 +391,7 @@ class _$_Article implements _Article {
 
 abstract class _Article implements Article {
   const factory _Article(
-      {String author,
+      {String id,
       String title,
       String url,
       String urlToImage,
@@ -450,7 +400,7 @@ abstract class _Article implements Article {
   factory _Article.fromJson(Map<String, dynamic> json) = _$_Article.fromJson;
 
   @override
-  String get author => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   @override
   String get title => throw _privateConstructorUsedError;
   @override

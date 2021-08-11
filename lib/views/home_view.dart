@@ -1,38 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:labo_flutter/models/article/article.dart';
-import 'package:labo_flutter/models/article/article_repository.dart';
 import 'package:labo_flutter/views/article_detail_view.dart';
-
-final articleListProvider = FutureProvider<List<Article>>((ref) async {
-  final articleRepository = ref.read(articleRepositoryProvider);
-  return articleRepository.fetch();
-});
 
 class HomeView extends HookWidget {
   const HomeView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final articleListAsyncValue = useProvider(articleListProvider);
+    return const Scaffold(body: Center(child: CommentsQuery()));
+  }
+}
 
-    return articleListAsyncValue.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stackTrace) => Center(child: Text(error.toString())),
-      data: (articleList) {
-        return RefreshIndicator(
-          onRefresh: () async {
-            await context.refresh(articleListProvider);
-          },
-          child: ListView.builder(
-            itemCount: articleList.length,
+class CommentsQuery extends StatelessWidget {
+  const CommentsQuery({Key? key}) : super(key: key);
+
+  static const String fetchArticlesQuery = '''
+{
+  articles {
+    id
+    publishedAt
+    title
+    url
+    urlToImage
+  }
+}
+''';
+
+  @override
+  Widget build(BuildContext context) {
+    return Query(
+      options: QueryOptions(
+        document: gql(fetchArticlesQuery),
+        pollInterval: const Duration(seconds: 10),
+      ),
+      builder: (QueryResult result,
+          {VoidCallback? refetch, FetchMore? fetchMore}) {
+        if (result.hasException) {
+          return Text(result.exception.toString());
+        }
+
+        if (result.isLoading) {
+          return const Text('Loading');
+        }
+
+        // final articles = result.data?['articles'] as List<dynamic>;
+
+        var articles = <Article>[];
+        final resultData = result.data;
+        if (resultData != null) {
+          articles = ArticleListResponse.fromJson(resultData).articles;
+        }
+
+        return ListView.builder(
+            shrinkWrap: true,
+            itemCount: articles.length,
             itemBuilder: (BuildContext context, int index) {
-              final article = articleList[index];
+              final article = articles[index];
               return _articleListItem(context, article);
-            },
-          ),
-        );
+            });
       },
     );
   }
@@ -40,7 +67,6 @@ class HomeView extends HookWidget {
   Widget _articleListItem(BuildContext context, Article article) {
     return GestureDetector(
       onTap: () {
-        print('onTap');
         Navigator.push(
           context,
           MaterialPageRoute<void>(
