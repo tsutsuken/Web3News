@@ -18,12 +18,24 @@ class CreatePostView extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final editingTextNotifier = useState('');
 
     return Scaffold(
         appBar: AppBar(
           title: const Text('CreatePostView'),
         ),
         body: Column(children: [
+          TextField(
+            autofocus: true,
+            maxLines: 10,
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              hintText: 'コメントを書く',
+            ),
+            onChanged: (text) {
+              editingTextNotifier.value = text;
+            },
+          ),
           Mutation(
             options: MutationOptions(
               document: gql(insertPostMutation),
@@ -40,7 +52,7 @@ class CreatePostView extends HookWidget {
             ) {
               return ElevatedButton(
                 onPressed: () => runMutation(<String, dynamic>{
-                  'text': 'けしからん！',
+                  'text': editingTextNotifier.value,
                   'article_url': articleUrl
                 }),
                 child: const Text('Postを追加'),
