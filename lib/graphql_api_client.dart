@@ -25,26 +25,6 @@ ValueNotifier<GraphQLClient> clientFor({
   );
 }
 
-// Future<QueryResult> query(
-//   String query, {
-//   Map<String, dynamic>? variables,
-// }) async {
-//   final QueryResult result = await clientFor.value.query(QueryOptions(
-//     documentNode: gql(query),
-//     variables: variables,
-//   ));
-//
-//   if (result.exception != null) {
-//     // エラー処理
-//     print(result.exception);
-//     for (final GraphQLError error in result.exception.graphqlErrors) {
-//       print(error.message);
-//     }
-//   }
-//
-//   return result;
-// }
-
 /// Wraps the root application with the `graphql_flutter` client.
 /// We use the cache for all state management.
 class GraphQLApiClient extends StatelessWidget {
