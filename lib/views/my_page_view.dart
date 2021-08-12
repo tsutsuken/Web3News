@@ -32,6 +32,23 @@ class MyPageView extends HookWidget {
       print('token: $token');
     }
 
+    Future<UserCredential> signinWithEmailAndPassword() async {
+      try {
+        final userCredential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+                email: 'ken08090930@example.com',
+                password: 'SuperSecretPassword!');
+        return userCredential;
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          print('No user found for that email.');
+        } else if (e.code == 'wrong-password') {
+          print('Wrong password provided for that user.');
+        }
+        rethrow;
+      }
+    }
+
     Future<UserCredential> createUserWithEmailAndPassword() async {
       try {
         final userCredential = await FirebaseAuth.instance
@@ -66,6 +83,9 @@ class MyPageView extends HookWidget {
                 },
                 child: const Text('サインアウト'),
               ),
+              ElevatedButton(
+                  onPressed: signinWithEmailAndPassword,
+                  child: const Text('サインイン')),
               ElevatedButton(
                   onPressed: createUserWithEmailAndPassword,
                   child: const Text('サインアップ')),
