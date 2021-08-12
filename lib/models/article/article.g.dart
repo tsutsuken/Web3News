@@ -27,7 +27,8 @@ _$_Article _$_$_ArticleFromJson(Map<String, dynamic> json) {
     id: json['id'] as String? ?? '',
     title: json['title'] as String? ?? '',
     url: json['url'] as String? ?? '',
-    urlToImage: json['urlToImage'] as String? ?? '',
+    urlToImage:
+        json['urlToImage'] as String? ?? 'http://placehold.jp/150x150.png',
     publishedAt: json['publishedAt'] as String? ?? '',
   );
 }

@@ -19,7 +19,7 @@ abstract class Article with _$Article {
     @Default('') String id,
     @Default('') String title,
     @Default('') String url,
-    @Default('') String urlToImage,
+    @Default('http://placehold.jp/150x150.png') String urlToImage,
     @Default('') String publishedAt,
   }) = _Article;
 

@@ -177,7 +177,7 @@ class _$ArticleTearOff {
       {String id = '',
       String title = '',
       String url = '',
-      String urlToImage = '',
+      String urlToImage = 'http://placehold.jp/150x150.png',
       String publishedAt = ''}) {
     return _Article(
       id: id,
@@ -324,7 +324,7 @@ class _$_Article implements _Article {
       {this.id = '',
       this.title = '',
       this.url = '',
-      this.urlToImage = '',
+      this.urlToImage = 'http://placehold.jp/150x150.png',
       this.publishedAt = ''});
 
   factory _$_Article.fromJson(Map<String, dynamic> json) =>
@@ -339,7 +339,7 @@ class _$_Article implements _Article {
   @JsonKey(defaultValue: '')
   @override
   final String url;
-  @JsonKey(defaultValue: '')
+  @JsonKey(defaultValue: 'http://placehold.jp/150x150.png')
   @override
   final String urlToImage;
   @JsonKey(defaultValue: '')
