@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -33,16 +34,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GraphQLApiClient(
-      uri: graphqlEndpoint,
-      child: MaterialApp(
-        title: 'MaterialApp',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: const RootView(title: 'RootView'),
-      ),
-    );
+    return FutureBuilder(
+        future: FirebaseAuth.instance.currentUser?.getIdToken(false),
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          final idToken = snapshot.data ?? '';
+          return GraphQLApiClient(
+            uri: graphqlEndpoint,
+            idToken: idToken,
+            child: MaterialApp(
+              title: 'MaterialApp',
+              theme: ThemeData(
+                primarySwatch: Colors.blue,
+              ),
+              home: const RootView(title: 'RootView'),
+            ),
+          );
+        });
   }
 }
 

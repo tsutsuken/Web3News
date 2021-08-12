@@ -1,20 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 ValueNotifier<GraphQLClient> clientFor({
   required String uri,
+  required String idToken,
 }) {
   final userid = FirebaseAuth.instance.currentUser?.uid ?? '';
-  // final tokenId = FirebaseAuth.instance.currentUser?.getIdToken(false);
-  final hasuraAdminSecret = dotenv.env['SECRET_HASURA_ADMIN_SECRET']!;
   final httpLink =
       HttpLink('https://labo-flutter.hasura.app/v1/graphql', defaultHeaders: {
-    'x-hasura-admin-secret': hasuraAdminSecret,
+    'Authorization': 'Bearer $idToken',
     'X-Hasura-Role': 'user',
     'X-Hasura-User-Id': userid,
-    // 'Authorization': 'Bearer $tokenId',
   });
 
   return ValueNotifier<GraphQLClient>(
@@ -32,8 +29,10 @@ class GraphQLApiClient extends StatelessWidget {
     Key? key,
     required this.child,
     required String uri,
+    required String idToken,
   })  : client = clientFor(
           uri: uri,
+          idToken: idToken,
         ),
         super(key: key);
 
