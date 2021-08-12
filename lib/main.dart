@@ -28,28 +28,48 @@ Future main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: FirebaseAuth.instance.currentUser?.getIdToken(false),
-        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-          final idToken = snapshot.data ?? '';
-          return GraphQLApiClient(
-            uri: graphqlEndpoint,
-            idToken: idToken,
-            child: MaterialApp(
-              title: 'MaterialApp',
-              theme: ThemeData(
-                primarySwatch: Colors.blue,
-              ),
-              home: const RootView(title: 'RootView'),
-            ),
-          );
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  String _idToken = '';
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        setState(() {
+          _idToken = '';
         });
+      } else {
+        user.getIdToken(false).then((value) {
+          setState(() {
+            _idToken = value;
+          });
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GraphQLApiClient(
+      uri: graphqlEndpoint,
+      idToken: _idToken,
+      child: MaterialApp(
+        title: 'MaterialApp',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const RootView(title: 'RootView'),
+      ),
+    );
   }
 }
 
