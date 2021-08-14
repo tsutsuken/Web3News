@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:labo_flutter/views/sign_in_view.dart';
+import 'package:labo_flutter/views/sign_up_view.dart';
 
 const String postsQuery = '''
 {
@@ -33,23 +34,6 @@ class MyPageView extends HookWidget {
       print('token: $token');
     }
 
-    Future<UserCredential> createUserWithEmailAndPassword() async {
-      try {
-        final userCredential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-                email: 'ken08090930@example.com',
-                password: 'SuperSecretPassword!');
-        return userCredential;
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          print('The password provided is too weak.');
-        } else if (e.code == 'email-already-in-use') {
-          print('The account already exists for that email.');
-        }
-        rethrow;
-      }
-    }
-
     return Scaffold(
       body: Center(
         child: Column(
@@ -72,8 +56,14 @@ class MyPageView extends HookWidget {
                     },
                     child: const Text('サインイン')),
                 ElevatedButton(
-                    onPressed: createUserWithEmailAndPassword,
-                    child: const Text('サインアップ')),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                            builder: (context) => const SignUpView()),
+                      );
+                    },
+                    child: const Text('新規登録')),
               ] else
                 ElevatedButton(
                   onPressed: () {
