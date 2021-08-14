@@ -40,10 +40,19 @@ class CreatePostView extends HookWidget {
             options: MutationOptions(
               document: gql(insertPostMutation),
               onCompleted: (dynamic resultData) {
-                print('resultData: $resultData');
+                Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('コメントを投稿しました'),
+                  ),
+                );
               },
               onError: (e) {
-                print('error: $e');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('$e'),
+                  ),
+                );
               },
             ),
             builder: (
