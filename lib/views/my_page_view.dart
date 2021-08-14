@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:labo_flutter/views/sign_in_view.dart';
 
 const String postsQuery = '''
 {
@@ -32,23 +33,6 @@ class MyPageView extends HookWidget {
       print('token: $token');
     }
 
-    Future<UserCredential> signinWithEmailAndPassword() async {
-      try {
-        final userCredential = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(
-                email: 'ken08090930@example.com',
-                password: 'SuperSecretPassword!');
-        return userCredential;
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'user-not-found') {
-          print('No user found for that email.');
-        } else if (e.code == 'wrong-password') {
-          print('Wrong password provided for that user.');
-        }
-        rethrow;
-      }
-    }
-
     Future<UserCredential> createUserWithEmailAndPassword() async {
       try {
         final userCredential = await FirebaseAuth.instance
@@ -77,18 +61,26 @@ class MyPageView extends HookWidget {
                 onPressed: getToken,
                 child: const Text('トークンを取得'),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  FirebaseAuth.instance.signOut();
-                },
-                child: const Text('サインアウト'),
-              ),
-              ElevatedButton(
-                  onPressed: signinWithEmailAndPassword,
-                  child: const Text('サインイン')),
-              ElevatedButton(
-                  onPressed: createUserWithEmailAndPassword,
-                  child: const Text('サインアップ')),
+              if (currentUser == null) ...[
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                            builder: (context) => const SignInView()),
+                      );
+                    },
+                    child: const Text('サインイン')),
+                ElevatedButton(
+                    onPressed: createUserWithEmailAndPassword,
+                    child: const Text('サインアップ')),
+              ] else
+                ElevatedButton(
+                  onPressed: () {
+                    FirebaseAuth.instance.signOut();
+                  },
+                  child: const Text('サインアウト'),
+                ),
               Mutation(
                 options: MutationOptions(
                   document: gql(insertPostMutation),
