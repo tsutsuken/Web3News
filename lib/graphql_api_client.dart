@@ -7,12 +7,17 @@ ValueNotifier<GraphQLClient> clientFor({
   required String idToken,
 }) {
   final userid = FirebaseAuth.instance.currentUser?.uid ?? '';
-  final httpLink =
-      HttpLink('https://labo-flutter.hasura.app/v1/graphql', defaultHeaders: {
-    'Authorization': 'Bearer $idToken',
-    'X-Hasura-Role': 'user',
-    'X-Hasura-User-Id': userid,
-  });
+  var defaultHeaders = <String, String>{};
+  if (idToken.isNotEmpty) {
+    defaultHeaders = {
+      'Authorization': 'Bearer $idToken',
+      'X-Hasura-Role':
+          'user', // role未指定の場合、HASURA_GRAPHQL_UNAUTHORIZED_ROLEのroleがセットされる
+      'X-Hasura-User-Id': userid,
+    };
+  }
+  final httpLink = HttpLink('https://labo-flutter.hasura.app/v1/graphql',
+      defaultHeaders: defaultHeaders);
 
   return ValueNotifier<GraphQLClient>(
     GraphQLClient(
