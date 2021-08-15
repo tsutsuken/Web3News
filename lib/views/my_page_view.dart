@@ -29,11 +29,6 @@ class MyPageView extends HookWidget {
   Widget build(BuildContext context) {
     final currentUser = FirebaseAuth.instance.currentUser;
 
-    Future<void> getToken() async {
-      final token = await currentUser?.getIdToken(true);
-      print('token: $token');
-    }
-
     return Scaffold(
       body: Center(
         child: Column(
@@ -41,10 +36,6 @@ class MyPageView extends HookWidget {
             children: <Widget>[
               Text('currentUser: $currentUser'),
               const Text('MyPageView'),
-              ElevatedButton(
-                onPressed: getToken,
-                child: const Text('トークンを取得'),
-              ),
               if (currentUser == null) ...[
                 ElevatedButton(
                     onPressed: () {
