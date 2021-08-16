@@ -6,13 +6,14 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/views/sign_in_view.dart';
 import 'package:labo_flutter/views/sign_up_view.dart';
 
-const String postsQuery = '''
-{
-  posts {
-    id
-    text
+const String myPostsQuery = '''
+  query MyQuery(\$user_id: String!) {
+    posts(where: {user_id: {_eq: \$user_id}}) {
+      id
+      text
+      article_url
+    }
   }
-}
 ''';
 
 const String insertPostMutation = '''
@@ -104,7 +105,10 @@ class MyPageView extends HookWidget {
               ),
               Query(
                 options: QueryOptions(
-                  document: gql(postsQuery),
+                  document: gql(myPostsQuery),
+                  variables: <String, dynamic>{
+                    'user_id': currentUser?.uid ?? '',
+                  },
                   pollInterval: const Duration(seconds: 10),
                 ),
                 builder: (QueryResult result,
@@ -127,7 +131,7 @@ class MyPageView extends HookWidget {
                           return ListTile(
                             title: Text('${post["text"]}'),
                             trailing: const Icon(Icons.more_vert),
-                            subtitle: Text('${post["id"]}'),
+                            subtitle: Text('${post["article_url"]}'),
                             onTap: () {},
                           );
                         }),
