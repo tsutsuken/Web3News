@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:labo_flutter/views/comment_list_view.dart';
 import 'package:labo_flutter/views/create_post_view.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -47,6 +48,20 @@ class _ArticleDetailViewState extends State<ArticleDetailView> {
                     context,
                     MaterialPageRoute<void>(
                       builder: (context) => CreatePostView(
+                        articleUrl: widget.articleUrl,
+                      ),
+                      fullscreenDialog: true,
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.add_comment)),
+            IconButton(
+                color: Colors.white,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (context) => CommentListView(
                         articleUrl: widget.articleUrl,
                       ),
                       fullscreenDialog: true,
