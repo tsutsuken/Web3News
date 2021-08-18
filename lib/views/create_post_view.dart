@@ -23,6 +23,44 @@ class CreatePostView extends HookWidget {
     return Scaffold(
         appBar: AppBar(
           title: const Text('CreatePostView'),
+          actions: [
+            Mutation(
+              options: MutationOptions(
+                document: gql(insertPostMutation),
+                onCompleted: (dynamic resultData) {
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('コメントを投稿しました'),
+                    ),
+                  );
+                },
+                onError: (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('$e'),
+                    ),
+                  );
+                },
+              ),
+              builder: (
+                RunMutation runMutation,
+                QueryResult? result,
+              ) {
+                return ElevatedButton(
+                  onPressed: () => runMutation(<String, dynamic>{
+                    'text': editingTextNotifier.value,
+                    'article_url': articleUrl
+                  }),
+                  style: ElevatedButton.styleFrom(
+                      textStyle: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  )),
+                  child: const Text('保存'),
+                );
+              },
+            )
+          ],
         ),
         body: Column(children: [
           TextField(
@@ -36,38 +74,6 @@ class CreatePostView extends HookWidget {
               editingTextNotifier.value = text;
             },
           ),
-          Mutation(
-            options: MutationOptions(
-              document: gql(insertPostMutation),
-              onCompleted: (dynamic resultData) {
-                Navigator.of(context).pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('コメントを投稿しました'),
-                  ),
-                );
-              },
-              onError: (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('$e'),
-                  ),
-                );
-              },
-            ),
-            builder: (
-              RunMutation runMutation,
-              QueryResult? result,
-            ) {
-              return ElevatedButton(
-                onPressed: () => runMutation(<String, dynamic>{
-                  'text': editingTextNotifier.value,
-                  'article_url': articleUrl
-                }),
-                child: const Text('Postを追加'),
-              );
-            },
-          )
         ]));
   }
 }
