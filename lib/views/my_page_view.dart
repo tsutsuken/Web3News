@@ -7,6 +7,15 @@ import 'package:labo_flutter/providers/user_notifier_provider.dart';
 import 'package:labo_flutter/views/sign_in_view.dart';
 import 'package:labo_flutter/views/sign_up_view.dart';
 
+const String myUserQuery = '''
+query MyQuery(\$id: String!) {
+  users_by_pk(id: \$id) {
+    id
+    name
+  }
+}
+''';
+
 const String myPostsQuery = '''
   query MyQuery(\$user_id: String!) {
     posts(where: {user_id: {_eq: \$user_id}}) {
@@ -42,7 +51,31 @@ class MyPageView extends HookWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text('currentUser: $currentUser'),
-              const Text('MyPageView'),
+              Query(
+                options: QueryOptions(
+                  document: gql(myUserQuery),
+                  variables: <String, dynamic>{
+                    'id': currentUser?.uid ?? '',
+                  },
+                  pollInterval: const Duration(seconds: 10),
+                ),
+                builder: (QueryResult result,
+                    {VoidCallback? refetch, FetchMore? fetchMore}) {
+                  if (result.hasException) {
+                    return Text(result.exception.toString());
+                  }
+
+                  if (result.isLoading) {
+                    return const Text('Loading');
+                  }
+
+                  final dynamic user = result.data?['users_by_pk'];
+                  final name = user['name'] as String ?? '';
+                  final id = user['id'] as String ?? '';
+                  print('user: ${user['id']}');
+                  return Text('name: $name, id: $id');
+                },
+              ),
               if (currentUser == null) ...[
                 ElevatedButton(
                     onPressed: () {
