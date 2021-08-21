@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:labo_flutter/providers/user_notifier_provider.dart';
 import 'package:labo_flutter/views/sign_in_view.dart';
 import 'package:labo_flutter/views/sign_up_view.dart';
 
@@ -24,28 +25,15 @@ const String insertPostMutation = '''
   }
 ''';
 
-final _userNotifierProvider =
-    StateNotifierProvider.autoDispose<_UserNotifier, User?>(
-        (_) => _UserNotifier());
-
-class _UserNotifier extends StateNotifier<User?> {
-  _UserNotifier() : super(null);
-  void listenAuthStateChanges() {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      state = user;
-    });
-  }
-}
-
 class MyPageView extends HookWidget {
   const MyPageView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final currentUser = useProvider(_userNotifierProvider);
+    final currentUser = useProvider(userNotifierProvider);
 
     useEffect(() {
-      context.read(_userNotifierProvider.notifier).listenAuthStateChanges();
+      context.read(userNotifierProvider.notifier).listenAuthStateChanges();
     }, const []);
 
     return Scaffold(
