@@ -5,6 +5,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/models/user/user.dart';
 import 'package:labo_flutter/providers/user_notifier_provider.dart';
+import 'package:labo_flutter/views/edit_profile_view.dart';
 import 'package:labo_flutter/views/sign_in_view.dart';
 import 'package:labo_flutter/views/sign_up_view.dart';
 
@@ -85,6 +86,12 @@ class MyPageView extends HookWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute<void>(
+                        builder: (context) => const EditProfileView(),
+                        fullscreenDialog: true,
+                      ),
+                    );
+                  },
+                  child: const Text('プロフィール編集')),
               if (currentUser == null) ...[
                 ElevatedButton(
                     onPressed: () {
