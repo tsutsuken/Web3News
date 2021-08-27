@@ -48,6 +48,10 @@ class MyPageView extends HookWidget {
     }, const []);
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('LaboFlutter'),
+        backgroundColor: Colors.blue,
+      ),
       body: Center(
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

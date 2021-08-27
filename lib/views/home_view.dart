@@ -1,15 +1,57 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:labo_flutter/models/article/article.dart';
 import 'package:labo_flutter/views/article_detail_view.dart';
 
-class HomeView extends HookWidget {
+class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
 
   @override
+  _HomeViewState createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  static const List<Tab> tabs = <Tab>[
+    Tab(text: '人気'),
+    Tab(text: '新着'),
+  ];
+
+  final List<Widget> childViews = [
+    const Center(child: CommentsQuery()),
+    const Center(child: CommentsQuery()),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(vsync: this, length: tabs.length);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: CommentsQuery()));
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('LaboFlutter'),
+        backgroundColor: Colors.blue,
+        bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(30),
+            child: TabBar(
+              controller: _tabController,
+              isScrollable: true,
+              unselectedLabelColor: Colors.white.withOpacity(0.3),
+              indicatorColor: Colors.white,
+              tabs: tabs,
+            )),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: childViews,
+      ),
+    );
+    // body: const Center(child: CommentsQuery()));
   }
 }
 

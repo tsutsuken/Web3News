@@ -113,10 +113,6 @@ class _RootViewState extends State<RootView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('LaboFlutter'),
-        backgroundColor: Colors.blue,
-      ),
       body: childViews[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         onTap: onTabTapped,

@@ -24,6 +24,10 @@ class PlaygroundView extends HookWidget {
     final albumAsyncValue = useProvider(albumProvider);
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('LaboFlutter'),
+        backgroundColor: Colors.blue,
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
