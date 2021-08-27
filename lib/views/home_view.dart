@@ -128,6 +128,22 @@ class CommentsQuery extends StatelessWidget {
                   article.urlToImage,
                   fit: BoxFit.cover,
                   width: 160,
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.blue),
+                        ),
+                      );
+                    }
+                  },
+                  errorBuilder: (context, object, stack) {
+                    return Image.asset('assets/images/default_article.png');
+                  },
                 ),
               ),
               Flexible(
