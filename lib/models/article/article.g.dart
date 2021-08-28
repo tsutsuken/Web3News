@@ -10,7 +10,7 @@ _$_ArticleListResponse _$_$_ArticleListResponseFromJson(
     Map<String, dynamic> json) {
   return _$_ArticleListResponse(
     articles: (json['articles'] as List<dynamic>?)
-            ?.map((e) => Article.fromJson(e as Map<String, dynamic>))
+            ?.map((dynamic e) => Article.fromJson(e as Map<String, dynamic>))
             .toList() ??
         [],
   );

@@ -10,7 +10,7 @@ _$_CommentListResponse _$_$_CommentListResponseFromJson(
     Map<String, dynamic> json) {
   return _$_CommentListResponse(
     comments: (json['comments'] as List<dynamic>?)
-            ?.map((e) => Comment.fromJson(e as Map<String, dynamic>))
+            ?.map((dynamic e) => Comment.fromJson(e as Map<String, dynamic>))
             .toList() ??
         [],
   );
