@@ -6,9 +6,11 @@ import 'package:labo_flutter/views/create_post_view.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ArticleDetailView extends StatefulWidget {
-  const ArticleDetailView({Key? key, required this.articleUrl})
+  const ArticleDetailView(
+      {Key? key, required this.articleId, required this.articleUrl})
       : super(key: key);
 
+  final String articleId;
   final String articleUrl;
 
   @override
@@ -48,7 +50,7 @@ class _ArticleDetailViewState extends State<ArticleDetailView> {
                     context,
                     MaterialPageRoute<void>(
                       builder: (context) => CreatePostView(
-                        articleUrl: widget.articleUrl,
+                        articleId: widget.articleId,
                       ),
                       fullscreenDialog: true,
                     ),

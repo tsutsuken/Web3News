@@ -4,17 +4,17 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 const String insertPostMutation = '''
-  mutation MyMutation(\$text: String!, \$article_url: String!) {
-    insert_posts_one(object: {text: \$text, article_url: \$article_url}) {
+  mutation MyMutation(\$text: String!, \$article_id: String!) {
+    insert_posts_one(object: {text: \$text, article_id: \$article_id}) {
       id
     }
   }
 ''';
 
 class CreatePostView extends HookWidget {
-  const CreatePostView({Key? key, required this.articleUrl}) : super(key: key);
+  const CreatePostView({Key? key, required this.articleId}) : super(key: key);
 
-  final String articleUrl;
+  final String articleId;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class CreatePostView extends HookWidget {
                 return ElevatedButton(
                   onPressed: () => runMutation(<String, dynamic>{
                     'text': editingTextNotifier.value,
-                    'article_url': articleUrl
+                    'article_id': articleId
                   }),
                   style: ElevatedButton.styleFrom(
                       textStyle: const TextStyle(

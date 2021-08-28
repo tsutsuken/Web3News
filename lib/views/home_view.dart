@@ -112,7 +112,8 @@ class CommentsQuery extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute<void>(
-              builder: (context) => ArticleDetailView(articleUrl: article.url)),
+              builder: (context) => ArticleDetailView(
+                  articleId: article.id, articleUrl: article.url)),
         );
       },
       child: Container(
