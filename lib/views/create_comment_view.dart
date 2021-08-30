@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-const String insertPostMutation = '''
+const String insertCommentMutation = '''
   mutation MyMutation(\$text: String!, \$article_id: String!) {
-    insert_posts_one(object: {text: \$text, article_id: \$article_id}) {
+    insert_comments_one(object: {text: \$text, article_id: \$article_id}) {
       id
     }
   }
 ''';
 
-class CreatePostView extends HookWidget {
-  const CreatePostView({Key? key, required this.articleId}) : super(key: key);
+class CreateCommentView extends HookWidget {
+  const CreateCommentView({Key? key, required this.articleId})
+      : super(key: key);
 
   final String articleId;
 
@@ -22,11 +23,11 @@ class CreatePostView extends HookWidget {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text('CreatePostView'),
+          title: const Text('CreateCommentView'),
           actions: [
             Mutation(
               options: MutationOptions(
-                document: gql(insertPostMutation),
+                document: gql(insertCommentMutation),
                 onCompleted: (dynamic resultData) {
                   Navigator.of(context).pop();
                   ScaffoldMessenger.of(context).showSnackBar(

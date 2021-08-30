@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:labo_flutter/views/comment_list_view.dart';
-import 'package:labo_flutter/views/create_post_view.dart';
+import 'package:labo_flutter/views/create_comment_view.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ArticleDetailView extends StatefulWidget {
@@ -49,7 +49,7 @@ class _ArticleDetailViewState extends State<ArticleDetailView> {
                   Navigator.push(
                     context,
                     MaterialPageRoute<void>(
-                      builder: (context) => CreatePostView(
+                      builder: (context) => CreateCommentView(
                         articleId: widget.articleId,
                       ),
                       fullscreenDialog: true,
@@ -64,7 +64,7 @@ class _ArticleDetailViewState extends State<ArticleDetailView> {
                     context,
                     MaterialPageRoute<void>(
                       builder: (context) => CommentListView(
-                        articleUrl: widget.articleUrl,
+                        articleId: widget.articleId,
                       ),
                       fullscreenDialog: true,
                     ),

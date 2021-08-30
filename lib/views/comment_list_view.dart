@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:labo_flutter/models/comment/comment.dart';
 
-const String postsQuery = '''
-  query MyQuery(\$article_url: String!) {
-    posts(where: {article_url: {_eq: \$article_url}}) {
+const String commentsQuery = '''
+  query MyQuery(\$article_id: String!) {
+    comments(where: {article_id: {_eq: \$article_id}}) {
       id
       text
       user_id
@@ -12,21 +13,21 @@ const String postsQuery = '''
 ''';
 
 class CommentListView extends StatelessWidget {
-  const CommentListView({Key? key, required this.articleUrl}) : super(key: key);
+  const CommentListView({Key? key, required this.articleId}) : super(key: key);
 
-  final String articleUrl;
+  final String articleId;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('CommentListView')),
+      appBar: AppBar(title: const Text('CommentListView')),
       body: Column(
         children: [
           Query(
               options: QueryOptions(
-                document: gql(postsQuery),
+                document: gql(commentsQuery),
                 variables: <String, dynamic>{
-                  'article_url': articleUrl,
+                  'article_id': articleId,
                 },
                 pollInterval: const Duration(seconds: 10),
               ),
@@ -40,17 +41,22 @@ class CommentListView extends StatelessWidget {
                   return const Text('Loading');
                 }
 
-                final posts = result.data?['posts'] as List<dynamic>;
+                var comments = <Comment>[];
+                final resultData = result.data;
+                if (resultData != null) {
+                  comments = CommentListResponse.fromJson(resultData).comments;
+                }
+
                 return Flexible(
                   child: ListView.builder(
                       shrinkWrap: true,
-                      itemCount: posts.length,
+                      itemCount: comments.length,
                       itemBuilder: (BuildContext context, int index) {
-                        final dynamic post = posts[index];
+                        final comment = comments[index];
                         return ListTile(
-                          title: Text('text: ${post["text"]}'),
+                          title: Text('text: ${comment.text}'),
                           trailing: const Icon(Icons.more_vert),
-                          subtitle: Text('user_id: ${post["user_id"]}'),
+                          subtitle: Text('user_id: ${comment.userId}'),
                           onTap: () {},
                         );
                       }),

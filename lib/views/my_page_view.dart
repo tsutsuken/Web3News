@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:labo_flutter/models/comment/comment.dart';
 import 'package:labo_flutter/models/user/user.dart';
 import 'package:labo_flutter/providers/user_notifier_provider.dart';
 import 'package:labo_flutter/views/edit_profile_view.dart';
@@ -18,19 +19,21 @@ query MyQuery(\$id: String!) {
 }
 ''';
 
-const String myPostsQuery = '''
+const String myCommentsQuery = '''
   query MyQuery(\$user_id: String!) {
-    posts(where: {user_id: {_eq: \$user_id}}) {
+    comments(where: {user_id: {_eq: \$user_id}}) {
       id
+      created_at
       text
-      article_url
+      user_id
+      article_id
     }
   }
 ''';
 
-const String insertPostMutation = '''
+const String insertCommentMutation = '''
   mutation MyMutation(\$text: String!) {
-    insert_posts_one(object: {text: \$text}) {
+    insert_comments_one(object: {text: \$text}) {
       id
     }
   }
@@ -124,7 +127,7 @@ class MyPageView extends HookWidget {
                 ),
               Mutation(
                 options: MutationOptions(
-                  document: gql(insertPostMutation),
+                  document: gql(insertCommentMutation),
                   onCompleted: (dynamic resultData) {
                     print('resultData: $resultData');
                   },
@@ -140,13 +143,13 @@ class MyPageView extends HookWidget {
                     onPressed: () => runMutation(<String, dynamic>{
                       'text': '本文',
                     }),
-                    child: const Text('Postを追加'),
+                    child: const Text('Commentを追加'),
                   );
                 },
               ),
               Query(
                 options: QueryOptions(
-                  document: gql(myPostsQuery),
+                  document: gql(myCommentsQuery),
                   variables: <String, dynamic>{
                     'user_id': currentUser?.uid ?? '',
                   },
@@ -162,17 +165,23 @@ class MyPageView extends HookWidget {
                     return const Text('Loading');
                   }
 
-                  final posts = result.data?['posts'] as List<dynamic>;
+                  var comments = <Comment>[];
+                  final resultData = result.data;
+                  if (resultData != null) {
+                    comments =
+                        CommentListResponse.fromJson(resultData).comments;
+                  }
+
                   return Flexible(
                     child: ListView.builder(
                         shrinkWrap: true,
-                        itemCount: posts.length,
+                        itemCount: comments.length,
                         itemBuilder: (BuildContext context, int index) {
-                          final dynamic post = posts[index];
+                          final comment = comments[index];
                           return ListTile(
-                            title: Text('${post["text"]}'),
+                            title: Text(comment.text),
                             trailing: const Icon(Icons.more_vert),
-                            subtitle: Text('${post["article_url"]}'),
+                            subtitle: Text(comment.articleId),
                             onTap: () {},
                           );
                         }),
