@@ -71,7 +71,10 @@ const String fetchCommentsQuery = '''
 {
   comments {
     id
+    created_at
     text
+    user_id
+    article_id
   }
 }
 ''';

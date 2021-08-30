@@ -24,11 +24,19 @@ Map<String, dynamic> _$_$_CommentListResponseToJson(
 
 _$_Comment _$_$_CommentFromJson(Map<String, dynamic> json) {
   return _$_Comment(
+    id: json['id'] as String? ?? '',
     text: json['text'] as String? ?? '',
+    userId: json['userId'] as String? ?? '',
+    articleId: json['articleId'] as String? ?? '',
+    createdAt: json['createdAt'] as String? ?? '',
   );
 }
 
 Map<String, dynamic> _$_$_CommentToJson(_$_Comment instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'text': instance.text,
+      'userId': instance.userId,
+      'articleId': instance.articleId,
+      'createdAt': instance.createdAt,
     };

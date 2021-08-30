@@ -16,7 +16,11 @@ abstract class CommentListResponse with _$CommentListResponse {
 @freezed
 abstract class Comment with _$Comment {
   const factory Comment({
+    @Default('') String id,
     @Default('') String text,
+    @Default('') String userId,
+    @Default('') String articleId,
+    @Default('') String createdAt,
   }) = _Comment;
 
   factory Comment.fromJson(Map<String, dynamic> json) =>
