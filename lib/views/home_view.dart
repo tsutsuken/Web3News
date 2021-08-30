@@ -20,8 +20,8 @@ class _HomeViewState extends State<HomeView>
   ];
 
   final List<Widget> childViews = [
-    const Center(child: CommentsQuery()),
-    const Center(child: CommentsQuery()),
+    const Center(child: _ArticlesQuery()),
+    const Center(child: _ArticlesQuery()),
   ];
 
   @override
@@ -51,12 +51,11 @@ class _HomeViewState extends State<HomeView>
         children: childViews,
       ),
     );
-    // body: const Center(child: CommentsQuery()));
   }
 }
 
-class CommentsQuery extends StatelessWidget {
-  const CommentsQuery({Key? key}) : super(key: key);
+class _ArticlesQuery extends StatelessWidget {
+  const _ArticlesQuery({Key? key}) : super(key: key);
 
   static const String fetchArticlesQuery = '''
 {
