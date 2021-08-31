@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:labo_flutter/models/user/user.dart';
+import 'package:labo_flutter/models/app_user/app_user.dart';
 import 'package:labo_flutter/providers/user_notifier_provider.dart';
 
 final _editProfileViewModelProvider =
@@ -118,10 +118,10 @@ class EditProfileView extends HookWidget {
                     return const Text('No User');
                   }
 
-                  final user = User.fromJson(resultData);
+                  final appUser = AppUser.fromJson(resultData);
                   // return Text('name: ${user.name}, id: ${user.id}');
                   return TextFormField(
-                    initialValue: user.name,
+                    initialValue: appUser.name,
                     decoration: const InputDecoration(
                       labelText: 'ユーザ名',
                       hintText: 'ユーザ名を入力してください',
