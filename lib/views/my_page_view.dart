@@ -55,141 +55,158 @@ class MyPageView extends HookWidget {
         title: const Text('LaboFlutter'),
         backgroundColor: Colors.blue,
       ),
-      body: Center(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text('currentUser: $currentUser'),
-              Query(
-                options: QueryOptions(
-                  document: gql(myUserQuery),
-                  variables: <String, dynamic>{
-                    'id': currentUser?.uid ?? '',
-                  },
-                  pollInterval: const Duration(seconds: 10),
-                ),
-                builder: (QueryResult result,
-                    {VoidCallback? refetch, FetchMore? fetchMore}) {
-                  if (result.hasException) {
-                    return Text(result.exception.toString());
-                  }
-
-                  if (result.isLoading) {
-                    return const Text('Loading');
-                  }
-
-                  final resultData =
-                      result.data?['users_by_pk'] as Map<String, dynamic>?;
-                  if (resultData == null) {
-                    return const Text('No User');
-                  }
-
-                  final user = User.fromJson(resultData);
-                  return Text('name: ${user.name}, id: ${user.id}');
-                },
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<void>(
-                        builder: (context) => const EditProfileView(),
-                        fullscreenDialog: true,
+      body:
+          Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
+        Container(
+          decoration: const BoxDecoration(
+              border: Border(bottom: BorderSide(width: 1, color: Colors.grey))),
+          child: Container(
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Colors.redAccent, Colors.pinkAccent])),
+            child: SizedBox(
+                width: double.infinity,
+                height: 300,
+                child: Center(
+                    child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Query(
+                      options: QueryOptions(
+                        document: gql(myUserQuery),
+                        variables: <String, dynamic>{
+                          'id': currentUser?.uid ?? '',
+                        },
+                        pollInterval: const Duration(seconds: 10),
                       ),
-                    );
-                  },
-                  child: const Text('プロフィール編集')),
-              if (currentUser == null) ...[
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<void>(
-                            builder: (context) => const SignInView()),
-                      );
-                    },
-                    child: const Text('サインイン')),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<void>(
-                            builder: (context) => const SignUpView()),
-                      );
-                    },
-                    child: const Text('新規登録')),
-              ] else
-                ElevatedButton(
-                  onPressed: () {
-                    FirebaseAuth.instance.signOut();
-                  },
-                  child: const Text('サインアウト'),
-                ),
-              Mutation(
-                options: MutationOptions(
-                  document: gql(insertCommentMutation),
-                  onCompleted: (dynamic resultData) {
-                    print('resultData: $resultData');
-                  },
-                  onError: (e) {
-                    print('error: $e');
-                  },
-                ),
-                builder: (
-                  RunMutation runMutation,
-                  QueryResult? result,
-                ) {
-                  return ElevatedButton(
-                    onPressed: () => runMutation(<String, dynamic>{
-                      'text': '本文',
-                    }),
-                    child: const Text('Commentを追加'),
-                  );
-                },
-              ),
-              Query(
-                options: QueryOptions(
-                  document: gql(myCommentsQuery),
-                  variables: <String, dynamic>{
-                    'user_id': currentUser?.uid ?? '',
-                  },
-                  pollInterval: const Duration(seconds: 10),
-                ),
-                builder: (QueryResult result,
-                    {VoidCallback? refetch, FetchMore? fetchMore}) {
-                  if (result.hasException) {
-                    return Text(result.exception.toString());
-                  }
+                      builder: (QueryResult result,
+                          {VoidCallback? refetch, FetchMore? fetchMore}) {
+                        if (result.hasException) {
+                          return Text(result.exception.toString());
+                        }
 
-                  if (result.isLoading) {
-                    return const Text('Loading');
-                  }
+                        if (result.isLoading) {
+                          return const Text('Loading');
+                        }
 
-                  var comments = <Comment>[];
-                  final resultData = result.data;
-                  if (resultData != null) {
-                    comments =
-                        CommentListResponse.fromJson(resultData).comments;
-                  }
+                        final resultData = result.data?['users_by_pk']
+                            as Map<String, dynamic>?;
+                        if (resultData == null) {
+                          return const Text('No User');
+                        }
 
-                  return Flexible(
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: comments.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final comment = comments[index];
-                          return ListTile(
-                            title: Text(comment.text),
-                            trailing: const Icon(Icons.more_vert),
-                            subtitle: Text(comment.articleId),
-                            onTap: () {},
+                        final user = User.fromJson(resultData);
+                        return Text('name: ${user.name}, id: ${user.id}');
+                      },
+                    ),
+                    Text('uid: ${currentUser?.uid}'),
+                    Text('email: ${currentUser?.email}'),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (context) => const EditProfileView(),
+                              fullscreenDialog: true,
+                            ),
                           );
-                        }),
-                  );
-                },
-              ),
-            ]),
-      ),
+                        },
+                        child: const Text('プロフィール編集')),
+                    if (currentUser == null) ...[
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<void>(
+                                  builder: (context) => const SignInView()),
+                            );
+                          },
+                          child: const Text('サインイン')),
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<void>(
+                                  builder: (context) => const SignUpView()),
+                            );
+                          },
+                          child: const Text('新規登録')),
+                    ] else
+                      ElevatedButton(
+                        onPressed: () {
+                          FirebaseAuth.instance.signOut();
+                        },
+                        child: const Text('サインアウト'),
+                      ),
+                    Mutation(
+                      options: MutationOptions(
+                        document: gql(insertCommentMutation),
+                        onCompleted: (dynamic resultData) {
+                          print('resultData: $resultData');
+                        },
+                        onError: (e) {
+                          print('error: $e');
+                        },
+                      ),
+                      builder: (
+                        RunMutation runMutation,
+                        QueryResult? result,
+                      ) {
+                        return ElevatedButton(
+                          onPressed: () => runMutation(<String, dynamic>{
+                            'text': '本文',
+                          }),
+                          child: const Text('Commentを追加'),
+                        );
+                      },
+                    ),
+                  ],
+                ))),
+          ),
+        ),
+        Query(
+          options: QueryOptions(
+            document: gql(myCommentsQuery),
+            variables: <String, dynamic>{
+              'user_id': currentUser?.uid ?? '',
+            },
+            pollInterval: const Duration(seconds: 10),
+          ),
+          builder: (QueryResult result,
+              {VoidCallback? refetch, FetchMore? fetchMore}) {
+            if (result.hasException) {
+              return Text(result.exception.toString());
+            }
+
+            if (result.isLoading) {
+              return const Text('Loading');
+            }
+
+            var comments = <Comment>[];
+            final resultData = result.data;
+            if (resultData != null) {
+              comments = CommentListResponse.fromJson(resultData).comments;
+            }
+
+            return Expanded(
+                // The ListView
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: comments.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final comment = comments[index];
+                      return ListTile(
+                        title: Text(comment.text),
+                        trailing: const Icon(Icons.more_vert),
+                        subtitle: Text(comment.articleId),
+                        onTap: () {},
+                      );
+                    }));
+          },
+        ),
+      ]),
     );
   }
 }
