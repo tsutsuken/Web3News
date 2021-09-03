@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'package:labo_flutter/logger_http_client.dart';
 
 ValueNotifier<GraphQLClient> clientFor({
   required String uri,
@@ -17,7 +19,8 @@ ValueNotifier<GraphQLClient> clientFor({
     };
   }
   final httpLink = HttpLink('https://labo-flutter.hasura.app/v1/graphql',
-      defaultHeaders: defaultHeaders);
+      defaultHeaders: defaultHeaders,
+      httpClient: LoggerHttpClient(http.Client()));
 
   return ValueNotifier<GraphQLClient>(
     GraphQLClient(
