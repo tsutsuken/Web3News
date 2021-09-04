@@ -41,7 +41,7 @@ class EditProfileView extends HookWidget {
     final _formKey = GlobalKey<FormState>();
 
     useEffect(() {
-      print('ken');
+      debugPrint('ken');
     }, const []);
 
     return Scaffold(
@@ -60,7 +60,7 @@ class EditProfileView extends HookWidget {
                 );
               },
               onError: (e) {
-                print('e: $e');
+                debugPrint('e: $e');
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text('$e'),

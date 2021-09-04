@@ -184,10 +184,10 @@ class MyPageView extends HookWidget {
                   options: MutationOptions(
                     document: gql(insertCommentMutation),
                     onCompleted: (dynamic resultData) {
-                      print('resultData: $resultData');
+                      debugPrint('resultData: $resultData');
                     },
                     onError: (e) {
-                      print('error: $e');
+                      debugPrint('error: $e');
                     },
                   ),
                   builder: (
