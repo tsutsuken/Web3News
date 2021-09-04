@@ -29,7 +29,6 @@ class CommentListView extends StatelessWidget {
                 variables: <String, dynamic>{
                   'article_id': articleId,
                 },
-                pollInterval: const Duration(seconds: 10),
               ),
               builder: (QueryResult result,
                   {VoidCallback? refetch, FetchMore? fetchMore}) {

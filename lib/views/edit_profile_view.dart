@@ -100,7 +100,6 @@ class EditProfileView extends HookWidget {
                   variables: <String, dynamic>{
                     'id': _currentUser?.uid ?? '',
                   },
-                  pollInterval: const Duration(seconds: 10),
                 ),
                 builder: (QueryResult result,
                     {VoidCallback? refetch, FetchMore? fetchMore}) {

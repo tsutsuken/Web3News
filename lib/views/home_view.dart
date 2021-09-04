@@ -74,7 +74,6 @@ class _ArticlesQuery extends StatelessWidget {
     return Query(
       options: QueryOptions(
         document: gql(fetchArticlesQuery),
-        pollInterval: const Duration(seconds: 10),
       ),
       builder: (QueryResult result,
           {VoidCallback? refetch, FetchMore? fetchMore}) {

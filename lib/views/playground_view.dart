@@ -87,7 +87,6 @@ class CommentsQuery extends StatelessWidget {
     return Query(
       options: QueryOptions(
         document: gql(fetchCommentsQuery),
-        pollInterval: const Duration(seconds: 10),
       ),
       builder: (QueryResult result,
           {VoidCallback? refetch, FetchMore? fetchMore}) {

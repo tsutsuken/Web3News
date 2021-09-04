@@ -64,7 +64,6 @@ class MyPageView extends HookWidget {
             variables: <String, dynamic>{
               'user_id': currentUser?.uid ?? '',
             },
-            pollInterval: const Duration(seconds: 10),
           ),
           builder: (QueryResult result,
               {VoidCallback? refetch, FetchMore? fetchMore}) {
@@ -125,7 +124,6 @@ class MyPageView extends HookWidget {
                     variables: <String, dynamic>{
                       'id': currentUser?.uid ?? '',
                     },
-                    pollInterval: const Duration(seconds: 10),
                   ),
                   builder: (QueryResult result,
                       {VoidCallback? refetch, FetchMore? fetchMore}) {
