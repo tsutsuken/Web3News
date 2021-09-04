@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:labo_flutter/models/comment/comment.dart';
 import 'package:labo_flutter/models/app_user/app_user.dart';
-import 'package:labo_flutter/providers/user_notifier_provider.dart';
+import 'package:labo_flutter/models/comment/comment.dart';
+import 'package:labo_flutter/providers/user_change_notifier_provider.dart';
 import 'package:labo_flutter/views/edit_profile_view.dart';
 import 'package:labo_flutter/views/sign_in_view.dart';
 import 'package:labo_flutter/views/sign_up_view.dart';
@@ -44,11 +44,7 @@ class MyPageView extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentUser = useProvider(userNotifierProvider);
-
-    useEffect(() {
-      context.read(userNotifierProvider.notifier).listenAuthStateChanges();
-    }, const []);
+    final _userChangeNotifier = useProvider(userChangeNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -57,12 +53,12 @@ class MyPageView extends HookWidget {
       ),
       body:
           Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-        _header(context, currentUser),
+        _header(context, _userChangeNotifier.currentUser),
         Query(
           options: QueryOptions(
             document: gql(myCommentsQuery),
             variables: <String, dynamic>{
-              'user_id': currentUser?.uid ?? '',
+              'user_id': _userChangeNotifier.currentUser?.uid ?? '',
             },
           ),
           builder: (QueryResult result,

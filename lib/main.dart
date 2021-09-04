@@ -1,10 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/graphql_api_client.dart';
+import 'package:labo_flutter/providers/user_change_notifier_provider.dart';
 import 'package:labo_flutter/views/home_view.dart';
 import 'package:labo_flutter/views/my_page_view.dart';
 import 'package:labo_flutter/views/playground_view.dart';
@@ -28,40 +29,17 @@ Future main() async {
   );
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends HookWidget {
   // This widget is the root of your application.
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  String _idToken = '';
-
-  @override
-  void initState() {
-    super.initState();
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user == null) {
-        setState(() {
-          _idToken = '';
-        });
-      } else {
-        user.getIdToken(false).then((value) {
-          setState(() {
-            _idToken = value;
-          });
-        });
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final _userChangeNotifier = useProvider(userChangeNotifierProvider);
+
     return GraphQLApiClient(
       uri: graphqlEndpoint,
-      idToken: _idToken,
+      idToken: _userChangeNotifier.idToken,
       child: MaterialApp(
         title: 'MaterialApp',
         theme: ThemeData(

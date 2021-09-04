@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/models/app_user/app_user.dart';
-import 'package:labo_flutter/providers/user_notifier_provider.dart';
+import 'package:labo_flutter/providers/user_change_notifier_provider.dart';
 
 final _editProfileViewModelProvider =
     ChangeNotifierProvider.autoDispose((ref) => _EditProfileViewModel());
@@ -37,7 +37,7 @@ class EditProfileView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _editProfileViewModel = useProvider(_editProfileViewModelProvider);
-    final _currentUser = useProvider(userNotifierProvider);
+    final _userChangeNotifier = useProvider(userChangeNotifierProvider);
     final _formKey = GlobalKey<FormState>();
 
     useEffect(() {
@@ -74,7 +74,7 @@ class EditProfileView extends HookWidget {
             ) {
               return ElevatedButton(
                 onPressed: () => runMutation(<String, dynamic>{
-                  'id': _currentUser?.uid ?? '',
+                  'id': _userChangeNotifier.currentUser?.uid ?? '',
                   'name': _editProfileViewModel.username,
                 }),
                 style: ElevatedButton.styleFrom(
@@ -98,7 +98,7 @@ class EditProfileView extends HookWidget {
                 options: QueryOptions(
                   document: gql(myUserQuery),
                   variables: <String, dynamic>{
-                    'id': _currentUser?.uid ?? '',
+                    'id': _userChangeNotifier.currentUser?.uid ?? '',
                   },
                 ),
                 builder: (QueryResult result,
