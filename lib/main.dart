@@ -113,7 +113,10 @@ class _RootViewState extends State<RootView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: childViews[currentIndex],
+      body: IndexedStack(
+        index: currentIndex,
+        children: childViews,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: onTabTapped,
         currentIndex: currentIndex,
