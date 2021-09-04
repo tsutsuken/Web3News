@@ -51,7 +51,9 @@ class GraphQLApiClient extends StatelessWidget {
   Widget build(BuildContext context) {
     return GraphQLProvider(
       client: client,
-      child: child,
+      child: CacheProvider(
+        child: child,
+      ),
     );
   }
 }
