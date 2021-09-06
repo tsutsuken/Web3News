@@ -54,47 +54,55 @@ class MyPageView extends HookWidget {
       body:
           Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
         _header(context, _userChangeNotifier.currentUser),
-        Query(
-          options: QueryOptions(
-            document: gql(myCommentsQuery),
-            variables: <String, dynamic>{
-              'user_id': _userChangeNotifier.currentUser?.uid ?? '',
-            },
-          ),
-          builder: (QueryResult result,
-              {VoidCallback? refetch, FetchMore? fetchMore}) {
-            if (result.hasException) {
-              return Text(result.exception.toString());
-            }
-
-            if (result.isLoading) {
-              return const Text('Loading');
-            }
-
-            var comments = <Comment>[];
-            final resultData = result.data;
-            if (resultData != null) {
-              comments = CommentListResponse.fromJson(resultData).comments;
-            }
-
-            return Expanded(
-                // The ListView
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: comments.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final comment = comments[index];
-                      return ListTile(
-                        title: Text(comment.text),
-                        trailing: const Icon(Icons.more_vert),
-                        subtitle: Text(comment.articleId),
-                        onTap: () {},
-                      );
-                    }));
-          },
-        ),
+        buildMyCommentsQuery(_userChangeNotifier),
       ]),
     );
+  }
+
+  Query buildMyCommentsQuery(UserChangeNotifier _userChangeNotifier) {
+    return Query(
+      options: QueryOptions(
+        document: gql(myCommentsQuery),
+        variables: <String, dynamic>{
+          'user_id': _userChangeNotifier.currentUser?.uid ?? '',
+        },
+      ),
+      builder: (QueryResult result,
+          {VoidCallback? refetch, FetchMore? fetchMore}) {
+        if (result.hasException) {
+          return Text(result.exception.toString());
+        }
+
+        if (result.isLoading) {
+          return const Text('Loading');
+        }
+
+        var comments = <Comment>[];
+        final resultData = result.data;
+        if (resultData != null) {
+          comments = CommentListResponse.fromJson(resultData).comments;
+        }
+
+        return Expanded(
+            // The ListView
+            child: buildListView(comments));
+      },
+    );
+  }
+
+  ListView buildListView(List<Comment> comments) {
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: comments.length,
+        itemBuilder: (BuildContext context, int index) {
+          final comment = comments[index];
+          return ListTile(
+            title: Text(comment.text),
+            trailing: const Icon(Icons.more_vert),
+            subtitle: Text(comment.articleId),
+            onTap: () {},
+          );
+        });
   }
 
   Widget _header(BuildContext context, User? currentUser) {
@@ -114,33 +122,7 @@ class MyPageView extends HookWidget {
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Query(
-                  options: QueryOptions(
-                    document: gql(myUserQuery),
-                    variables: <String, dynamic>{
-                      'id': currentUser?.uid ?? '',
-                    },
-                  ),
-                  builder: (QueryResult result,
-                      {VoidCallback? refetch, FetchMore? fetchMore}) {
-                    if (result.hasException) {
-                      return Text(result.exception.toString());
-                    }
-
-                    if (result.isLoading) {
-                      return const Text('Loading');
-                    }
-
-                    final resultData =
-                        result.data?['users_by_pk'] as Map<String, dynamic>?;
-                    if (resultData == null) {
-                      return const Text('No User');
-                    }
-
-                    final appUser = AppUser.fromJson(resultData);
-                    return Text('name: ${appUser.name}, id: ${appUser.id}');
-                  },
-                ),
+                buildMyUserQuery(currentUser),
                 Text('uid: ${currentUser?.uid}'),
                 Text('email: ${currentUser?.email}'),
                 ElevatedButton(
@@ -180,31 +162,64 @@ class MyPageView extends HookWidget {
                     },
                     child: const Text('サインアウト'),
                   ),
-                Mutation(
-                  options: MutationOptions(
-                    document: gql(insertCommentMutation),
-                    onCompleted: (dynamic resultData) {
-                      debugPrint('resultData: $resultData');
-                    },
-                    onError: (e) {
-                      debugPrint('error: $e');
-                    },
-                  ),
-                  builder: (
-                    RunMutation runMutation,
-                    QueryResult? result,
-                  ) {
-                    return ElevatedButton(
-                      onPressed: () => runMutation(<String, dynamic>{
-                        'text': '本文',
-                      }),
-                      child: const Text('Commentを追加'),
-                    );
-                  },
-                ),
+                buildInsertCommentMutation(),
               ],
             ))),
       ),
+    );
+  }
+
+  Query buildMyUserQuery(User? currentUser) {
+    return Query(
+      options: QueryOptions(
+        document: gql(myUserQuery),
+        variables: <String, dynamic>{
+          'id': currentUser?.uid ?? '',
+        },
+      ),
+      builder: (QueryResult result,
+          {VoidCallback? refetch, FetchMore? fetchMore}) {
+        if (result.hasException) {
+          return Text(result.exception.toString());
+        }
+
+        if (result.isLoading) {
+          return const Text('Loading');
+        }
+
+        final resultData = result.data?['users_by_pk'] as Map<String, dynamic>?;
+        if (resultData == null) {
+          return const Text('No User');
+        }
+
+        final appUser = AppUser.fromJson(resultData);
+        return Text('name: ${appUser.name}, id: ${appUser.id}');
+      },
+    );
+  }
+
+  Mutation buildInsertCommentMutation() {
+    return Mutation(
+      options: MutationOptions(
+        document: gql(insertCommentMutation),
+        onCompleted: (dynamic resultData) {
+          debugPrint('resultData: $resultData');
+        },
+        onError: (e) {
+          debugPrint('error: $e');
+        },
+      ),
+      builder: (
+        RunMutation runMutation,
+        QueryResult? result,
+      ) {
+        return ElevatedButton(
+          onPressed: () => runMutation(<String, dynamic>{
+            'text': '本文',
+          }),
+          child: const Text('Commentを追加'),
+        );
+      },
     );
   }
 }
