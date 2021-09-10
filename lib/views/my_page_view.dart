@@ -51,12 +51,81 @@ class MyPageView extends HookWidget {
         title: const Text('LaboFlutter'),
         backgroundColor: Colors.blue,
       ),
-      body:
-          Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-        _header(context, _userChangeNotifier.currentUser),
-        buildMyCommentsQuery(_userChangeNotifier),
-      ]),
+      body: _userChangeNotifier.currentUser == null
+          ? buildNotLoggedInWidget(context)
+          : buildLoggedInWidget(context, _userChangeNotifier),
     );
+  }
+
+  Widget buildNotLoggedInWidget(
+    BuildContext context,
+  ) {
+    return Container(
+      margin: const EdgeInsets.only(left: 40, right: 40),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Icon(
+            Icons.person,
+            size: 80,
+          ),
+          const Text(
+            '保存した記事を閲覧',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            height: 44,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                      builder: (context) => const SignUpView()),
+                );
+              },
+              child: const Text(
+                '新規登録',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            height: 44,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                      builder: (context) => const SignInView()),
+                );
+              },
+              style: ElevatedButton.styleFrom(primary: Colors.white),
+              child: const Text(
+                'ログイン',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildLoggedInWidget(
+      BuildContext context, UserChangeNotifier _userChangeNotifier) {
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          _header(context, _userChangeNotifier.currentUser),
+          buildMyCommentsQuery(_userChangeNotifier),
+        ]);
   }
 
   Query buildMyCommentsQuery(UserChangeNotifier _userChangeNotifier) {
