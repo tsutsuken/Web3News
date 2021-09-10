@@ -11,8 +11,8 @@ const String insertCommentMutation = '''
   }
 ''';
 
-class CreateCommentView extends HookWidget {
-  const CreateCommentView({Key? key, required this.articleId})
+class CommentCreateView extends HookWidget {
+  const CommentCreateView({Key? key, required this.articleId})
       : super(key: key);
 
   final String articleId;
@@ -23,7 +23,7 @@ class CreateCommentView extends HookWidget {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text('CreateCommentView'),
+          title: const Text('CommentCreateView'),
           actions: [
             Mutation(
               options: MutationOptions(
