@@ -20,8 +20,8 @@ class _HomeViewState extends State<HomeView>
   ];
 
   final List<Widget> childViews = [
-    const Center(child: _ArticlesQuery()),
-    const Center(child: _ArticlesQuery()),
+    const Center(child: _ArticlesQuery(key: PageStorageKey(0))),
+    const Center(child: _ArticlesQuery(key: PageStorageKey(1))),
   ];
 
   @override
