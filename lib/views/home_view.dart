@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:labo_flutter/models/article/article.dart';
@@ -95,23 +96,46 @@ class _ArticlesQuery extends StatelessWidget {
 
         return ListView.builder(
             shrinkWrap: true,
+            addAutomaticKeepAlives: true,
+            cacheExtent: 1000,
             itemCount: articles.length,
             itemBuilder: (BuildContext context, int index) {
               final article = articles[index];
-              return _articleListItem(context, article);
+              return _ArticleListItem(
+                  key: ValueKey(index), context: context, article: article);
             });
       },
     );
   }
+}
 
-  Widget _articleListItem(BuildContext context, Article article) {
+class _ArticleListItem extends StatefulWidget {
+  const _ArticleListItem({
+    Key? key,
+    required this.context,
+    required this.article,
+  }) : super(key: key);
+
+  final BuildContext context;
+  final Article article;
+
+  @override
+  _ArticleListItemState createState() => _ArticleListItemState();
+}
+
+class _ArticleListItemState extends State<_ArticleListItem>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute<void>(
               builder: (context) => ArticleDetailView(
-                  articleId: article.id, articleUrl: article.url)),
+                  articleId: widget.article.id,
+                  articleUrl: widget.article.url)),
         );
       },
       child: Container(
@@ -123,31 +147,17 @@ class _ArticlesQuery extends StatelessWidget {
             children: <Widget>[
               Container(
                 margin: const EdgeInsets.only(right: 8),
-                child: Image.network(
-                  article.urlToImage,
-                  fit: BoxFit.cover,
+                child: CachedNetworkImage(
                   width: 160,
-                  loadingBuilder: (BuildContext context, Widget child,
-                      ImageChunkEvent? loadingProgress) {
-                    if (loadingProgress == null) {
-                      return child;
-                    } else {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.blue),
-                        ),
-                      );
-                    }
-                  },
-                  errorBuilder: (context, object, stack) {
-                    return Image.asset('assets/images/default_article.png');
-                  },
+                  fit: BoxFit.cover,
+                  imageUrl: widget.article.urlToImage,
+                  errorWidget: (context, url, dynamic error) =>
+                      Image.asset('assets/images/default_article.png'),
                 ),
               ),
               Flexible(
                 child: Text(
-                  article.title,
+                  widget.article.title,
                   style: const TextStyle(color: Colors.black, fontSize: 18),
                 ),
               ),
@@ -155,4 +165,7 @@ class _ArticlesQuery extends StatelessWidget {
           )),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
