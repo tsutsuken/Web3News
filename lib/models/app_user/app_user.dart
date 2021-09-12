@@ -9,6 +9,7 @@ abstract class AppUser with _$AppUser {
     @Default('') String id,
     @Default('') String name,
     @Default('') String createdAt,
+    @Default('http://placehold.jp/150x150.png') String profileImageUrl,
   }) = _AppUser;
 
   factory AppUser.fromJson(Map<String, dynamic> json) =>

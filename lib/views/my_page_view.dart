@@ -7,6 +7,7 @@ import 'package:labo_flutter/models/app_user/app_user.dart';
 import 'package:labo_flutter/models/comment/comment.dart';
 import 'package:labo_flutter/providers/user_change_notifier_provider.dart';
 import 'package:labo_flutter/views/edit_profile_view.dart';
+import 'package:labo_flutter/views/setting_view.dart';
 import 'package:labo_flutter/views/sign_in_view.dart';
 import 'package:labo_flutter/views/sign_up_view.dart';
 
@@ -50,6 +51,16 @@ class MyPageView extends HookWidget {
       appBar: AppBar(
         title: const Text('LaboFlutter'),
         backgroundColor: Colors.blue,
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                        builder: (context) => const SettingView()));
+              },
+              icon: const Icon(Icons.settings))
+        ],
       ),
       body: _userChangeNotifier.currentUser == null
           ? buildNotLoggedInWidget(context)
@@ -176,25 +187,20 @@ class MyPageView extends HookWidget {
 
   Widget _header(BuildContext context, User? currentUser) {
     return Container(
-      decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(width: 1, color: Colors.grey))),
       child: Container(
-        decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.redAccent, Colors.pinkAccent])),
+        color: Colors.white,
         child: SizedBox(
             width: double.infinity,
-            height: 300,
+            height: 192,
             child: Center(
                 child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 buildMyUserQuery(currentUser),
-                Text('uid: ${currentUser?.uid}'),
-                Text('email: ${currentUser?.email}'),
-                ElevatedButton(
+                SizedBox(
+                  height: 36,
+                  width: 160,
+                  child: ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -204,34 +210,15 @@ class MyPageView extends HookWidget {
                         ),
                       );
                     },
-                    child: const Text('プロフィール編集')),
-                if (currentUser == null) ...[
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute<void>(
-                              builder: (context) => const SignInView()),
-                        );
-                      },
-                      child: const Text('サインイン')),
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute<void>(
-                              builder: (context) => const SignUpView()),
-                        );
-                      },
-                      child: const Text('新規登録')),
-                ] else
-                  ElevatedButton(
-                    onPressed: () {
-                      FirebaseAuth.instance.signOut();
-                    },
-                    child: const Text('サインアウト'),
+                    style: ElevatedButton.styleFrom(primary: Colors.white),
+                    child: const Text('プロフィールを編集',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        )),
                   ),
-                buildInsertCommentMutation(),
+                ),
               ],
             ))),
       ),
@@ -262,33 +249,29 @@ class MyPageView extends HookWidget {
         }
 
         final appUser = AppUser.fromJson(resultData);
-        return Text('name: ${appUser.name}, id: ${appUser.id}');
+        return _buildUserInfoContainer(appUser);
+        // return Text(appUser.name);
       },
     );
   }
 
-  Mutation buildInsertCommentMutation() {
-    return Mutation(
-      options: MutationOptions(
-        document: gql(insertCommentMutation),
-        onCompleted: (dynamic resultData) {
-          debugPrint('resultData: $resultData');
-        },
-        onError: (e) {
-          debugPrint('error: $e');
-        },
-      ),
-      builder: (
-        RunMutation runMutation,
-        QueryResult? result,
-      ) {
-        return ElevatedButton(
-          onPressed: () => runMutation(<String, dynamic>{
-            'text': '本文',
-          }),
-          child: const Text('Commentを追加'),
-        );
-      },
+  Widget _buildUserInfoContainer(AppUser appUser) {
+    return Column(
+      children: [
+        const SizedBox(height: 12),
+        Container(
+          height: 80,
+          width: 80,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image:
+                DecorationImage(image: NetworkImage(appUser.profileImageUrl)),
+          ),
+        ),
+        const SizedBox(height: 12),
+        Text(appUser.name),
+        const SizedBox(height: 12),
+      ],
     );
   }
 }

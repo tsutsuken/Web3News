@@ -20,11 +20,16 @@ AppUser _$AppUserFromJson(Map<String, dynamic> json) {
 class _$AppUserTearOff {
   const _$AppUserTearOff();
 
-  _AppUser call({String id = '', String name = '', String createdAt = ''}) {
+  _AppUser call(
+      {String id = '',
+      String name = '',
+      String createdAt = '',
+      String profileImageUrl = 'http://placehold.jp/150x150.png'}) {
     return _AppUser(
       id: id,
       name: name,
       createdAt: createdAt,
+      profileImageUrl: profileImageUrl,
     );
   }
 
@@ -41,6 +46,7 @@ mixin _$AppUser {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get createdAt => throw _privateConstructorUsedError;
+  String get profileImageUrl => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -51,7 +57,7 @@ mixin _$AppUser {
 abstract class $AppUserCopyWith<$Res> {
   factory $AppUserCopyWith(AppUser value, $Res Function(AppUser) then) =
       _$AppUserCopyWithImpl<$Res>;
-  $Res call({String id, String name, String createdAt});
+  $Res call({String id, String name, String createdAt, String profileImageUrl});
 }
 
 /// @nodoc
@@ -67,6 +73,7 @@ class _$AppUserCopyWithImpl<$Res> implements $AppUserCopyWith<$Res> {
     Object? id = freezed,
     Object? name = freezed,
     Object? createdAt = freezed,
+    Object? profileImageUrl = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -81,6 +88,10 @@ class _$AppUserCopyWithImpl<$Res> implements $AppUserCopyWith<$Res> {
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as String,
+      profileImageUrl: profileImageUrl == freezed
+          ? _value.profileImageUrl
+          : profileImageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -90,7 +101,7 @@ abstract class _$AppUserCopyWith<$Res> implements $AppUserCopyWith<$Res> {
   factory _$AppUserCopyWith(_AppUser value, $Res Function(_AppUser) then) =
       __$AppUserCopyWithImpl<$Res>;
   @override
-  $Res call({String id, String name, String createdAt});
+  $Res call({String id, String name, String createdAt, String profileImageUrl});
 }
 
 /// @nodoc
@@ -107,6 +118,7 @@ class __$AppUserCopyWithImpl<$Res> extends _$AppUserCopyWithImpl<$Res>
     Object? id = freezed,
     Object? name = freezed,
     Object? createdAt = freezed,
+    Object? profileImageUrl = freezed,
   }) {
     return _then(_AppUser(
       id: id == freezed
@@ -121,6 +133,10 @@ class __$AppUserCopyWithImpl<$Res> extends _$AppUserCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as String,
+      profileImageUrl: profileImageUrl == freezed
+          ? _value.profileImageUrl
+          : profileImageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -128,7 +144,11 @@ class __$AppUserCopyWithImpl<$Res> extends _$AppUserCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_AppUser implements _AppUser {
-  const _$_AppUser({this.id = '', this.name = '', this.createdAt = ''});
+  const _$_AppUser(
+      {this.id = '',
+      this.name = '',
+      this.createdAt = '',
+      this.profileImageUrl = 'http://placehold.jp/150x150.png'});
 
   factory _$_AppUser.fromJson(Map<String, dynamic> json) =>
       _$_$_AppUserFromJson(json);
@@ -142,10 +162,13 @@ class _$_AppUser implements _AppUser {
   @JsonKey(defaultValue: '')
   @override
   final String createdAt;
+  @JsonKey(defaultValue: 'http://placehold.jp/150x150.png')
+  @override
+  final String profileImageUrl;
 
   @override
   String toString() {
-    return 'AppUser(id: $id, name: $name, createdAt: $createdAt)';
+    return 'AppUser(id: $id, name: $name, createdAt: $createdAt, profileImageUrl: $profileImageUrl)';
   }
 
   @override
@@ -158,7 +181,10 @@ class _$_AppUser implements _AppUser {
                 const DeepCollectionEquality().equals(other.name, name)) &&
             (identical(other.createdAt, createdAt) ||
                 const DeepCollectionEquality()
-                    .equals(other.createdAt, createdAt)));
+                    .equals(other.createdAt, createdAt)) &&
+            (identical(other.profileImageUrl, profileImageUrl) ||
+                const DeepCollectionEquality()
+                    .equals(other.profileImageUrl, profileImageUrl)));
   }
 
   @override
@@ -166,7 +192,8 @@ class _$_AppUser implements _AppUser {
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(id) ^
       const DeepCollectionEquality().hash(name) ^
-      const DeepCollectionEquality().hash(createdAt);
+      const DeepCollectionEquality().hash(createdAt) ^
+      const DeepCollectionEquality().hash(profileImageUrl);
 
   @JsonKey(ignore: true)
   @override
@@ -180,8 +207,11 @@ class _$_AppUser implements _AppUser {
 }
 
 abstract class _AppUser implements AppUser {
-  const factory _AppUser({String id, String name, String createdAt}) =
-      _$_AppUser;
+  const factory _AppUser(
+      {String id,
+      String name,
+      String createdAt,
+      String profileImageUrl}) = _$_AppUser;
 
   factory _AppUser.fromJson(Map<String, dynamic> json) = _$_AppUser.fromJson;
 
@@ -191,6 +221,8 @@ abstract class _AppUser implements AppUser {
   String get name => throw _privateConstructorUsedError;
   @override
   String get createdAt => throw _privateConstructorUsedError;
+  @override
+  String get profileImageUrl => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$AppUserCopyWith<_AppUser> get copyWith =>

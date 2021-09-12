@@ -11,6 +11,8 @@ _$_AppUser _$_$_AppUserFromJson(Map<String, dynamic> json) {
     id: json['id'] as String? ?? '',
     name: json['name'] as String? ?? '',
     createdAt: json['createdAt'] as String? ?? '',
+    profileImageUrl:
+        json['profileImageUrl'] as String? ?? 'http://placehold.jp/150x150.png',
   );
 }
 
@@ -19,4 +21,5 @@ Map<String, dynamic> _$_$_AppUserToJson(_$_AppUser instance) =>
       'id': instance.id,
       'name': instance.name,
       'createdAt': instance.createdAt,
+      'profileImageUrl': instance.profileImageUrl,
     };
