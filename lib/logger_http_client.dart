@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 
 class LoggerHttpClient extends BaseClient {
@@ -20,11 +19,11 @@ class LoggerHttpClient extends BaseClient {
     return _client.send(request).then((StreamedResponse response) async {
       final responseString = await response.stream.bytesToString();
 
-      debugPrint('''
-        => request: ${response.request.toString()},
-        => headers: ${_encoder.convert(response.headers)},
-        <- statusCode: ${response.statusCode},
-      ''');
+      // debugPrint('''
+      //   => request: ${response.request.toString()},
+      //   => headers: ${_encoder.convert(response.headers)},
+      //   <- statusCode: ${response.statusCode},
+      // ''');
       // <- responseString: ${_encoder.convert(_decoder.convert(responseString))},
 
       return StreamedResponse(
