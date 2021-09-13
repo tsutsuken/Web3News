@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -32,43 +33,56 @@ const String myCommentsQuery = '''
   }
 ''';
 
-const String insertCommentMutation = '''
-  mutation MyMutation(\$text: String!) {
-    insert_comments_one(object: {text: \$text}) {
-      id
-    }
-  }
-''';
-
-class MyPageView extends HookWidget {
+class MyPageView extends StatefulWidget {
   const MyPageView({Key? key}) : super(key: key);
+
+  @override
+  _MyPageViewState createState() => _MyPageViewState();
+}
+
+class _MyPageViewState extends State<MyPageView>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  static const List<Tab> tabs = <Tab>[
+    Tab(text: 'コメント'),
+    Tab(text: 'お気に入り'),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(vsync: this, length: tabs.length);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _ScaffoldWidget(tabController: _tabController, tabs: tabs);
+  }
+}
+
+class _ScaffoldWidget extends HookWidget {
+  const _ScaffoldWidget({
+    Key? key,
+    required TabController tabController,
+    required this.tabs,
+  })  : _tabController = tabController,
+        super(key: key);
+
+  final TabController _tabController;
+  final List<Tab> tabs;
 
   @override
   Widget build(BuildContext context) {
     final _userChangeNotifier = useProvider(userChangeNotifierProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('LaboFlutter'),
-        backgroundColor: Colors.blue,
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute<void>(
-                        builder: (context) => const SettingView()));
-              },
-              icon: const Icon(Icons.settings))
-        ],
-      ),
       body: _userChangeNotifier.currentUser == null
-          ? buildNotLoggedInWidget(context)
-          : buildLoggedInWidget(context, _userChangeNotifier),
+          ? _buildNotLoggedInWidget(context)
+          : _buildLoggedInWidget(context, _userChangeNotifier),
     );
   }
 
-  Widget buildNotLoggedInWidget(
+  Widget _buildNotLoggedInWidget(
     BuildContext context,
   ) {
     return Container(
@@ -129,17 +143,48 @@ class MyPageView extends HookWidget {
     );
   }
 
-  Widget buildLoggedInWidget(
+  Widget _buildLoggedInWidget(
       BuildContext context, UserChangeNotifier _userChangeNotifier) {
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          _header(context, _userChangeNotifier.currentUser),
-          buildMyCommentsQuery(_userChangeNotifier),
-        ]);
+    return CustomScrollView(
+      slivers: [
+        _buildSliverAppBar(context, _userChangeNotifier),
+        _buildMyCommentsQuery(_userChangeNotifier)
+      ],
+    );
   }
 
-  Query buildMyCommentsQuery(UserChangeNotifier _userChangeNotifier) {
+  SliverAppBar _buildSliverAppBar(
+      BuildContext context, UserChangeNotifier _userChangeNotifier) {
+    return SliverAppBar(
+      pinned: true,
+      expandedHeight: 280,
+      toolbarHeight: 56,
+      title: const Text('マイページ'),
+      actions: [
+        IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                      builder: (context) => const SettingView()));
+            },
+            icon: const Icon(Icons.settings))
+      ],
+      flexibleSpace: FlexibleSpaceBar(
+        collapseMode: CollapseMode.pin,
+        centerTitle: true,
+        background: Container(
+          child: _buildBarContent(context, _userChangeNotifier.currentUser),
+        ),
+      ),
+      bottom: TabBar(
+        controller: _tabController,
+        tabs: tabs,
+      ),
+    );
+  }
+
+  Query _buildMyCommentsQuery(UserChangeNotifier _userChangeNotifier) {
     return Query(
       options: QueryOptions(
         document: gql(myCommentsQuery),
@@ -150,11 +195,11 @@ class MyPageView extends HookWidget {
       builder: (QueryResult result,
           {VoidCallback? refetch, FetchMore? fetchMore}) {
         if (result.hasException) {
-          return Text(result.exception.toString());
+          return SliverToBoxAdapter(child: Text(result.exception.toString()));
         }
 
         if (result.isLoading) {
-          return const Text('Loading');
+          return const SliverToBoxAdapter(child: Text('Loading'));
         }
 
         var comments = <Comment>[];
@@ -163,69 +208,62 @@ class MyPageView extends HookWidget {
           comments = CommentListResponse.fromJson(resultData).comments;
         }
 
-        return Expanded(
-            // The ListView
-            child: buildListView(comments));
+        return _buildSliverList(comments);
       },
     );
   }
 
-  ListView buildListView(List<Comment> comments) {
-    return ListView.builder(
-        shrinkWrap: true,
-        itemCount: comments.length,
-        itemBuilder: (BuildContext context, int index) {
-          final comment = comments[index];
-          return ListTile(
-            title: Text(comment.text),
-            trailing: const Icon(Icons.more_vert),
-            subtitle: Text(comment.articleId),
-            onTap: () {},
-          );
-        });
-  }
-
-  Widget _header(BuildContext context, User? currentUser) {
-    return Container(
-      child: Container(
-        color: Colors.white,
-        child: SizedBox(
-            width: double.infinity,
-            height: 192,
-            child: Center(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                buildMyUserQuery(currentUser),
-                SizedBox(
-                  height: 36,
-                  width: 160,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<void>(
-                          builder: (context) => const EditProfileView(),
-                          fullscreenDialog: true,
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(primary: Colors.white),
-                    child: const Text('プロフィールを編集',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        )),
-                  ),
-                ),
-              ],
-            ))),
-      ),
+  SliverList _buildSliverList(List<Comment> comments) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+        final comment = comments[index];
+        return ListTile(
+          title: Text(comment.text),
+          trailing: const Icon(Icons.more_vert),
+          subtitle: Text(comment.articleId),
+          onTap: () {},
+        );
+      }, childCount: comments.length),
     );
   }
 
-  Query buildMyUserQuery(User? currentUser) {
+  Widget _buildBarContent(BuildContext context, User? currentUser) {
+    return SizedBox(
+        width: double.infinity,
+        height: 192,
+        child: Center(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _buildMyUserQuery(currentUser),
+            SizedBox(
+              height: 36,
+              width: 160,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (context) => const EditProfileView(),
+                      fullscreenDialog: true,
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(primary: Colors.white),
+                child: const Text('プロフィールを編集',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    )),
+              ),
+            ),
+          ],
+        )));
+  }
+
+  Query _buildMyUserQuery(User? currentUser) {
     return Query(
       options: QueryOptions(
         document: gql(myUserQuery),
@@ -269,7 +307,10 @@ class MyPageView extends HookWidget {
           ),
         ),
         const SizedBox(height: 12),
-        Text(appUser.name),
+        Text(
+          appUser.name,
+          style: const TextStyle(color: Colors.white),
+        ),
         const SizedBox(height: 12),
       ],
     );
