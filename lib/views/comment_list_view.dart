@@ -46,23 +46,35 @@ class CommentListView extends StatelessWidget {
                   comments = CommentListResponse.fromJson(resultData).comments;
                 }
 
-                return Flexible(
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: comments.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final comment = comments[index];
-                        return ListTile(
-                          title: Text('text: ${comment.text}'),
-                          trailing: const Icon(Icons.more_vert),
-                          subtitle: Text('user_id: ${comment.userId}'),
-                          onTap: () {},
-                        );
-                      }),
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    if (refetch != null) {
+                      refetch();
+                    }
+                  },
+                  child: Flexible(
+                    child: _buildListView(comments),
+                  ),
                 );
               })
         ],
       ),
     );
+  }
+
+  ListView _buildListView(List<Comment> comments) {
+    return ListView.builder(
+        physics: const AlwaysScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: comments.length,
+        itemBuilder: (BuildContext context, int index) {
+          final comment = comments[index];
+          return ListTile(
+            title: Text('text: ${comment.text}'),
+            trailing: const Icon(Icons.more_vert),
+            subtitle: Text('user_id: ${comment.userId}'),
+            onTap: () {},
+          );
+        });
   }
 }
