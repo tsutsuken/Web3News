@@ -8,7 +8,6 @@ import 'package:labo_flutter/graphql_api_client.dart';
 import 'package:labo_flutter/providers/user_change_notifier_provider.dart';
 import 'package:labo_flutter/views/home_view.dart';
 import 'package:labo_flutter/views/my_page_view.dart';
-import 'package:labo_flutter/views/playground_view.dart';
 
 const graphqlEndpoint = 'https://labo-flutter.hasura.app/v1/graphql';
 
@@ -45,15 +44,14 @@ class MyApp extends HookWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const RootView(title: 'RootView'),
+        home: const RootView(),
       ),
     );
   }
 }
 
 class RootView extends StatefulWidget {
-  const RootView({Key? key, required this.title}) : super(key: key);
-  final String title;
+  const RootView({Key? key}) : super(key: key);
 
   @override
   _RootViewState createState() => _RootViewState();
@@ -63,7 +61,6 @@ class _RootViewState extends State<RootView> {
   int currentIndex = 0;
   final List<Widget> childViews = [
     const HomeView(),
-    const PlaygroundView(title: 'PlaygroundView', color: Colors.redAccent),
     const MyPageView(),
   ];
 
@@ -71,10 +68,6 @@ class _RootViewState extends State<RootView> {
     BottomNavigationBarItem(
       icon: Icon(Icons.home),
       label: 'ホーム',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.mail),
-      label: 'Playground',
     ),
     BottomNavigationBarItem(
       icon: Icon(Icons.person),
