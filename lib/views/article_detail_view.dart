@@ -2,8 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:labo_flutter/providers/user_change_notifier_provider.dart';
 import 'package:labo_flutter/views/comment_create_view.dart';
 import 'package:labo_flutter/views/comment_list_view.dart';
+import 'package:labo_flutter/views/promote_sign_in_view.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ArticleDetailView extends HookWidget {
@@ -26,7 +29,8 @@ class ArticleDetailView extends HookWidget {
     return Scaffold(
       appBar: buildAppBar(),
       body: buildWebView(),
-      bottomNavigationBar: _buildBottomAppBar(context),
+      bottomNavigationBar:
+          ArticleDetailBottomAppBar(articleId: articleId, context: context),
     );
   }
 
@@ -43,8 +47,51 @@ class ArticleDetailView extends HookWidget {
       gestureNavigationEnabled: true,
     );
   }
+}
 
-  BottomAppBar _buildBottomAppBar(BuildContext context) {
+class ArticleDetailBottomAppBar extends HookWidget {
+  const ArticleDetailBottomAppBar({
+    Key? key,
+    required this.articleId,
+    required this.context,
+  }) : super(key: key);
+
+  final String articleId;
+  final BuildContext context;
+
+  @override
+  Widget build(BuildContext context) {
+    final _userChangeNotifier = useProvider(userChangeNotifierProvider);
+
+    void _showPromoteSignInView() {
+      showGeneralDialog(
+        transitionDuration: const Duration(milliseconds: 400),
+        context: context,
+        pageBuilder: (context, anim1, anim2) {
+          return const PromoteSignInView();
+        },
+        transitionBuilder: (context, anim1, anim2, child) {
+          return SlideTransition(
+            position: Tween(begin: const Offset(0, 1), end: Offset.zero)
+                .animate(anim1),
+            child: child,
+          );
+        },
+      );
+    }
+
+    void _showCommentCreateView() {
+      Navigator.push(
+        context,
+        MaterialPageRoute<void>(
+          builder: (context) => CommentCreateView(
+            articleId: articleId,
+          ),
+          fullscreenDialog: true,
+        ),
+      );
+    }
+
     return BottomAppBar(
       color: Colors.blue,
       child: Row(
@@ -53,15 +100,11 @@ class ArticleDetailView extends HookWidget {
           IconButton(
               color: Colors.white,
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (context) => CommentCreateView(
-                      articleId: articleId,
-                    ),
-                    fullscreenDialog: true,
-                  ),
-                );
+                if (_userChangeNotifier.currentUser == null) {
+                  _showPromoteSignInView();
+                } else {
+                  _showCommentCreateView();
+                }
               },
               icon: const Icon(Icons.add_comment)),
           IconButton(
