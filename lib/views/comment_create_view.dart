@@ -24,57 +24,64 @@ class CommentCreateView extends HookWidget {
     return Scaffold(
         appBar: AppBar(
           title: const Text('CommentCreateView'),
-          actions: [
-            Mutation(
-              options: MutationOptions(
-                document: gql(insertCommentMutation),
-                onCompleted: (dynamic resultData) {
-                  Navigator.of(context).pop();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('コメントを投稿しました'),
-                    ),
-                  );
-                },
-                onError: (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('$e'),
-                    ),
-                  );
-                },
-              ),
-              builder: (
-                RunMutation runMutation,
-                QueryResult? result,
-              ) {
-                return ElevatedButton(
-                  onPressed: () => runMutation(<String, dynamic>{
-                    'text': editingTextNotifier.value,
-                    'article_id': articleId
-                  }),
-                  style: ElevatedButton.styleFrom(
-                      textStyle: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  )),
-                  child: const Text('保存'),
-                );
-              },
-            )
-          ],
+          actions: [_buildAppBarActions(context, editingTextNotifier)],
         ),
-        body: Column(children: [
-          TextField(
-            autofocus: true,
-            maxLines: 10,
-            decoration: const InputDecoration(
-              border: InputBorder.none,
-              hintText: 'コメントを書く',
+        body: _buildBody(editingTextNotifier));
+  }
+
+  Mutation _buildAppBarActions(
+      BuildContext context, ValueNotifier<String> editingTextNotifier) {
+    return Mutation(
+      options: MutationOptions(
+        document: gql(insertCommentMutation),
+        onCompleted: (dynamic resultData) {
+          Navigator.of(context).pop();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('コメントを投稿しました'),
             ),
-            onChanged: (text) {
-              editingTextNotifier.value = text;
-            },
-          ),
-        ]));
+          );
+        },
+        onError: (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('$e'),
+            ),
+          );
+        },
+      ),
+      builder: (
+        RunMutation runMutation,
+        QueryResult? result,
+      ) {
+        return ElevatedButton(
+          onPressed: () => runMutation(<String, dynamic>{
+            'text': editingTextNotifier.value,
+            'article_id': articleId
+          }),
+          style: ElevatedButton.styleFrom(
+              textStyle: const TextStyle(
+            fontWeight: FontWeight.bold,
+          )),
+          child: const Text('保存'),
+        );
+      },
+    );
+  }
+
+  Column _buildBody(ValueNotifier<String> editingTextNotifier) {
+    return Column(children: [
+      TextField(
+        autofocus: true,
+        maxLines: 10,
+        decoration: const InputDecoration(
+          border: InputBorder.none,
+          hintText: 'コメントを書く',
+        ),
+        onChanged: (text) {
+          editingTextNotifier.value = text;
+        },
+      ),
+    ]);
   }
 }
