@@ -4,28 +4,47 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:labo_flutter/logger_http_client.dart';
 
+final authAuthorizationLink = AuthLink(
+  headerKey: 'Authorization',
+  getToken: () async {
+    final idToken = await FirebaseAuth.instance.currentUser?.getIdToken();
+    if (idToken == null) {
+      return null;
+    } else {
+      return 'Bearer $idToken';
+    }
+  },
+);
+
+final authRoleLink = AuthLink(
+  headerKey: 'X-Hasura-Role',
+  getToken: () {
+    var role = '';
+    if (FirebaseAuth.instance.currentUser != null) {
+      role = 'user';
+    } else {
+      role = 'anonymous';
+    }
+    return role;
+  },
+);
+
+final authUserIdLink = AuthLink(
+  headerKey: 'X-Hasura-User-Id',
+  getToken: () => FirebaseAuth.instance.currentUser?.uid,
+);
+
+final httpLink = HttpLink('https://labo-flutter.hasura.app/v1/graphql',
+    httpClient: LoggerHttpClient(http.Client()));
+
 ValueNotifier<GraphQLClient> clientFor({
   required String uri,
-  required String idToken,
 }) {
-  final userid = FirebaseAuth.instance.currentUser?.uid ?? '';
-  var defaultHeaders = <String, String>{};
-  if (idToken.isNotEmpty) {
-    defaultHeaders = {
-      'Authorization': 'Bearer $idToken',
-      'X-Hasura-Role':
-          'user', // role未指定の場合、HASURA_GRAPHQL_UNAUTHORIZED_ROLEのroleがセットされる
-      'X-Hasura-User-Id': userid,
-    };
-  }
-  final httpLink = HttpLink('https://labo-flutter.hasura.app/v1/graphql',
-      defaultHeaders: defaultHeaders,
-      httpClient: LoggerHttpClient(http.Client()));
-
   return ValueNotifier<GraphQLClient>(
     GraphQLClient(
       cache: GraphQLCache(store: HiveStore()),
-      link: httpLink,
+      link: Link.from(
+          [authAuthorizationLink, authRoleLink, authUserIdLink, httpLink]),
     ),
   );
 }
@@ -37,10 +56,8 @@ class GraphQLApiClient extends StatelessWidget {
     Key? key,
     required this.child,
     required String uri,
-    required String idToken,
   })  : client = clientFor(
           uri: uri,
-          idToken: idToken,
         ),
         super(key: key);
 
