@@ -4,6 +4,30 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:labo_flutter/models/article/article.dart';
 import 'package:labo_flutter/views/article_detail_view.dart';
 
+const String queryArticlesPopular = '''
+{
+  articles(order_by: {publishedAt: asc}, limit: 50) {
+    id
+    publishedAt
+    title
+    url
+    urlToImage
+  }
+}
+''';
+
+const String queryArticlesNew = '''
+{
+  articles(order_by: {publishedAt: desc}, limit: 50) {
+    id
+    publishedAt
+    title
+    url
+    urlToImage
+  }
+}
+''';
+
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
 
@@ -21,8 +45,16 @@ class _HomeViewState extends State<HomeView>
   ];
 
   final List<Widget> childViews = [
-    const Center(child: _ArticlesQuery(key: PageStorageKey(0))),
-    const Center(child: _ArticlesQuery(key: PageStorageKey(1))),
+    const Center(
+        child: _ArticlesQuery(
+      key: PageStorageKey(0),
+      query: queryArticlesPopular,
+    )),
+    const Center(
+        child: _ArticlesQuery(
+      key: PageStorageKey(1),
+      query: queryArticlesNew,
+    )),
   ];
 
   @override
@@ -56,25 +88,14 @@ class _HomeViewState extends State<HomeView>
 }
 
 class _ArticlesQuery extends StatelessWidget {
-  const _ArticlesQuery({Key? key}) : super(key: key);
-
-  static const String fetchArticlesQuery = '''
-{
-  articles {
-    id
-    publishedAt
-    title
-    url
-    urlToImage
-  }
-}
-''';
+  const _ArticlesQuery({Key? key, required this.query}) : super(key: key);
+  final String query;
 
   @override
   Widget build(BuildContext context) {
     return Query(
       options: QueryOptions(
-        document: gql(fetchArticlesQuery),
+        document: gql(query),
       ),
       builder: (QueryResult result,
           {VoidCallback? refetch, FetchMore? fetchMore}) {
