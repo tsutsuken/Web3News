@@ -136,7 +136,13 @@ class SignInView extends HookWidget {
 
                             if (errorMessage == null) {
                               // ログインに成功した場合
-                              Navigator.of(context).pop();
+                              const didLogin = true;
+                              Navigator.of(context).pop<bool>(didLogin);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('ログインしました'),
+                                ),
+                              );
                             } else {
                               loginModel.setMessage(errorMessage);
                             }

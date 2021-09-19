@@ -55,12 +55,17 @@ class PromoteSignInView extends StatelessWidget {
           SizedBox(
             height: 44,
             child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                final didSignUp = await Navigator.push(
                   context,
-                  MaterialPageRoute<void>(
-                      builder: (context) => const SignUpView()),
+                  MaterialPageRoute<bool>(
+                    builder: (context) => const SignUpView(),
+                  ),
                 );
+
+                if (didSignUp == true) {
+                  Navigator.of(context).pop();
+                }
               },
               child: const Text(
                 '新規登録',
@@ -72,12 +77,17 @@ class PromoteSignInView extends StatelessWidget {
           SizedBox(
             height: 44,
             child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                final didLogin = await Navigator.push(
                   context,
-                  MaterialPageRoute<void>(
-                      builder: (context) => const SignInView()),
+                  MaterialPageRoute<bool>(
+                    builder: (context) => const SignInView(),
+                  ),
                 );
+
+                if (didLogin == true) {
+                  Navigator.of(context).pop();
+                }
               },
               style: ElevatedButton.styleFrom(primary: Colors.white),
               child: const Text(

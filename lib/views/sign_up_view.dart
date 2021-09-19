@@ -131,7 +131,8 @@ class SignUpView extends HookWidget {
                             final errorMessage = await signUpModel.signUp();
                             if (errorMessage == null) {
                               // 成功した場合
-                              Navigator.of(context).pop();
+                              const didSignUp = true;
+                              Navigator.of(context).pop(didSignUp);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('新規登録しました'),
