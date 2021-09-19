@@ -52,13 +52,31 @@ class AppThemes {
       primaryColorBrightness: Brightness.dark,
       textTheme: _darkTextTheme,
       appBarTheme: const AppBarTheme(
-        color: Colors.black,
+        backgroundColor: AppColors.black,
         iconTheme: IconThemeData(color: AppColors.white),
+        backwardsCompatibility: false,
         titleTextStyle: TextStyle(
           color: AppColors.textDarkPrimary,
+          fontSize: 21,
+          fontWeight: FontWeight.bold,
         ),
       ),
-      backgroundColor: AppColors().grey,
+      bottomAppBarTheme: const BottomAppBarTheme(
+        color: AppColors.black,
+      ),
+      tabBarTheme: TabBarTheme(
+        labelColor: AppColors.primary,
+        unselectedLabelColor: AppColors.textDarkSecondary.withOpacity(0.7),
+        indicator: const ShapeDecoration(
+          shape: UnderlineInputBorder(
+            borderSide: BorderSide(
+                color: AppColors.primary, width: 2, style: BorderStyle.solid),
+          ),
+        ),
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        selectedItemColor: AppColors.primary,
+      ),
     );
   }
 

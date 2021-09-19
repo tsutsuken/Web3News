@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:labo_flutter/utils/app_colors.dart';
 
 class SettingView extends StatelessWidget {
   const SettingView({Key? key}) : super(key: key);
@@ -17,7 +18,12 @@ class SettingView extends StatelessWidget {
               FirebaseAuth.instance.signOut();
             },
             leading: const Icon(Icons.logout),
-            title: const Text('ログアウト'),
+            title: Text(
+              'ログアウト',
+              style: TextStyle(
+                color: AppColors().textPrimary,
+              ),
+            ),
           )
         ],
       ),

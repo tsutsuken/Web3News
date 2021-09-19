@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'MaterialApp',
         theme: AppThemes().lightTheme,
+        darkTheme: AppThemes().darkTheme,
         home: const RootView(),
       ),
     );

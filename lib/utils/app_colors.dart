@@ -21,6 +21,9 @@ class AppColors {
   static const Color textDarkSecondary = Color(0xFFE4E7E7);
   static const Color textDarkDisabled = Color(0x61FEFEFE);
 
+  static const Color backgroundLightPrimary = Color(0xFFFFFFFF);
+  static const Color backgroundDarkPrimary = Color(0xFF1A1C1E);
+
   bool get isDarkTheme =>
       WidgetsBinding.instance?.window.platformBrightness == Brightness.dark;
 
@@ -28,7 +31,15 @@ class AppColors {
     return isDarkTheme ? lightGrey : brightGrey;
   }
 
-  Color get primaryText {
+  Color get textPrimary {
     return isDarkTheme ? textDarkPrimary : textLightPrimary;
+  }
+
+  Color get textSecondary {
+    return isDarkTheme ? textDarkSecondary : textLightSecondary;
+  }
+
+  Color get backgroundPrimary {
+    return isDarkTheme ? backgroundDarkPrimary : backgroundLightPrimary;
   }
 }

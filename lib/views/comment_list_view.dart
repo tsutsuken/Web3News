@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:labo_flutter/models/comment/comment.dart';
+import 'package:labo_flutter/utils/app_colors.dart';
 
 const String commentsQuery = '''
   query MyQuery(\$article_id: String!) {
@@ -70,9 +71,15 @@ class CommentListView extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           final comment = comments[index];
           return ListTile(
-            title: Text('text: ${comment.text}'),
+            title: Text(
+              'text: ${comment.text}',
+              style: TextStyle(color: AppColors().textPrimary),
+            ),
             trailing: const Icon(Icons.more_vert),
-            subtitle: Text('user_id: ${comment.userId}'),
+            subtitle: Text(
+              'user_id: ${comment.userId}',
+              style: TextStyle(color: AppColors().textSecondary),
+            ),
             onTap: () {},
           );
         });

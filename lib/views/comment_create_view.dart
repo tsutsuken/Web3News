@@ -61,8 +61,8 @@ class CommentCreateView extends HookWidget {
             'article_id': articleId
           }),
           style: ElevatedButton.styleFrom(
-            primary: AppColors.white,
-            onPrimary: AppColors.textLightPrimary,
+            primary: AppColors().backgroundPrimary,
+            onPrimary: AppColors().textPrimary,
             textStyle: const TextStyle(
               fontWeight: FontWeight.bold,
             ),

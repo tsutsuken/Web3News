@@ -7,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/models/app_user/app_user.dart';
 import 'package:labo_flutter/models/comment/comment.dart';
 import 'package:labo_flutter/providers/user_change_notifier_provider.dart';
+import 'package:labo_flutter/utils/app_colors.dart';
 import 'package:labo_flutter/views/edit_profile_view.dart';
 import 'package:labo_flutter/views/setting_view.dart';
 import 'package:labo_flutter/views/sign_in_view.dart';
@@ -95,10 +96,14 @@ class _ScaffoldWidget extends HookWidget {
             Icons.person,
             size: 80,
           ),
-          const Text(
+          Text(
             '保存した記事を閲覧',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors().textPrimary,
+            ),
           ),
           const SizedBox(height: 12),
           SizedBox(
@@ -218,9 +223,15 @@ class _ScaffoldWidget extends HookWidget {
       delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
         final comment = comments[index];
         return ListTile(
-          title: Text(comment.text),
+          title: Text(
+            comment.text,
+            style: TextStyle(color: AppColors().textPrimary),
+          ),
           trailing: const Icon(Icons.more_vert),
-          subtitle: Text(comment.articleId),
+          subtitle: Text(
+            comment.articleId,
+            style: TextStyle(color: AppColors().textSecondary),
+          ),
           onTap: () {},
         );
       }, childCount: comments.length),

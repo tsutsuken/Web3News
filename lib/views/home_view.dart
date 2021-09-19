@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:labo_flutter/models/article/article.dart';
+import 'package:labo_flutter/utils/app_colors.dart';
 import 'package:labo_flutter/views/article_detail_view.dart';
 
 const String queryArticlesPopular = '''
@@ -176,7 +177,10 @@ class _ArticleListItemState extends State<_ArticleListItem>
               Flexible(
                 child: Text(
                   widget.article.title,
-                  style: const TextStyle(color: Colors.black, fontSize: 18),
+                  style: TextStyle(
+                    color: AppColors().textPrimary,
+                    fontSize: 18,
+                  ),
                 ),
               ),
             ],

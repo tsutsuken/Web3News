@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:labo_flutter/utils/app_colors.dart';
 import 'package:labo_flutter/views/sign_in_view.dart';
 import 'package:labo_flutter/views/sign_up_view.dart';
 
@@ -41,10 +42,14 @@ class PromoteSignInView extends StatelessWidget {
             Icons.person,
             size: 80,
           ),
-          const Text(
+          Text(
             '保存した記事を閲覧',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors().textPrimary,
+            ),
           ),
           const SizedBox(height: 12),
           SizedBox(

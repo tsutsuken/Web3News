@@ -79,8 +79,8 @@ class EditProfileView extends HookWidget {
                   'name': _editProfileViewModel.username,
                 }),
                 style: ElevatedButton.styleFrom(
-                  primary: AppColors.white,
-                  onPrimary: AppColors.textLightPrimary,
+                  primary: AppColors().backgroundPrimary,
+                  onPrimary: AppColors().textPrimary,
                   textStyle: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
