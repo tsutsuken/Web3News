@@ -125,6 +125,9 @@ class EditProfileView extends HookWidget {
                   // return Text('name: ${user.name}, id: ${user.id}');
                   return TextFormField(
                     initialValue: appUser.name,
+                    style: TextStyle(
+                      color: AppColors().textPrimary,
+                    ),
                     decoration: const InputDecoration(
                       labelText: 'ユーザ名',
                       hintText: 'ユーザ名を入力してください',

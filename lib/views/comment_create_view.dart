@@ -78,6 +78,9 @@ class CommentCreateView extends HookWidget {
       TextField(
         autofocus: true,
         maxLines: 10,
+        style: TextStyle(
+          color: AppColors().textPrimary,
+        ),
         decoration: const InputDecoration(
           border: InputBorder.none,
           hintText: 'コメントを書く',
