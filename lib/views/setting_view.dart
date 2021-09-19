@@ -14,8 +14,14 @@ class SettingView extends StatelessWidget {
       body: ListView(
         children: [
           ListTile(
-            onTap: () {
-              FirebaseAuth.instance.signOut();
+            onTap: () async {
+              await FirebaseAuth.instance.signOut();
+              Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('ログアウトしました'),
+                ),
+              );
             },
             leading: const Icon(Icons.logout),
             title: Text(
