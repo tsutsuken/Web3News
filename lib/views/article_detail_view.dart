@@ -93,12 +93,11 @@ class ArticleDetailBottomAppBar extends HookWidget {
     }
 
     return BottomAppBar(
-      color: Colors.blue,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           IconButton(
-              color: Colors.white,
+              color: Theme.of(context).primaryColor,
               onPressed: () {
                 if (_userChangeNotifier.currentUser == null) {
                   _showPromoteSignInView();
@@ -108,7 +107,7 @@ class ArticleDetailBottomAppBar extends HookWidget {
               },
               icon: const Icon(Icons.add_comment)),
           IconButton(
-              color: Colors.white,
+              color: Theme.of(context).primaryColor,
               onPressed: () {
                 Navigator.push(
                   context,

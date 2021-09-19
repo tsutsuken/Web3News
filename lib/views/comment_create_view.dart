@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:labo_flutter/utils/app_colors.dart';
 
 const String insertCommentMutation = '''
   mutation MyMutation(\$text: String!, \$article_id: String!) {
@@ -60,9 +61,12 @@ class CommentCreateView extends HookWidget {
             'article_id': articleId
           }),
           style: ElevatedButton.styleFrom(
-              textStyle: const TextStyle(
-            fontWeight: FontWeight.bold,
-          )),
+            primary: AppColors.white,
+            onPrimary: AppColors.textLightPrimary,
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           child: const Text('保存'),
         );
       },

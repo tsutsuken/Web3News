@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/graphql_api_client.dart';
+import 'package:labo_flutter/utils/app_themes.dart';
 import 'package:labo_flutter/views/home_view.dart';
 import 'package:labo_flutter/views/my_page_view.dart';
 
@@ -36,9 +37,7 @@ class MyApp extends StatelessWidget {
       uri: graphqlEndpoint,
       child: MaterialApp(
         title: 'MaterialApp',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
+        theme: AppThemes().lightTheme,
         home: const RootView(),
       ),
     );

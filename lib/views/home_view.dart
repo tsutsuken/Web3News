@@ -68,14 +68,11 @@ class _HomeViewState extends State<HomeView>
     return Scaffold(
       appBar: AppBar(
         title: const Text('LaboFlutter'),
-        backgroundColor: Colors.blue,
         bottom: PreferredSize(
             preferredSize: const Size.fromHeight(30),
             child: TabBar(
               controller: _tabController,
               isScrollable: true,
-              unselectedLabelColor: Colors.white.withOpacity(0.3),
-              indicatorColor: Colors.white,
               tabs: tabs,
             )),
       ),

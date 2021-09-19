@@ -4,6 +4,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/models/app_user/app_user.dart';
 import 'package:labo_flutter/providers/user_change_notifier_provider.dart';
+import 'package:labo_flutter/utils/app_colors.dart';
 
 final _editProfileViewModelProvider =
     ChangeNotifierProvider.autoDispose((ref) => _EditProfileViewModel());
@@ -78,9 +79,12 @@ class EditProfileView extends HookWidget {
                   'name': _editProfileViewModel.username,
                 }),
                 style: ElevatedButton.styleFrom(
-                    textStyle: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                )),
+                  primary: AppColors.white,
+                  onPrimary: AppColors.textLightPrimary,
+                  textStyle: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 child: const Text('保存'),
               );
             },

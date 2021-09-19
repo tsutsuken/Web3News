@@ -18,13 +18,31 @@ class AppThemes {
       primaryColorBrightness: Brightness.light,
       textTheme: _lightTextTheme,
       appBarTheme: const AppBarTheme(
-        color: AppColors.white,
+        backgroundColor: AppColors.white,
         iconTheme: IconThemeData(color: AppColors.black),
+        backwardsCompatibility: false,
         titleTextStyle: TextStyle(
           color: AppColors.textLightPrimary,
+          fontSize: 21,
+          fontWeight: FontWeight.bold,
         ),
       ),
-      backgroundColor: AppColors().grey,
+      bottomAppBarTheme: const BottomAppBarTheme(
+        color: AppColors.white,
+      ),
+      tabBarTheme: TabBarTheme(
+        labelColor: AppColors.primary,
+        unselectedLabelColor: AppColors.textLightSecondary.withOpacity(0.7),
+        indicator: const ShapeDecoration(
+          shape: UnderlineInputBorder(
+            borderSide: BorderSide(
+                color: AppColors.primary, width: 2, style: BorderStyle.solid),
+          ),
+        ),
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        selectedItemColor: AppColors.primary,
+      ),
     );
   }
 
