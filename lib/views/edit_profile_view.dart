@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:labo_flutter/models/app_user/app_user.dart';
 import 'package:labo_flutter/providers/user_change_notifier_provider.dart';
@@ -51,17 +52,23 @@ class EditProfileView extends HookWidget {
   const EditProfileView({Key? key}) : super(key: key);
 
   Future<bool> updateProfileImage(GraphQLClient client) async {
-    var didSuccess = false;
-    debugPrint('ttmm updateProfileImage');
     final pickedImageFile = await pickImageFromGallery();
-    if (pickedImageFile != null) {
-      final url = await uploadImageToStorage(pickedImageFile);
-      debugPrint('ttmm storage url: $url');
-      if (url != null && url.isNotEmpty) {
-        didSuccess = await updateProfileImageUrl(client, url);
-      }
+    if (pickedImageFile == null) {
+      return false;
     }
-    return didSuccess;
+
+    final croppedImageFile = await cropImage(pickedImageFile);
+    if (croppedImageFile == null) {
+      return false;
+    }
+
+    final newImageUrl = await uploadImageToStorage(croppedImageFile);
+    if (newImageUrl == null || newImageUrl.isEmpty) {
+      return false;
+    }
+
+    final didSuccessUpdate = await updateProfileImageUrl(client, newImageUrl);
+    return didSuccessUpdate;
   }
 
   Future<XFile?> pickImageFromGallery() async {
@@ -70,18 +77,41 @@ class EditProfileView extends HookWidget {
     return pickedImageFile;
   }
 
-  Future<String?> uploadImageToStorage(XFile imageFile) async {
+  Future<File?> cropImage(XFile imageFile) async {
+    final croppedImageFile = await ImageCropper.cropImage(
+      sourcePath: imageFile.path,
+      cropStyle: CropStyle.circle,
+      aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+      maxWidth: 400,
+      maxHeight: 400,
+      androidUiSettings: const AndroidUiSettings(
+        toolbarTitle: 'トリミング',
+        cropFrameColor: Colors.transparent,
+        showCropGrid: false,
+        hideBottomControls: true,
+      ),
+      iosUiSettings: const IOSUiSettings(
+        title: 'トリミング',
+        rotateButtonsHidden: true,
+        resetButtonHidden: true,
+        aspectRatioPickerButtonHidden: true,
+      ),
+    );
+    return croppedImageFile;
+  }
+
+  Future<String?> uploadImageToStorage(File imageFile) async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId == null || userId.isEmpty) {
       return null;
     }
 
     final storage = FirebaseStorage.instance;
-    final file = File(imageFile.path);
     final imageName = DateTime.now().microsecondsSinceEpoch;
     try {
-      final snapshot =
-          await storage.ref('profile/$userId/$imageName.jpg').putFile(file);
+      final snapshot = await storage
+          .ref('profile/$userId/$imageName.jpg')
+          .putFile(imageFile);
       final url = await snapshot.ref.getDownloadURL();
       return url;
     } on Exception catch (error) {
