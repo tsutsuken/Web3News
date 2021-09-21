@@ -55,14 +55,12 @@ class CommentCreateView extends HookWidget {
         RunMutation runMutation,
         QueryResult? result,
       ) {
-        return ElevatedButton(
+        return TextButton(
           onPressed: () => runMutation(<String, dynamic>{
             'text': editingTextNotifier.value,
             'article_id': articleId
           }),
-          style: ElevatedButton.styleFrom(
-            primary: AppColors().backgroundPrimary,
-            onPrimary: AppColors().textPrimary,
+          style: TextButton.styleFrom(
             textStyle: const TextStyle(
               fontWeight: FontWeight.bold,
             ),

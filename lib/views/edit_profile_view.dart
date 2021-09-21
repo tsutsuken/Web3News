@@ -189,14 +189,14 @@ class EditProfileView extends HookWidget {
             RunMutation runMutation,
             QueryResult? result,
           ) {
-            return ElevatedButton(
-              onPressed: () => runMutation(<String, dynamic>{
-                'id': _userChangeNotifier.currentUser?.uid ?? '',
-                'name': _editProfileViewModel.username,
-              }),
-              style: ElevatedButton.styleFrom(
-                primary: AppColors().backgroundPrimary,
-                onPrimary: AppColors().textPrimary,
+            return TextButton(
+              onPressed: () => runMutation(
+                <String, dynamic>{
+                  'id': _userChangeNotifier.currentUser?.uid ?? '',
+                  'name': _editProfileViewModel.username,
+                },
+              ),
+              style: TextButton.styleFrom(
                 textStyle: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
