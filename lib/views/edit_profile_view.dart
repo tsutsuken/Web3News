@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -26,6 +28,15 @@ mutation MyMutation(\$id: String!, \$name: String!) {
 }
 ''';
 
+const String updateUserProfileImageMutation = '''
+mutation MyMutation(\$id: String!, \$profile_image_url: String!) {
+  update_users_by_pk(pk_columns: {id: \$id}, _set: {profile_image_url: \$profile_image_url}) {
+    id
+    profile_image_url
+  }
+}
+''';
+
 const String myUserQuery = '''
 query MyQuery(\$id: String!) {
   users_by_pk(id: \$id) {
@@ -38,10 +49,66 @@ query MyQuery(\$id: String!) {
 class EditProfileView extends HookWidget {
   const EditProfileView({Key? key}) : super(key: key);
 
+  Future<bool> updateProfileImage(GraphQLClient client) async {
+    var didSuccess = false;
+    debugPrint('ttmm updateProfileImage');
+    final pickedImageFile = await pickImageFromGallery();
+    if (pickedImageFile != null) {
+      final url = await uploadImageToStorage(pickedImageFile);
+      debugPrint('ttmm storage url: $url');
+      if (url != null && url.isNotEmpty) {
+        didSuccess = await updateProfileImageUrl(client, url);
+      }
+    }
+    return didSuccess;
+  }
+
   Future<XFile?> pickImageFromGallery() async {
     final picker = ImagePicker();
     final pickedImageFile = await picker.pickImage(source: ImageSource.gallery);
     return pickedImageFile;
+  }
+
+  Future<String?> uploadImageToStorage(XFile imageFile) async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null || userId.isEmpty) {
+      return null;
+    }
+
+    final storage = FirebaseStorage.instance;
+    final file = File(imageFile.path);
+    final imageName = DateTime.now().microsecondsSinceEpoch;
+    try {
+      final snapshot =
+          await storage.ref('profile/$userId/$imageName.jpg').putFile(file);
+      final url = await snapshot.ref.getDownloadURL();
+      return url;
+    } on Exception catch (error) {
+      debugPrint('error $error');
+      return null;
+    }
+  }
+
+  Future<bool> updateProfileImageUrl(GraphQLClient client, String url) async {
+    var didSuccess = false;
+
+    try {
+      final result = await client.mutate(
+        MutationOptions(
+          document: gql(updateUserProfileImageMutation),
+          variables: <String, dynamic>{
+            'id': FirebaseAuth.instance.currentUser?.uid ?? '',
+            'profile_image_url': url,
+          },
+        ),
+      );
+      debugPrint('updateProfileImageUrl success result.data: ${result.data}');
+      didSuccess = true;
+    } on Exception catch (e) {
+      debugPrint('updateProfileImageUrl error: $e');
+    }
+
+    return didSuccess;
   }
 
   @override
@@ -153,35 +220,43 @@ class EditProfileView extends HookWidget {
       key: _formKey,
       child: Column(
         children: [
-          TextButton(
-            onPressed: () async {
-              final pickedImageFile = await pickImageFromGallery();
-              if (pickedImageFile != null) {
-                debugPrint('ttmm _image: ${File(pickedImageFile.path)}');
-              }
+          GraphQLConsumer(
+            builder: (GraphQLClient client) {
+              return TextButton(
+                onPressed: () async {
+                  final didSuccess = await updateProfileImage(client);
+                  final message =
+                      didSuccess ? 'プロフィール写真を変更しました' : 'エラーが発生しました。もう一度お試しください';
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(message),
+                    ),
+                  );
+                },
+                child: Column(
+                  children: [
+                    Container(
+                      height: 80,
+                      width: 80,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            image: NetworkImage(appUser.profileImageUrl)),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    const Text(
+                      'プロフィール写真を変更',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              );
             },
-            child: Column(
-              children: [
-                Container(
-                  height: 80,
-                  width: 80,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                        image: NetworkImage(appUser.profileImageUrl)),
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                const Text(
-                  'プロフィール写真を変更',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
           ),
           TextFormField(
             initialValue: appUser.name,
