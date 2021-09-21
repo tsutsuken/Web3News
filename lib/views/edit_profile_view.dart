@@ -42,6 +42,7 @@ query MyQuery(\$id: String!) {
   users_by_pk(id: \$id) {
     id
     name
+    profile_image_url
   }
 }
 ''';
