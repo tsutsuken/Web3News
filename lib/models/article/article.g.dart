@@ -28,8 +28,8 @@ _$_Article _$_$_ArticleFromJson(Map<String, dynamic> json) {
     title: json['title'] as String? ?? '',
     url: json['url'] as String? ?? '',
     urlToImage:
-        json['urlToImage'] as String? ?? 'http://placehold.jp/150x150.png',
-    publishedAt: json['publishedAt'] as String? ?? '',
+        json['url_to_image'] as String? ?? 'http://placehold.jp/150x150.png',
+    publishedAt: json['published_at'] as String? ?? '',
   );
 }
 
@@ -38,6 +38,6 @@ Map<String, dynamic> _$_$_ArticleToJson(_$_Article instance) =>
       'id': instance.id,
       'title': instance.title,
       'url': instance.url,
-      'urlToImage': instance.urlToImage,
-      'publishedAt': instance.publishedAt,
+      'url_to_image': instance.urlToImage,
+      'published_at': instance.publishedAt,
     };

@@ -7,24 +7,24 @@ import 'package:labo_flutter/views/article_detail_view.dart';
 
 const String queryArticlesPopular = '''
 {
-  articles(order_by: {publishedAt: asc}, limit: 50) {
+  articles(order_by: {published_at: asc}, limit: 50) {
     id
-    publishedAt
+    published_at
     title
     url
-    urlToImage
+    url_to_image
   }
 }
 ''';
 
 const String queryArticlesNew = '''
 {
-  articles(order_by: {publishedAt: desc}, limit: 50) {
+  articles(order_by: {published_at: desc}, limit: 50) {
     id
-    publishedAt
+    published_at
     title
     url
-    urlToImage
+    url_to_image
   }
 }
 ''';

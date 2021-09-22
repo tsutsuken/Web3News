@@ -15,6 +15,7 @@ abstract class ArticleListResponse with _$ArticleListResponse {
 
 @freezed
 abstract class Article with _$Article {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory Article({
     @Default('') String id,
     @Default('') String title,
