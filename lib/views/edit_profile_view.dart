@@ -174,7 +174,7 @@ class EditProfileView extends HookWidget {
             document: gql(updateUserMutation),
             onCompleted: (dynamic resultData) {
               EasyLoading.dismiss();
-              // Navigator.of(context).pop();
+              Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('プロフィールを更新しました'),
