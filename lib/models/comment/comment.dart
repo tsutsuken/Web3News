@@ -15,6 +15,7 @@ abstract class CommentListResponse with _$CommentListResponse {
 
 @freezed
 abstract class Comment with _$Comment {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory Comment({
     @Default('') String id,
     @Default('') String text,

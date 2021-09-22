@@ -26,9 +26,9 @@ _$_Comment _$_$_CommentFromJson(Map<String, dynamic> json) {
   return _$_Comment(
     id: json['id'] as String? ?? '',
     text: json['text'] as String? ?? '',
-    userId: json['userId'] as String? ?? '',
-    articleId: json['articleId'] as String? ?? '',
-    createdAt: json['createdAt'] as String? ?? '',
+    userId: json['user_id'] as String? ?? '',
+    articleId: json['article_id'] as String? ?? '',
+    createdAt: json['created_at'] as String? ?? '',
   );
 }
 
@@ -36,7 +36,7 @@ Map<String, dynamic> _$_$_CommentToJson(_$_Comment instance) =>
     <String, dynamic>{
       'id': instance.id,
       'text': instance.text,
-      'userId': instance.userId,
-      'articleId': instance.articleId,
-      'createdAt': instance.createdAt,
+      'user_id': instance.userId,
+      'article_id': instance.articleId,
+      'created_at': instance.createdAt,
     };
