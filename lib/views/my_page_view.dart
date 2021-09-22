@@ -319,6 +319,7 @@ class _ScaffoldWidget extends HookWidget {
         const SizedBox(height: 12),
         Text(
           appUser.name,
+          style: TextStyle(color: AppColors().textPrimary),
         ),
         const SizedBox(height: 12),
       ],
