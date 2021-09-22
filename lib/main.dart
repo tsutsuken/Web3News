@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/graphql_api_client.dart';
@@ -42,6 +43,19 @@ class MyApp extends StatelessWidget {
         darkTheme: AppThemes().darkTheme,
         home: const RootView(),
         builder: EasyLoading.init(),
+        localizationsDelegates: const [
+          GlobalWidgetsLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en'),
+          Locale('ja'),
+        ],
+        localeResolutionCallback:
+            (Locale? locale, Iterable<Locale> supportedLocales) {
+          return locale;
+        },
       ),
     );
   }

@@ -31,6 +31,8 @@ dependencies:
   flutter_dotenv: ^5.0.0
   flutter_easyloading: ^3.0.3
   flutter_hooks: ^0.17.0
+  flutter_localizations:
+    sdk: flutter
   flutter_state_notifier: ^0.7.0
   freezed_annotation:
   graphql_flutter: ^5.0.0
