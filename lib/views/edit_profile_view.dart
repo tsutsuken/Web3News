@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -62,12 +63,15 @@ class EditProfileView extends HookWidget {
       return false;
     }
 
+    await EasyLoading.show(maskType: EasyLoadingMaskType.black);
     final newImageUrl = await uploadImageToStorage(croppedImageFile);
     if (newImageUrl == null || newImageUrl.isEmpty) {
       return false;
     }
 
     final didSuccessUpdate = await updateProfileImageUrl(client, newImageUrl);
+    await EasyLoading.dismiss();
+
     return didSuccessUpdate;
   }
 
@@ -169,6 +173,7 @@ class EditProfileView extends HookWidget {
           options: MutationOptions(
             document: gql(updateUserMutation),
             onCompleted: (dynamic resultData) {
+              EasyLoading.dismiss();
               // Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -177,6 +182,7 @@ class EditProfileView extends HookWidget {
               );
             },
             onError: (e) {
+              EasyLoading.dismiss();
               debugPrint('e: $e');
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -190,12 +196,16 @@ class EditProfileView extends HookWidget {
             QueryResult? result,
           ) {
             return TextButton(
-              onPressed: () => runMutation(
-                <String, dynamic>{
-                  'id': _userChangeNotifier.currentUser?.uid ?? '',
-                  'name': _editProfileViewModel.username,
-                },
-              ),
+              onPressed: () {
+                runMutation(
+                  <String, dynamic>{
+                    'id': _userChangeNotifier.currentUser?.uid ?? '',
+                    'name': _editProfileViewModel.username,
+                  },
+                );
+
+                EasyLoading.show(maskType: EasyLoadingMaskType.black);
+              },
               style: TextButton.styleFrom(
                 textStyle: const TextStyle(
                   fontWeight: FontWeight.bold,
