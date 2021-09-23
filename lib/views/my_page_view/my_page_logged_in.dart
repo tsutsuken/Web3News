@@ -53,12 +53,25 @@ class _MyPageLoggedInState extends State<MyPageLoggedIn>
 
   @override
   Widget build(BuildContext context) {
-    // return Placeholder();
-    return CustomScrollView(
-      slivers: [
-        _buildSliverAppBar(context),
-        _buildMyCommentsQuery(),
-      ],
+    return NestedScrollView(
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        return <Widget>[
+          SliverOverlapAbsorber(
+            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+            sliver: _buildSliverAppBar(context),
+          ),
+        ];
+      },
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          _buildContentScrollView(
+            const PageStorageKey<String>('0'),
+            myCommentsQuery,
+          ),
+          const Placeholder(),
+        ],
+      ),
     );
   }
 
@@ -183,10 +196,29 @@ class _MyPageLoggedInState extends State<MyPageLoggedIn>
     );
   }
 
-  Query _buildMyCommentsQuery() {
+  Builder _buildContentScrollView(Key key, String query) {
+    return Builder(
+      builder: (BuildContext _context) {
+        return CustomScrollView(
+          key: key,
+          slivers: [
+            SliverOverlapInjector(
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(_context),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.all(8),
+              sliver: _buildQuery(query),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Query _buildQuery(String query) {
     return Query(
       options: QueryOptions(
-        document: gql(myCommentsQuery),
+        document: gql(query),
         variables: <String, dynamic>{
           'user_id': FirebaseAuth.instance.currentUser?.uid ?? '',
         },
