@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:labo_flutter/components/loading_indicator.dart';
 import 'package:labo_flutter/models/article/article.dart';
 import 'package:labo_flutter/utils/app_colors.dart';
 import 'package:labo_flutter/views/article_detail_view.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 const String queryArticlesPopular = '''
 {
@@ -85,12 +88,15 @@ class _HomeViewState extends State<HomeView>
   }
 }
 
-class _ArticlesQuery extends StatelessWidget {
+class _ArticlesQuery extends HookWidget {
   const _ArticlesQuery({Key? key, required this.query}) : super(key: key);
   final String query;
 
   @override
   Widget build(BuildContext context) {
+    final _refreshControllerNotifier =
+        useState<RefreshController>(RefreshController(initialRefresh: false));
+
     return Query(
       options: QueryOptions(
         document: gql(query),
@@ -101,11 +107,9 @@ class _ArticlesQuery extends StatelessWidget {
           return Text(result.exception.toString());
         }
 
-        if (result.isLoading) {
-          return const Text('Loading');
+        if (result.isLoading && result.data == null) {
+          return const LoadingIndicator();
         }
-
-        // final articles = result.data?['articles'] as List<dynamic>;
 
         var articles = <Article>[];
         final resultData = result.data;
@@ -113,18 +117,31 @@ class _ArticlesQuery extends StatelessWidget {
           articles = ArticleListResponse.fromJson(resultData).articles;
         }
 
-        return ListView.builder(
-            shrinkWrap: true,
-            addAutomaticKeepAlives: true,
-            cacheExtent: 1000,
-            itemCount: articles.length,
-            itemBuilder: (BuildContext context, int index) {
-              final article = articles[index];
-              return _ArticleListItem(
-                  key: ValueKey(index), context: context, article: article);
-            });
+        return SmartRefresher(
+          controller: _refreshControllerNotifier.value,
+          onRefresh: () async {
+            _refreshControllerNotifier.value.refreshCompleted();
+            if (refetch != null) {
+              refetch();
+            }
+          },
+          child: _buildListView(articles),
+        );
       },
     );
+  }
+
+  ListView _buildListView(List<Article> articles) {
+    return ListView.builder(
+        shrinkWrap: true,
+        addAutomaticKeepAlives: true,
+        cacheExtent: 1000,
+        itemCount: articles.length,
+        itemBuilder: (BuildContext context, int index) {
+          final article = articles[index];
+          return _ArticleListItem(
+              key: ValueKey(index), context: context, article: article);
+        });
   }
 }
 
