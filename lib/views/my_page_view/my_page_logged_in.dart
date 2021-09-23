@@ -18,9 +18,21 @@ query MyQuery(\$id: String!) {
 }
 ''';
 
-const String myCommentsQuery = '''
+const String myCommentsDescendingQuery = '''
   query MyQuery(\$user_id: String!) {
-    comments(where: {user_id: {_eq: \$user_id}}) {
+    comments(order_by: {created_at: desc}, where: {user_id: {_eq: \$user_id}}) {
+      id
+      created_at
+      text
+      user_id
+      article_id
+    }
+  }
+''';
+
+const String myCommentsAscendingQuery = '''
+  query MyQuery(\$user_id: String!) {
+    comments(order_by: {created_at: asc}, where: {user_id: {_eq: \$user_id}}) {
       id
       created_at
       text
@@ -41,8 +53,8 @@ class _MyPageLoggedInState extends State<MyPageLoggedIn>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   static const List<Tab> tabs = <Tab>[
-    Tab(text: 'コメント'),
-    Tab(text: 'お気に入り'),
+    Tab(text: 'コメント（新しい順）'),
+    Tab(text: 'コメント（古い順）'),
   ];
 
   @override
@@ -67,9 +79,12 @@ class _MyPageLoggedInState extends State<MyPageLoggedIn>
         children: [
           _buildContentScrollView(
             const PageStorageKey<String>('0'),
-            myCommentsQuery,
+            myCommentsDescendingQuery,
           ),
-          const Placeholder(),
+          _buildContentScrollView(
+            const PageStorageKey<String>('1'),
+            myCommentsAscendingQuery,
+          ),
         ],
       ),
     );
