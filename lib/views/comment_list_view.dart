@@ -54,7 +54,7 @@ class CommentListView extends HookWidget {
           return Text(result.exception.toString());
         }
 
-        if (result.isLoading) {
+        if (result.isLoading && result.data == null) {
           return const LoadingIndicator();
         }
 
