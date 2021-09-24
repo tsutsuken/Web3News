@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -11,7 +12,11 @@ const String commentsQuery = '''
     comments(where: {article_id: {_eq: \$article_id}}) {
       id
       text
-      user_id
+      user {
+        id
+        name
+        profile_image_url
+      }
     }
   }
 ''';
@@ -82,18 +87,49 @@ class CommentListView extends HookWidget {
         itemCount: comments.length,
         itemBuilder: (BuildContext context, int index) {
           final comment = comments[index];
-          return ListTile(
-            title: Text(
-              'text: ${comment.text}',
-              style: TextStyle(color: AppColors().textPrimary),
-            ),
-            trailing: const Icon(Icons.more_vert),
-            subtitle: Text(
-              'user_id: ${comment.userId}',
-              style: TextStyle(color: AppColors().textSecondary),
-            ),
-            onTap: () {},
-          );
+          return _CommentListItem(comment: comment);
         });
+  }
+}
+
+class _CommentListItem extends StatelessWidget {
+  const _CommentListItem({Key? key, required this.comment}) : super(key: key);
+
+  final Comment comment;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+          height: 84,
+          padding: const EdgeInsets.all(8),
+          decoration: const BoxDecoration(
+              border: Border(bottom: BorderSide(width: 1, color: Colors.grey))),
+          child: Row(
+            children: <Widget>[
+              Container(
+                margin: const EdgeInsets.only(right: 16),
+                height: 44,
+                width: 44,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(44 / 2),
+                  child: CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    imageUrl: comment.user?.profileImageUrl ?? '',
+                    errorWidget: (context, url, dynamic error) =>
+                        Image.asset('assets/images/default_article.png'),
+                  ),
+                ),
+              ),
+              Flexible(
+                child: Text(
+                  'text: ${comment.text}',
+                  style: TextStyle(color: AppColors().textPrimary),
+                ),
+              ),
+            ],
+          )),
+    );
   }
 }

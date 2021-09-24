@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:labo_flutter/models/app_user/app_user.dart';
 
 part 'comment.freezed.dart';
 part 'comment.g.dart';
@@ -22,6 +23,8 @@ abstract class Comment with _$Comment {
     @Default('') String userId,
     @Default('') String articleId,
     @Default('') String createdAt,
+    // TODO: デフォルトでAppUserのコンストラクタを指定する
+    AppUser? user,
   }) = _Comment;
 
   factory Comment.fromJson(Map<String, dynamic> json) =>

@@ -29,6 +29,9 @@ _$_Comment _$_$_CommentFromJson(Map<String, dynamic> json) {
     userId: json['user_id'] as String? ?? '',
     articleId: json['article_id'] as String? ?? '',
     createdAt: json['created_at'] as String? ?? '',
+    user: json['user'] == null
+        ? null
+        : AppUser.fromJson(json['user'] as Map<String, dynamic>),
   );
 }
 
@@ -39,4 +42,5 @@ Map<String, dynamic> _$_$_CommentToJson(_$_Comment instance) =>
       'user_id': instance.userId,
       'article_id': instance.articleId,
       'created_at': instance.createdAt,
+      'user': instance.user,
     };

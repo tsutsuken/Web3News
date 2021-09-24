@@ -178,13 +178,15 @@ class _$CommentTearOff {
       String text = '',
       String userId = '',
       String articleId = '',
-      String createdAt = ''}) {
+      String createdAt = '',
+      AppUser? user}) {
     return _Comment(
       id: id,
       text: text,
       userId: userId,
       articleId: articleId,
       createdAt: createdAt,
+      user: user,
     );
   }
 
@@ -203,6 +205,7 @@ mixin _$Comment {
   String get userId => throw _privateConstructorUsedError;
   String get articleId => throw _privateConstructorUsedError;
   String get createdAt => throw _privateConstructorUsedError;
+  AppUser? get user => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -218,7 +221,10 @@ abstract class $CommentCopyWith<$Res> {
       String text,
       String userId,
       String articleId,
-      String createdAt});
+      String createdAt,
+      AppUser? user});
+
+  $AppUserCopyWith<$Res>? get user;
 }
 
 /// @nodoc
@@ -236,6 +242,7 @@ class _$CommentCopyWithImpl<$Res> implements $CommentCopyWith<$Res> {
     Object? userId = freezed,
     Object? articleId = freezed,
     Object? createdAt = freezed,
+    Object? user = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -258,7 +265,22 @@ class _$CommentCopyWithImpl<$Res> implements $CommentCopyWith<$Res> {
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as String,
+      user: user == freezed
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as AppUser?,
     ));
+  }
+
+  @override
+  $AppUserCopyWith<$Res>? get user {
+    if (_value.user == null) {
+      return null;
+    }
+
+    return $AppUserCopyWith<$Res>(_value.user!, (value) {
+      return _then(_value.copyWith(user: value));
+    });
   }
 }
 
@@ -272,7 +294,11 @@ abstract class _$CommentCopyWith<$Res> implements $CommentCopyWith<$Res> {
       String text,
       String userId,
       String articleId,
-      String createdAt});
+      String createdAt,
+      AppUser? user});
+
+  @override
+  $AppUserCopyWith<$Res>? get user;
 }
 
 /// @nodoc
@@ -291,6 +317,7 @@ class __$CommentCopyWithImpl<$Res> extends _$CommentCopyWithImpl<$Res>
     Object? userId = freezed,
     Object? articleId = freezed,
     Object? createdAt = freezed,
+    Object? user = freezed,
   }) {
     return _then(_Comment(
       id: id == freezed
@@ -313,6 +340,10 @@ class __$CommentCopyWithImpl<$Res> extends _$CommentCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as String,
+      user: user == freezed
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as AppUser?,
     ));
   }
 }
@@ -326,7 +357,8 @@ class _$_Comment implements _Comment {
       this.text = '',
       this.userId = '',
       this.articleId = '',
-      this.createdAt = ''});
+      this.createdAt = '',
+      this.user});
 
   factory _$_Comment.fromJson(Map<String, dynamic> json) =>
       _$_$_CommentFromJson(json);
@@ -346,10 +378,12 @@ class _$_Comment implements _Comment {
   @JsonKey(defaultValue: '')
   @override
   final String createdAt;
+  @override
+  final AppUser? user;
 
   @override
   String toString() {
-    return 'Comment(id: $id, text: $text, userId: $userId, articleId: $articleId, createdAt: $createdAt)';
+    return 'Comment(id: $id, text: $text, userId: $userId, articleId: $articleId, createdAt: $createdAt, user: $user)';
   }
 
   @override
@@ -367,7 +401,9 @@ class _$_Comment implements _Comment {
                     .equals(other.articleId, articleId)) &&
             (identical(other.createdAt, createdAt) ||
                 const DeepCollectionEquality()
-                    .equals(other.createdAt, createdAt)));
+                    .equals(other.createdAt, createdAt)) &&
+            (identical(other.user, user) ||
+                const DeepCollectionEquality().equals(other.user, user)));
   }
 
   @override
@@ -377,7 +413,8 @@ class _$_Comment implements _Comment {
       const DeepCollectionEquality().hash(text) ^
       const DeepCollectionEquality().hash(userId) ^
       const DeepCollectionEquality().hash(articleId) ^
-      const DeepCollectionEquality().hash(createdAt);
+      const DeepCollectionEquality().hash(createdAt) ^
+      const DeepCollectionEquality().hash(user);
 
   @JsonKey(ignore: true)
   @override
@@ -396,7 +433,8 @@ abstract class _Comment implements Comment {
       String text,
       String userId,
       String articleId,
-      String createdAt}) = _$_Comment;
+      String createdAt,
+      AppUser? user}) = _$_Comment;
 
   factory _Comment.fromJson(Map<String, dynamic> json) = _$_Comment.fromJson;
 
@@ -410,6 +448,8 @@ abstract class _Comment implements Comment {
   String get articleId => throw _privateConstructorUsedError;
   @override
   String get createdAt => throw _privateConstructorUsedError;
+  @override
+  AppUser? get user => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$CommentCopyWith<_Comment> get copyWith =>
