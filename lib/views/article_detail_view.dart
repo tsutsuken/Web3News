@@ -28,7 +28,7 @@ class ArticleDetailView extends HookWidget {
 
     return Scaffold(
       appBar: buildAppBar(),
-      body: buildWebView(),
+      body: buildWebView(context),
       bottomNavigationBar:
           ArticleDetailBottomAppBar(articleId: articleId, context: context),
     );
@@ -40,11 +40,29 @@ class ArticleDetailView extends HookWidget {
     );
   }
 
-  WebView buildWebView() {
+  WebView buildWebView(BuildContext context) {
     return WebView(
       initialUrl: articleUrl,
       javascriptMode: JavascriptMode.unrestricted,
       gestureNavigationEnabled: true,
+      navigationDelegate: (_navigationRequest) {
+        // ページ遷移が発生する場合、新しい画面を開く
+        if (_navigationRequest.isForMainFrame &&
+            _navigationRequest.url != articleUrl) {
+          Navigator.push(
+            context,
+            MaterialPageRoute<void>(
+              builder: (context) => ArticleDetailView(
+                articleId: '',
+                articleUrl: _navigationRequest.url,
+              ),
+            ),
+          );
+          return NavigationDecision.prevent;
+        } else {
+          return NavigationDecision.navigate;
+        }
+      },
     );
   }
 }
