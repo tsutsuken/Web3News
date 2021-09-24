@@ -222,15 +222,22 @@ class _MyPageLoggedInState extends State<MyPageLoggedIn>
             ),
             SliverPadding(
               padding: const EdgeInsets.all(8),
-              sliver: _buildQuery(query),
+              sliver: _ContentQuery(query: query),
             ),
           ],
         );
       },
     );
   }
+}
 
-  Query _buildQuery(String query) {
+class _ContentQuery extends StatelessWidget {
+  const _ContentQuery({Key? key, required this.query}) : super(key: key);
+
+  final String query;
+
+  @override
+  Widget build(BuildContext context) {
     return Query(
       options: QueryOptions(
         document: gql(query),
