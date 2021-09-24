@@ -102,26 +102,35 @@ class _CommentListItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {},
       child: Container(
-          height: 84,
+          height: 88,
           padding: const EdgeInsets.all(8),
           decoration: const BoxDecoration(
               border: Border(bottom: BorderSide(width: 1, color: Colors.grey))),
           child: Row(
             children: <Widget>[
-              Container(
-                margin: const EdgeInsets.only(right: 16),
-                height: 44,
-                width: 44,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(44 / 2),
-                  child: CachedNetworkImage(
-                    fit: BoxFit.cover,
-                    imageUrl: comment.user?.profileImageUrl ?? '',
-                    errorWidget: (context, url, dynamic error) =>
-                        Image.asset('assets/images/default_article.png'),
+              Column(
+                children: [
+                  SizedBox(
+                    height: 44,
+                    width: 44,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(44 / 2),
+                      child: CachedNetworkImage(
+                        fit: BoxFit.cover,
+                        imageUrl: comment.user?.profileImageUrl ?? '',
+                        errorWidget: (context, url, dynamic error) =>
+                            Image.asset('assets/images/default_article.png'),
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 4),
+                  Text(
+                    comment.user?.name ?? '',
+                    style: TextStyle(color: AppColors().textPrimary),
+                  ),
+                ],
               ),
+              const SizedBox(width: 16),
               Flexible(
                 child: Text(
                   'text: ${comment.text}',
