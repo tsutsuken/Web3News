@@ -18,56 +18,73 @@ class CommentCreateView extends HookWidget {
 
   final String? articleId;
 
+  Future<bool> addComment(
+      GraphQLClient client, String _articleId, String _text) async {
+    var didAddComment = false;
+    try {
+      final result = await client.mutate(
+        MutationOptions(
+          document: gql(insertCommentMutation),
+          variables: <String, dynamic>{'text': _text, 'article_id': _articleId},
+        ),
+      );
+      didAddComment = true;
+    } on Exception catch (e) {
+      debugPrint('addComment error: $e');
+      didAddComment = false;
+    }
+    return didAddComment;
+  }
+
   @override
   Widget build(BuildContext context) {
     final editingTextNotifier = useState('');
 
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('CommentCreateView'),
-          actions: [_buildAppBarActions(context, editingTextNotifier)],
-        ),
-        body: _buildBody(editingTextNotifier));
+    return GraphQLConsumer(
+      builder: (GraphQLClient client) {
+        return Scaffold(
+          appBar: _buildAppBar(context, editingTextNotifier, client),
+          body: _buildBody(editingTextNotifier),
+        );
+      },
+    );
   }
 
-  Mutation _buildAppBarActions(
-      BuildContext context, ValueNotifier<String> editingTextNotifier) {
-    return Mutation(
-      options: MutationOptions(
-        document: gql(insertCommentMutation),
-        onCompleted: (dynamic resultData) {
-          Navigator.of(context).pop();
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('コメントを投稿しました'),
-            ),
-          );
-        },
-        onError: (e) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('$e'),
-            ),
-          );
-        },
-      ),
-      builder: (
-        RunMutation runMutation,
-        QueryResult? result,
-      ) {
-        return TextButton(
-          onPressed: () => runMutation(<String, dynamic>{
-            'text': editingTextNotifier.value,
-            'article_id': articleId
-          }),
+  AppBar _buildAppBar(BuildContext context,
+      ValueNotifier<String> editingTextNotifier, GraphQLClient client) {
+    return AppBar(
+      title: const Text('CommentCreateView'),
+      actions: [
+        TextButton(
+          onPressed: () async {
+            if (articleId != null) {
+              final didAddComment = await addComment(
+                  client, articleId!, editingTextNotifier.value);
+
+              if (didAddComment) {
+                Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('コメントを投稿しました'),
+                  ),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('エラーが発生しました。もう一度お試しください'),
+                  ),
+                );
+              }
+            }
+          },
           style: TextButton.styleFrom(
             textStyle: const TextStyle(
               fontWeight: FontWeight.bold,
             ),
           ),
           child: const Text('保存'),
-        );
-      },
+        )
+      ],
     );
   }
 
