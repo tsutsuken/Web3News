@@ -16,7 +16,7 @@ class CommentCreateView extends HookWidget {
   const CommentCreateView({Key? key, required this.articleId})
       : super(key: key);
 
-  final String articleId;
+  final String? articleId;
 
   @override
   Widget build(BuildContext context) {

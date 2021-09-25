@@ -24,7 +24,7 @@ const String commentsQuery = '''
 class CommentListView extends HookWidget {
   const CommentListView({Key? key, required this.articleId}) : super(key: key);
 
-  final String articleId;
+  final String? articleId;
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +40,17 @@ class CommentListView extends HookWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('CommentListView')),
-      body: _buildBody(_refreshControllerNotifier.value, _refreshList),
+      body: (articleId == null)
+          ? _buildEmptyBody()
+          : _buildCommentsQuery(_refreshControllerNotifier.value, _refreshList),
     );
   }
 
-  Widget _buildBody(RefreshController _refreshController,
+  Widget _buildEmptyBody() {
+    return const Text('最初のコメントを投稿しましょう');
+  }
+
+  Widget _buildCommentsQuery(RefreshController _refreshController,
       Future<void> Function(VoidCallback? _refetch) _refreshList) {
     return Query(
       options: QueryOptions(
@@ -67,6 +73,10 @@ class CommentListView extends HookWidget {
         final resultData = result.data;
         if (resultData != null) {
           comments = CommentListResponse.fromJson(resultData).comments;
+        }
+
+        if (comments.isEmpty) {
+          return _buildEmptyBody();
         }
 
         return SmartRefresher(

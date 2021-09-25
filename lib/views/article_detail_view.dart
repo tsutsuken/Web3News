@@ -14,7 +14,7 @@ class ArticleDetailView extends HookWidget {
       {Key? key, required this.articleId, required this.articleUrl})
       : super(key: key);
 
-  final String articleId;
+  final String? articleId;
   final String articleUrl;
 
   @override
@@ -74,7 +74,7 @@ class ArticleDetailBottomAppBar extends HookWidget {
     required this.context,
   }) : super(key: key);
 
-  final String articleId;
+  final String? articleId;
   final BuildContext context;
 
   @override
