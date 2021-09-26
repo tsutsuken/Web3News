@@ -119,6 +119,7 @@ class _CommentListItem extends StatelessWidget {
           child: Row(
             children: <Widget>[
               Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(
                     height: 44,
@@ -133,19 +134,24 @@ class _CommentListItem extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 4),
+                ],
+              ),
+              const SizedBox(width: 16),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
                     comment.user?.name ?? '',
                     style: TextStyle(color: AppColors().textPrimary),
                   ),
+                  const SizedBox(height: 4),
+                  Flexible(
+                    child: Text(
+                      'text: ${comment.text}',
+                      style: TextStyle(color: AppColors().textPrimary),
+                    ),
+                  ),
                 ],
-              ),
-              const SizedBox(width: 16),
-              Flexible(
-                child: Text(
-                  'text: ${comment.text}',
-                  style: TextStyle(color: AppColors().textPrimary),
-                ),
               ),
             ],
           )),
