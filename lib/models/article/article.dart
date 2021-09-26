@@ -4,6 +4,17 @@ part 'article.freezed.dart';
 part 'article.g.dart';
 
 @freezed
+abstract class InsertArticlesOneResponse with _$InsertArticlesOneResponse {
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  const factory InsertArticlesOneResponse({
+    @Default(null) Article? insertArticlesOne,
+  }) = _InsertArticlesOneResponse;
+
+  factory InsertArticlesOneResponse.fromJson(Map<String, dynamic> json) =>
+      _$InsertArticlesOneResponseFromJson(json);
+}
+
+@freezed
 abstract class ArticleListResponse with _$ArticleListResponse {
   const factory ArticleListResponse({
     @Default(<Article>[]) List<Article> articles,

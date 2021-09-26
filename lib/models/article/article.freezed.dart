@@ -12,6 +12,180 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+InsertArticlesOneResponse _$InsertArticlesOneResponseFromJson(
+    Map<String, dynamic> json) {
+  return _InsertArticlesOneResponse.fromJson(json);
+}
+
+/// @nodoc
+class _$InsertArticlesOneResponseTearOff {
+  const _$InsertArticlesOneResponseTearOff();
+
+  _InsertArticlesOneResponse call({Article? insertArticlesOne = null}) {
+    return _InsertArticlesOneResponse(
+      insertArticlesOne: insertArticlesOne,
+    );
+  }
+
+  InsertArticlesOneResponse fromJson(Map<String, Object> json) {
+    return InsertArticlesOneResponse.fromJson(json);
+  }
+}
+
+/// @nodoc
+const $InsertArticlesOneResponse = _$InsertArticlesOneResponseTearOff();
+
+/// @nodoc
+mixin _$InsertArticlesOneResponse {
+  Article? get insertArticlesOne => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $InsertArticlesOneResponseCopyWith<InsertArticlesOneResponse> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $InsertArticlesOneResponseCopyWith<$Res> {
+  factory $InsertArticlesOneResponseCopyWith(InsertArticlesOneResponse value,
+          $Res Function(InsertArticlesOneResponse) then) =
+      _$InsertArticlesOneResponseCopyWithImpl<$Res>;
+  $Res call({Article? insertArticlesOne});
+
+  $ArticleCopyWith<$Res>? get insertArticlesOne;
+}
+
+/// @nodoc
+class _$InsertArticlesOneResponseCopyWithImpl<$Res>
+    implements $InsertArticlesOneResponseCopyWith<$Res> {
+  _$InsertArticlesOneResponseCopyWithImpl(this._value, this._then);
+
+  final InsertArticlesOneResponse _value;
+  // ignore: unused_field
+  final $Res Function(InsertArticlesOneResponse) _then;
+
+  @override
+  $Res call({
+    Object? insertArticlesOne = freezed,
+  }) {
+    return _then(_value.copyWith(
+      insertArticlesOne: insertArticlesOne == freezed
+          ? _value.insertArticlesOne
+          : insertArticlesOne // ignore: cast_nullable_to_non_nullable
+              as Article?,
+    ));
+  }
+
+  @override
+  $ArticleCopyWith<$Res>? get insertArticlesOne {
+    if (_value.insertArticlesOne == null) {
+      return null;
+    }
+
+    return $ArticleCopyWith<$Res>(_value.insertArticlesOne!, (value) {
+      return _then(_value.copyWith(insertArticlesOne: value));
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$InsertArticlesOneResponseCopyWith<$Res>
+    implements $InsertArticlesOneResponseCopyWith<$Res> {
+  factory _$InsertArticlesOneResponseCopyWith(_InsertArticlesOneResponse value,
+          $Res Function(_InsertArticlesOneResponse) then) =
+      __$InsertArticlesOneResponseCopyWithImpl<$Res>;
+  @override
+  $Res call({Article? insertArticlesOne});
+
+  @override
+  $ArticleCopyWith<$Res>? get insertArticlesOne;
+}
+
+/// @nodoc
+class __$InsertArticlesOneResponseCopyWithImpl<$Res>
+    extends _$InsertArticlesOneResponseCopyWithImpl<$Res>
+    implements _$InsertArticlesOneResponseCopyWith<$Res> {
+  __$InsertArticlesOneResponseCopyWithImpl(_InsertArticlesOneResponse _value,
+      $Res Function(_InsertArticlesOneResponse) _then)
+      : super(_value, (v) => _then(v as _InsertArticlesOneResponse));
+
+  @override
+  _InsertArticlesOneResponse get _value =>
+      super._value as _InsertArticlesOneResponse;
+
+  @override
+  $Res call({
+    Object? insertArticlesOne = freezed,
+  }) {
+    return _then(_InsertArticlesOneResponse(
+      insertArticlesOne: insertArticlesOne == freezed
+          ? _value.insertArticlesOne
+          : insertArticlesOne // ignore: cast_nullable_to_non_nullable
+              as Article?,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(fieldRename: FieldRename.snake)
+class _$_InsertArticlesOneResponse implements _InsertArticlesOneResponse {
+  const _$_InsertArticlesOneResponse({this.insertArticlesOne = null});
+
+  factory _$_InsertArticlesOneResponse.fromJson(Map<String, dynamic> json) =>
+      _$_$_InsertArticlesOneResponseFromJson(json);
+
+  @JsonKey(defaultValue: null)
+  @override
+  final Article? insertArticlesOne;
+
+  @override
+  String toString() {
+    return 'InsertArticlesOneResponse(insertArticlesOne: $insertArticlesOne)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _InsertArticlesOneResponse &&
+            (identical(other.insertArticlesOne, insertArticlesOne) ||
+                const DeepCollectionEquality()
+                    .equals(other.insertArticlesOne, insertArticlesOne)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(insertArticlesOne);
+
+  @JsonKey(ignore: true)
+  @override
+  _$InsertArticlesOneResponseCopyWith<_InsertArticlesOneResponse>
+      get copyWith =>
+          __$InsertArticlesOneResponseCopyWithImpl<_InsertArticlesOneResponse>(
+              this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$_$_InsertArticlesOneResponseToJson(this);
+  }
+}
+
+abstract class _InsertArticlesOneResponse implements InsertArticlesOneResponse {
+  const factory _InsertArticlesOneResponse({Article? insertArticlesOne}) =
+      _$_InsertArticlesOneResponse;
+
+  factory _InsertArticlesOneResponse.fromJson(Map<String, dynamic> json) =
+      _$_InsertArticlesOneResponse.fromJson;
+
+  @override
+  Article? get insertArticlesOne => throw _privateConstructorUsedError;
+  @override
+  @JsonKey(ignore: true)
+  _$InsertArticlesOneResponseCopyWith<_InsertArticlesOneResponse>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
 ArticleListResponse _$ArticleListResponseFromJson(Map<String, dynamic> json) {
   return _ArticleListResponse.fromJson(json);
 }

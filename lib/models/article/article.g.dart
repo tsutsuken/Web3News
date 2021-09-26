@@ -6,6 +6,21 @@ part of 'article.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+_$_InsertArticlesOneResponse _$_$_InsertArticlesOneResponseFromJson(
+    Map<String, dynamic> json) {
+  return _$_InsertArticlesOneResponse(
+    insertArticlesOne: json['insert_articles_one'] == null
+        ? null
+        : Article.fromJson(json['insert_articles_one'] as Map<String, dynamic>),
+  );
+}
+
+Map<String, dynamic> _$_$_InsertArticlesOneResponseToJson(
+        _$_InsertArticlesOneResponse instance) =>
+    <String, dynamic>{
+      'insert_articles_one': instance.insertArticlesOne,
+    };
+
 _$_ArticleListResponse _$_$_ArticleListResponseFromJson(
     Map<String, dynamic> json) {
   return _$_ArticleListResponse(

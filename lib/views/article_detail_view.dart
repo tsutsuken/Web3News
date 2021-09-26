@@ -29,8 +29,8 @@ class ArticleDetailView extends HookWidget {
     return Scaffold(
       appBar: buildAppBar(),
       body: buildWebView(context),
-      bottomNavigationBar:
-          ArticleDetailBottomAppBar(articleId: articleId, context: context),
+      bottomNavigationBar: ArticleDetailBottomAppBar(
+          articleId: articleId, articleUrl: articleUrl, context: context),
     );
   }
 
@@ -53,7 +53,7 @@ class ArticleDetailView extends HookWidget {
             context,
             MaterialPageRoute<void>(
               builder: (context) => ArticleDetailView(
-                articleId: '',
+                articleId: null,
                 articleUrl: _navigationRequest.url,
               ),
             ),
@@ -71,14 +71,18 @@ class ArticleDetailBottomAppBar extends HookWidget {
   const ArticleDetailBottomAppBar({
     Key? key,
     required this.articleId,
+    required this.articleUrl,
     required this.context,
   }) : super(key: key);
 
   final String? articleId;
+  final String articleUrl;
   final BuildContext context;
 
   @override
   Widget build(BuildContext context) {
+    // article追加時にarticleIdの変更を反映させるため
+    final articleIdNotifier = useState(articleId);
     final _userChangeNotifier = useProvider(userChangeNotifierProvider);
 
     void _showPromoteSignInView() {
@@ -98,16 +102,18 @@ class ArticleDetailBottomAppBar extends HookWidget {
       );
     }
 
-    void _showCommentCreateView() {
-      Navigator.push(
+    Future<void> _showCommentCreateView() async {
+      final newArticleId = await Navigator.push(
         context,
-        MaterialPageRoute<void>(
+        MaterialPageRoute<String?>(
           builder: (context) => CommentCreateView(
-            articleId: articleId,
+            articleId: articleIdNotifier.value,
+            articleUrl: articleUrl,
           ),
           fullscreenDialog: true,
         ),
       );
+      articleIdNotifier.value = newArticleId;
     }
 
     return BottomAppBar(
@@ -131,7 +137,7 @@ class ArticleDetailBottomAppBar extends HookWidget {
                   context,
                   MaterialPageRoute<void>(
                     builder: (context) => CommentListView(
-                      articleId: articleId,
+                      articleId: articleIdNotifier.value,
                     ),
                     fullscreenDialog: true,
                   ),
