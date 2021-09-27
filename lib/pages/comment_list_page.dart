@@ -121,7 +121,6 @@ class _CommentListItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {},
       child: Container(
-          height: 88,
           padding: const EdgeInsets.all(8),
           decoration: const BoxDecoration(
               border: Border(bottom: BorderSide(width: 1, color: Colors.grey))),
@@ -154,11 +153,9 @@ class _CommentListItem extends StatelessWidget {
                     style: TextStyle(color: AppColors().textPrimary),
                   ),
                   const SizedBox(height: 4),
-                  Flexible(
-                    child: Text(
-                      'text: ${comment.text}',
-                      style: TextStyle(color: AppColors().textPrimary),
-                    ),
+                  Text(
+                    comment.text,
+                    style: TextStyle(color: AppColors().textPrimary),
                   ),
                   const SizedBox(height: 4),
                   Text(
