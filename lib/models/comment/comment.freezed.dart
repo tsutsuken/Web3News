@@ -204,7 +204,8 @@ mixin _$Comment {
   String get text => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
   String get articleId => throw _privateConstructorUsedError;
-  String get createdAt => throw _privateConstructorUsedError;
+  String get createdAt =>
+      throw _privateConstructorUsedError; // TODO: デフォルトでAppUserのコンストラクタを指定する
   AppUser? get user => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -351,14 +352,15 @@ class __$CommentCopyWithImpl<$Res> extends _$CommentCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class _$_Comment implements _Comment {
+class _$_Comment extends _Comment {
   const _$_Comment(
       {this.id = '',
       this.text = '',
       this.userId = '',
       this.articleId = '',
       this.createdAt = '',
-      this.user});
+      this.user})
+      : super._();
 
   factory _$_Comment.fromJson(Map<String, dynamic> json) =>
       _$_$_CommentFromJson(json);
@@ -378,7 +380,7 @@ class _$_Comment implements _Comment {
   @JsonKey(defaultValue: '')
   @override
   final String createdAt;
-  @override
+  @override // TODO: デフォルトでAppUserのコンストラクタを指定する
   final AppUser? user;
 
   @override
@@ -427,7 +429,7 @@ class _$_Comment implements _Comment {
   }
 }
 
-abstract class _Comment implements Comment {
+abstract class _Comment extends Comment {
   const factory _Comment(
       {String id,
       String text,
@@ -435,6 +437,7 @@ abstract class _Comment implements Comment {
       String articleId,
       String createdAt,
       AppUser? user}) = _$_Comment;
+  const _Comment._() : super._();
 
   factory _Comment.fromJson(Map<String, dynamic> json) = _$_Comment.fromJson;
 
@@ -448,7 +451,7 @@ abstract class _Comment implements Comment {
   String get articleId => throw _privateConstructorUsedError;
   @override
   String get createdAt => throw _privateConstructorUsedError;
-  @override
+  @override // TODO: デフォルトでAppUserのコンストラクタを指定する
   AppUser? get user => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)

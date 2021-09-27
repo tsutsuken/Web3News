@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:labo_flutter/models/app_user/app_user.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 part 'comment.freezed.dart';
 part 'comment.g.dart';
@@ -29,4 +30,12 @@ abstract class Comment with _$Comment {
 
   factory Comment.fromJson(Map<String, dynamic> json) =>
       _$CommentFromJson(json);
+
+  const Comment._();
+
+  String createdAtTimeAgo() {
+    final time = DateTime.parse(createdAt);
+    final _timeagoString = timeago.format(time, locale: 'ja');
+    return _timeagoString;
+  }
 }
