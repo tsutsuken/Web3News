@@ -4,8 +4,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:labo_flutter/components/loading_indicator.dart';
 import 'package:labo_flutter/models/article/article.dart';
+import 'package:labo_flutter/pages/article_detail_page.dart';
 import 'package:labo_flutter/utils/app_colors.dart';
-import 'package:labo_flutter/views/article_detail_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 const String queryArticlesPopular = '''
@@ -32,14 +32,14 @@ const String queryArticlesNew = '''
 }
 ''';
 
-class HomeView extends StatefulWidget {
-  const HomeView({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  _HomeViewState createState() => _HomeViewState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _HomeViewState extends State<HomeView>
+class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -169,7 +169,7 @@ class _ArticleListItemState extends State<_ArticleListItem>
         Navigator.push(
           context,
           MaterialPageRoute<void>(
-              builder: (context) => ArticleDetailView(
+              builder: (context) => ArticleDetailPage(
                   articleId: widget.article.id,
                   articleUrl: widget.article.url)),
         );

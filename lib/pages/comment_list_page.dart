@@ -23,8 +23,8 @@ const String commentsQuery = '''
   }
 ''';
 
-class CommentListView extends HookWidget {
-  const CommentListView({Key? key, required this.articleId}) : super(key: key);
+class CommentListPage extends HookWidget {
+  const CommentListPage({Key? key, required this.articleId}) : super(key: key);
 
   final String? articleId;
 
@@ -41,7 +41,7 @@ class CommentListView extends HookWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('CommentListView')),
+      appBar: AppBar(title: const Text('CommentListPage')),
       body: (articleId == null)
           ? _buildEmptyBody()
           : _buildCommentsQuery(_refreshControllerNotifier.value, _refreshList),

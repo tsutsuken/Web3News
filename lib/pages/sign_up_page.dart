@@ -50,8 +50,8 @@ class _SignUpModel extends ChangeNotifier {
   }
 }
 
-class SignUpView extends HookWidget {
-  const SignUpView({Key? key}) : super(key: key);
+class SignUpPage extends HookWidget {
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

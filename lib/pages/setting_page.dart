@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:labo_flutter/utils/app_colors.dart';
 
-class SettingView extends StatelessWidget {
-  const SettingView({Key? key}) : super(key: key);
+class SettingPage extends StatelessWidget {
+  const SettingPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

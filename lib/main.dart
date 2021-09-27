@@ -6,9 +6,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/graphql_api_client.dart';
+import 'package:labo_flutter/pages/home_page.dart';
+import 'package:labo_flutter/pages/my_page/my_page.dart';
 import 'package:labo_flutter/utils/app_themes.dart';
-import 'package:labo_flutter/views/home_view.dart';
-import 'package:labo_flutter/views/my_page_view/my_page_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -77,8 +77,8 @@ class RootView extends StatefulWidget {
 class _RootViewState extends State<RootView> {
   int currentIndex = 0;
   final List<Widget> childViews = [
-    const HomeView(),
-    const MyPageView(),
+    const HomePage(),
+    const MyPage(),
   ];
 
   final List<BottomNavigationBarItem> navigationBarItems = const [

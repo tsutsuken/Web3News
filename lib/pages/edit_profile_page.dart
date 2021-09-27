@@ -49,8 +49,8 @@ query MyQuery(\$id: String!) {
 }
 ''';
 
-class EditProfileView extends HookWidget {
-  const EditProfileView({Key? key}) : super(key: key);
+class EditProfilePage extends HookWidget {
+  const EditProfilePage({Key? key}) : super(key: key);
 
   Future<bool> updateProfileImage(GraphQLClient client) async {
     final pickedImageFile = await pickImageFromGallery();

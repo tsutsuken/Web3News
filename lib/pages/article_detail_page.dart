@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:labo_flutter/pages/comment_create_page.dart';
+import 'package:labo_flutter/pages/comment_list_page.dart';
+import 'package:labo_flutter/pages/promote_sign_in_page.dart';
 import 'package:labo_flutter/providers/user_change_notifier_provider.dart';
-import 'package:labo_flutter/views/comment_create_view.dart';
-import 'package:labo_flutter/views/comment_list_view.dart';
-import 'package:labo_flutter/views/promote_sign_in_view.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class ArticleDetailView extends HookWidget {
-  const ArticleDetailView(
+class ArticleDetailPage extends HookWidget {
+  const ArticleDetailPage(
       {Key? key, required this.articleId, required this.articleUrl})
       : super(key: key);
 
@@ -36,7 +36,7 @@ class ArticleDetailView extends HookWidget {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: const Text('ArticleDetailView'),
+      title: const Text('ArticleDetailPage'),
     );
   }
 
@@ -52,7 +52,7 @@ class ArticleDetailView extends HookWidget {
           Navigator.push(
             context,
             MaterialPageRoute<void>(
-              builder: (context) => ArticleDetailView(
+              builder: (context) => ArticleDetailPage(
                 articleId: null,
                 articleUrl: _navigationRequest.url,
               ),
@@ -85,12 +85,12 @@ class ArticleDetailBottomAppBar extends HookWidget {
     final articleIdNotifier = useState(articleId);
     final _userChangeNotifier = useProvider(userChangeNotifierProvider);
 
-    void _showPromoteSignInView() {
+    void _showPromoteSignInPage() {
       showGeneralDialog(
         transitionDuration: const Duration(milliseconds: 400),
         context: context,
         pageBuilder: (context, anim1, anim2) {
-          return const PromoteSignInView();
+          return const PromoteSignInPage();
         },
         transitionBuilder: (context, anim1, anim2, child) {
           return SlideTransition(
@@ -102,11 +102,11 @@ class ArticleDetailBottomAppBar extends HookWidget {
       );
     }
 
-    Future<void> _showCommentCreateView() async {
+    Future<void> _showCommentCreatePage() async {
       final newArticleId = await Navigator.push(
         context,
         MaterialPageRoute<String?>(
-          builder: (context) => CommentCreateView(
+          builder: (context) => CommentCreatePage(
             articleId: articleIdNotifier.value,
             articleUrl: articleUrl,
           ),
@@ -124,9 +124,9 @@ class ArticleDetailBottomAppBar extends HookWidget {
               color: Theme.of(context).primaryColor,
               onPressed: () {
                 if (_userChangeNotifier.currentUser == null) {
-                  _showPromoteSignInView();
+                  _showPromoteSignInPage();
                 } else {
-                  _showCommentCreateView();
+                  _showCommentCreatePage();
                 }
               },
               icon: const Icon(Icons.add_comment)),
@@ -136,7 +136,7 @@ class ArticleDetailBottomAppBar extends HookWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute<void>(
-                    builder: (context) => CommentListView(
+                    builder: (context) => CommentListPage(
                       articleId: articleIdNotifier.value,
                     ),
                     fullscreenDialog: true,

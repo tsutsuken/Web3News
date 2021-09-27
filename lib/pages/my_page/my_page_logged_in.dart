@@ -4,9 +4,9 @@ import 'package:flutter/rendering.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:labo_flutter/models/app_user/app_user.dart';
 import 'package:labo_flutter/models/comment/comment.dart';
+import 'package:labo_flutter/pages/edit_profile_page.dart';
+import 'package:labo_flutter/pages/setting_page.dart';
 import 'package:labo_flutter/utils/app_colors.dart';
-import 'package:labo_flutter/views/edit_profile_view.dart';
-import 'package:labo_flutter/views/setting_view.dart';
 
 const String myUserQuery = '''
 query MyQuery(\$id: String!) {
@@ -102,7 +102,7 @@ class _MyPageLoggedInState extends State<MyPageLoggedIn>
               Navigator.push(
                   context,
                   MaterialPageRoute<void>(
-                      builder: (context) => const SettingView()));
+                      builder: (context) => const SettingPage()));
             },
             icon: const Icon(Icons.settings))
       ],
@@ -195,7 +195,7 @@ class _MyPageLoggedInState extends State<MyPageLoggedIn>
           Navigator.push(
             context,
             MaterialPageRoute<void>(
-              builder: (context) => const EditProfileView(),
+              builder: (context) => const EditProfilePage(),
               fullscreenDialog: true,
             ),
           );

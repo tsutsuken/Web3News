@@ -28,8 +28,8 @@ class ResponseAddCommentAndArticle {
   final String? newArticleId;
 }
 
-class CommentCreateView extends HookWidget {
-  const CommentCreateView(
+class CommentCreatePage extends HookWidget {
+  const CommentCreatePage(
       {Key? key, required this.articleId, required this.articleUrl})
       : super(key: key);
 
@@ -120,7 +120,7 @@ class CommentCreateView extends HookWidget {
   AppBar _buildAppBar(BuildContext context,
       ValueNotifier<String> editingTextNotifier, GraphQLClient client) {
     return AppBar(
-      title: const Text('CommentCreateView'),
+      title: const Text('CommentCreatePage'),
       actions: [
         TextButton(
           onPressed: () async {

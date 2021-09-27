@@ -53,8 +53,8 @@ class _LoginModel extends ChangeNotifier {
   }
 }
 
-class SignInView extends HookWidget {
-  const SignInView({Key? key}) : super(key: key);
+class SignInPage extends HookWidget {
+  const SignInPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

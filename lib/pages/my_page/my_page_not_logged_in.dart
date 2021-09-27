@@ -1,37 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:labo_flutter/pages/sign_in_page.dart';
+import 'package:labo_flutter/pages/sign_up_page.dart';
 import 'package:labo_flutter/utils/app_colors.dart';
-import 'package:labo_flutter/views/sign_in_view.dart';
-import 'package:labo_flutter/views/sign_up_view.dart';
 
-class PromoteSignInView extends StatelessWidget {
-  const PromoteSignInView({Key? key}) : super(key: key);
+class MyPageNotLoggedIn extends StatelessWidget {
+  const MyPageNotLoggedIn({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
-        key: const ValueKey('CommentCreateView'),
-        direction: DismissDirection.vertical,
-        confirmDismiss: (DismissDirection direction) async {
-          Navigator.of(context).pop();
-          return true;
-        },
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('PromoteSignInView'),
-            leading: CloseButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ),
-          body: _buildNotLoggedInWidget(context),
-        ));
-  }
-
-  // TODO: マイページとの共通ウィジェットとして書き出す
-  Widget _buildNotLoggedInWidget(
-    BuildContext context,
-  ) {
     return Container(
       margin: const EdgeInsets.only(left: 40, right: 40),
       child: Column(
@@ -55,17 +33,12 @@ class PromoteSignInView extends StatelessWidget {
           SizedBox(
             height: 44,
             child: ElevatedButton(
-              onPressed: () async {
-                final didSignUp = await Navigator.push(
+              onPressed: () {
+                Navigator.push(
                   context,
-                  MaterialPageRoute<bool>(
-                    builder: (context) => const SignUpView(),
-                  ),
+                  MaterialPageRoute<void>(
+                      builder: (context) => const SignUpPage()),
                 );
-
-                if (didSignUp == true) {
-                  Navigator.of(context).pop();
-                }
               },
               child: const Text(
                 '新規登録',
@@ -77,17 +50,12 @@ class PromoteSignInView extends StatelessWidget {
           SizedBox(
             height: 44,
             child: ElevatedButton(
-              onPressed: () async {
-                final didLogin = await Navigator.push(
+              onPressed: () {
+                Navigator.push(
                   context,
-                  MaterialPageRoute<bool>(
-                    builder: (context) => const SignInView(),
-                  ),
+                  MaterialPageRoute<void>(
+                      builder: (context) => const SignInPage()),
                 );
-
-                if (didLogin == true) {
-                  Navigator.of(context).pop();
-                }
               },
               style: ElevatedButton.styleFrom(primary: Colors.white),
               child: const Text(
