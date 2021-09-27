@@ -6,12 +6,14 @@ import 'package:labo_flutter/components/loading_indicator.dart';
 import 'package:labo_flutter/models/comment/comment.dart';
 import 'package:labo_flutter/utils/app_colors.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 const String commentsQuery = '''
   query MyQuery(\$article_id: String!) {
     comments(where: {article_id: {_eq: \$article_id}}) {
       id
       text
+      created_at
       user {
         id
         name
@@ -107,6 +109,13 @@ class _CommentListItem extends StatelessWidget {
 
   final Comment comment;
 
+  // TODO: 共通クラスで書く
+  String timeagoString(String timeString) {
+    final time = DateTime.parse(timeString);
+    final _timeagoString = timeago.format(time, locale: 'ja');
+    return _timeagoString;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -150,6 +159,11 @@ class _CommentListItem extends StatelessWidget {
                       'text: ${comment.text}',
                       style: TextStyle(color: AppColors().textPrimary),
                     ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    timeagoString(comment.createdAt),
+                    style: TextStyle(color: AppColors().textPrimary),
                   ),
                 ],
               ),

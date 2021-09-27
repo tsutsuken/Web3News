@@ -10,6 +10,7 @@ import 'package:labo_flutter/utils/app_themes.dart';
 import 'package:labo_flutter/views/home_view.dart';
 import 'package:labo_flutter/views/my_page_view/my_page_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 const graphqlEndpoint = 'https://labo-flutter.hasura.app/v1/graphql';
 
@@ -22,6 +23,9 @@ Future main() async {
 
   // GraphQL
   await initHiveForFlutter();
+
+  // timeago
+  timeago.setLocaleMessages('ja', timeago.JaMessages());
 
   runApp(
     const ProviderScope(
