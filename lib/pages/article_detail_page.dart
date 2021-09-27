@@ -103,7 +103,8 @@ class ArticleDetailBottomAppBar extends HookWidget {
     }
 
     Future<void> _showCommentCreatePage() async {
-      final newArticleId = await Navigator.push(
+      // 未登録記事へのコメントを追加した場合、登録した記事のarticleIdが返ってくる
+      final articleId = await Navigator.push(
         context,
         MaterialPageRoute<String?>(
           builder: (context) => CommentCreatePage(
@@ -113,7 +114,7 @@ class ArticleDetailBottomAppBar extends HookWidget {
           fullscreenDialog: true,
         ),
       );
-      articleIdNotifier.value = newArticleId;
+      articleIdNotifier.value = articleId;
     }
 
     return BottomAppBar(

@@ -23,9 +23,9 @@ const String insertArticleMutation = '''
 
 class ResponseAddCommentAndArticle {
   const ResponseAddCommentAndArticle(
-      {required this.didAddComment, required this.newArticleId});
+      {required this.didAddComment, required this.articleId});
   final bool didAddComment;
-  final String? newArticleId;
+  final String? articleId;
 }
 
 class CommentCreatePage extends HookWidget {
@@ -45,17 +45,17 @@ class CommentCreatePage extends HookWidget {
       final newArticleId = await addArticle(client, _articleUrl);
       if (newArticleId == null) {
         return const ResponseAddCommentAndArticle(
-            didAddComment: false, newArticleId: null);
+            didAddComment: false, articleId: null);
       }
 
       final didAddComment = await addComment(client, newArticleId, _text);
       return ResponseAddCommentAndArticle(
-          didAddComment: didAddComment, newArticleId: newArticleId);
+          didAddComment: didAddComment, articleId: newArticleId);
     } else {
       // コメントを追加
       final didAddComment = await addComment(client, _articleId, _text);
       return ResponseAddCommentAndArticle(
-          didAddComment: didAddComment, newArticleId: null);
+          didAddComment: didAddComment, articleId: _articleId);
     }
   }
 
@@ -128,7 +128,7 @@ class CommentCreatePage extends HookWidget {
                 client, articleId, articleUrl, editingTextNotifier.value);
             debugPrint('addCommentAndArticle response: $response');
             if (response.didAddComment) {
-              Navigator.of(context).pop<String?>(response.newArticleId);
+              Navigator.of(context).pop<String?>(response.articleId);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('コメントを投稿しました'),
