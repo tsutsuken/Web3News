@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:labo_flutter/components/comment_bottom_sheet.dart';
 import 'package:labo_flutter/components/comment_list_item.dart';
 import 'package:labo_flutter/models/app_user/app_user.dart';
 import 'package:labo_flutter/models/comment/comment.dart';
@@ -25,6 +26,7 @@ const String myCommentsDescendingQuery = '''
       id
       created_at
       text
+      user_id
       user {
         id
         name
@@ -42,6 +44,14 @@ const String myCommentsAscendingQuery = '''
       text
       user_id
       article_id
+    }
+  }
+''';
+
+const String deleteCommentMutation = '''
+  mutation MyMutation(\$id: uuid!) {
+    delete_comments_by_pk(id: \$id) {
+      id
     }
   }
 ''';
@@ -218,27 +228,87 @@ class _MyPageLoggedInState extends State<MyPageLoggedIn>
   Builder _buildContentScrollView(Key key, String query) {
     return Builder(
       builder: (BuildContext _context) {
-        return CustomScrollView(
-          key: key,
-          slivers: [
-            SliverOverlapInjector(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(_context),
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.all(8),
-              sliver: _ContentQuery(query: query),
-            ),
-          ],
-        );
+        return GraphQLConsumer(builder: (GraphQLClient client) {
+          return CustomScrollView(
+            key: key,
+            slivers: [
+              SliverOverlapInjector(
+                handle:
+                    NestedScrollView.sliverOverlapAbsorberHandleFor(_context),
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.all(8),
+                sliver: _ContentQuery(
+                  query: query,
+                  client: client,
+                ),
+              ),
+            ],
+          );
+        });
       },
     );
   }
 }
 
 class _ContentQuery extends StatelessWidget {
-  const _ContentQuery({Key? key, required this.query}) : super(key: key);
+  const _ContentQuery({Key? key, required this.query, required this.client})
+      : super(key: key);
 
   final String query;
+  final GraphQLClient client;
+
+  Future<void> _onTapMenuButton(BuildContext context, Comment comment) async {
+    await showCommentBottomSheet(
+      context,
+      comment: comment,
+      onTapDeleteContent: () async {
+        final didSuccess = await _deleteComment(comment);
+
+        // スナックバーを表示
+        var message = '';
+        if (didSuccess) {
+          message = '削除しました';
+        } else {
+          message = 'エラーが発信しました。もう一度お試しください';
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+          ),
+        );
+
+        // TODO: リストを更新
+      },
+      onTapReportContent: () {
+        debugPrint('onTapReportContent');
+      },
+      onTapBlockUser: () {
+        debugPrint('onTapBlockUser');
+      },
+    );
+  }
+
+  Future<bool> _deleteComment(Comment comment) async {
+    var didSuccess = false;
+
+    final result = await client.mutate(
+      MutationOptions(
+        document: gql(deleteCommentMutation),
+        variables: <String, dynamic>{
+          'id': comment.id,
+        },
+      ),
+    );
+    if (result.hasException) {
+      debugPrint('_deleteComment exception: ${result.exception.toString()}');
+      didSuccess = false;
+    } else {
+      didSuccess = true;
+    }
+
+    return didSuccess;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -276,6 +346,9 @@ class _ContentQuery extends StatelessWidget {
         final comment = comments[index];
         return CommentListItem(
           comment: comment,
+          onTapMenuButton: () async {
+            await _onTapMenuButton(context, comment);
+          },
         );
       }, childCount: comments.length),
     );

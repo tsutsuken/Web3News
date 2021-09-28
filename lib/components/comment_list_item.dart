@@ -4,9 +4,11 @@ import 'package:labo_flutter/models/comment/comment.dart';
 import 'package:labo_flutter/utils/app_colors.dart';
 
 class CommentListItem extends StatelessWidget {
-  const CommentListItem({Key? key, required this.comment}) : super(key: key);
+  const CommentListItem({Key? key, required this.comment, this.onTapMenuButton})
+      : super(key: key);
 
   final Comment comment;
+  final VoidCallback? onTapMenuButton;
 
   @override
   Widget build(BuildContext context) {
@@ -50,9 +52,18 @@ class CommentListItem extends StatelessWidget {
                     style: TextStyle(color: AppColors().textPrimary),
                   ),
                   const SizedBox(height: 4),
-                  Text(
-                    comment.createdAtTimeAgo(),
-                    style: TextStyle(color: AppColors().textPrimary),
+                  Row(
+                    children: [
+                      Text(
+                        comment.createdAtTimeAgo(),
+                        style: TextStyle(color: AppColors().textPrimary),
+                      ),
+                      const SizedBox(width: 8),
+                      IconButton(
+                          onPressed: onTapMenuButton,
+                          icon: const Icon(Icons.more_horiz)),
+                      // const Icon(Icons.more_horiz)
+                    ],
                   ),
                 ],
               ),
