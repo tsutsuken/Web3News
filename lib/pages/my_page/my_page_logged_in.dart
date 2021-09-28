@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:labo_flutter/components/comment_list_item.dart';
 import 'package:labo_flutter/models/app_user/app_user.dart';
 import 'package:labo_flutter/models/comment/comment.dart';
 import 'package:labo_flutter/pages/edit_profile_page.dart';
@@ -24,8 +25,11 @@ const String myCommentsDescendingQuery = '''
       id
       created_at
       text
-      user_id
-      article_id
+      user {
+        id
+        name
+        profile_image_url
+      }
     }
   }
 ''';
@@ -270,17 +274,8 @@ class _ContentQuery extends StatelessWidget {
     return SliverList(
       delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
         final comment = comments[index];
-        return ListTile(
-          title: Text(
-            comment.text,
-            style: TextStyle(color: AppColors().textPrimary),
-          ),
-          trailing: const Icon(Icons.more_vert),
-          subtitle: Text(
-            comment.articleId,
-            style: TextStyle(color: AppColors().textSecondary),
-          ),
-          onTap: () {},
+        return CommentListItem(
+          comment: comment,
         );
       }, childCount: comments.length),
     );
