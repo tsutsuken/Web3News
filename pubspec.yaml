@@ -30,13 +30,13 @@ dependencies:
     sdk: flutter
   flutter_dotenv: ^5.0.0
   flutter_easyloading: ^3.0.3
-  flutter_hooks: ^0.17.0
+  flutter_hooks: ^0.18.0
   flutter_localizations:
     sdk: flutter
   flutter_state_notifier: ^0.7.0
   freezed_annotation:
   graphql_flutter: ^5.0.0
-  hooks_riverpod: ^0.14.0+4
+  hooks_riverpod: ^1.0.0-dev.7
   http: ^0.13.3
   image_cropper: ^1.4.1
   image_picker: ^0.8.4+1

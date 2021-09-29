@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/utils/app_colors.dart';
 
@@ -50,12 +49,12 @@ class _SignUpModel extends ChangeNotifier {
   }
 }
 
-class SignUpPage extends HookWidget {
+class SignUpPage extends HookConsumerWidget {
   const SignUpPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final signUpModel = useProvider(_signUpModelProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final signUpModel = ref.watch(_signUpModelProvider);
     final _formKey = GlobalKey<FormState>();
     final _passwordFocusNode = FocusNode();
 
@@ -84,7 +83,7 @@ class SignUpPage extends HookWidget {
                   FocusScope.of(context).requestFocus(_passwordFocusNode); // 変更
                 },
                 onSaved: (value) {
-                  context.read(_signUpModelProvider).email = value ?? '';
+                  ref.read(_signUpModelProvider).email = value ?? '';
                 },
               ),
               TextFormField(
@@ -106,7 +105,7 @@ class SignUpPage extends HookWidget {
                 ),
                 validator: signUpModel.emptyValidator,
                 onSaved: (value) {
-                  context.read(_signUpModelProvider).password = value ?? '';
+                  ref.read(_signUpModelProvider).password = value ?? '';
                 },
               ),
               Container(

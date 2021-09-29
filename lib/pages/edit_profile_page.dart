@@ -49,7 +49,7 @@ query MyQuery(\$id: String!) {
 }
 ''';
 
-class EditProfilePage extends HookWidget {
+class EditProfilePage extends HookConsumerWidget {
   const EditProfilePage({Key? key}) : super(key: key);
 
   Future<bool> updateProfileImage(GraphQLClient client) async {
@@ -147,9 +147,9 @@ class EditProfilePage extends HookWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final _editProfileViewModel = useProvider(_editProfileViewModelProvider);
-    final _userChangeNotifier = useProvider(userChangeNotifierProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final _editProfileViewModel = ref.watch(_editProfileViewModelProvider);
+    final _userChangeNotifier = ref.watch(userChangeNotifierProvider);
     final _formKey = GlobalKey<FormState>();
 
     useEffect(() {
@@ -158,7 +158,7 @@ class EditProfilePage extends HookWidget {
 
     return Scaffold(
       appBar: _buildAppBar(context, _userChangeNotifier, _editProfileViewModel),
-      body: _buildBody(_formKey, _userChangeNotifier, context),
+      body: _buildBody(_formKey, _userChangeNotifier, context, ref),
     );
   }
 
@@ -219,8 +219,12 @@ class EditProfilePage extends HookWidget {
     );
   }
 
-  Center _buildBody(GlobalKey<FormState> _formKey,
-      UserChangeNotifier _userChangeNotifier, BuildContext context) {
+  Center _buildBody(
+    GlobalKey<FormState> _formKey,
+    UserChangeNotifier _userChangeNotifier,
+    BuildContext context,
+    WidgetRef ref,
+  ) {
     return Center(
         child: Container(
       padding: const EdgeInsets.all(24),
@@ -249,14 +253,18 @@ class EditProfilePage extends HookWidget {
 
           final appUser = AppUser.fromJson(resultData);
           // return Text('name: ${user.name}, id: ${user.id}');
-          return _buildForm(_formKey, appUser, context);
+          return _buildForm(_formKey, appUser, context, ref);
         },
       ),
     ));
   }
 
   Form _buildForm(
-      GlobalKey<FormState> _formKey, AppUser appUser, BuildContext context) {
+    GlobalKey<FormState> _formKey,
+    AppUser appUser,
+    BuildContext context,
+    WidgetRef ref,
+  ) {
     return Form(
       key: _formKey,
       child: Column(
@@ -309,7 +317,7 @@ class EditProfilePage extends HookWidget {
               hintText: 'ユーザ名を入力してください',
             ),
             onChanged: (value) {
-              context.read(_editProfileViewModelProvider).username = value;
+              ref.read(_editProfileViewModelProvider).username = value;
             },
           ),
         ],

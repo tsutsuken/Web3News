@@ -67,7 +67,7 @@ class ArticleDetailPage extends HookWidget {
   }
 }
 
-class ArticleDetailBottomAppBar extends HookWidget {
+class ArticleDetailBottomAppBar extends HookConsumerWidget {
   const ArticleDetailBottomAppBar({
     Key? key,
     required this.articleId,
@@ -80,10 +80,10 @@ class ArticleDetailBottomAppBar extends HookWidget {
   final BuildContext context;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // article追加時にarticleIdの変更を反映させるため
     final articleIdNotifier = useState(articleId);
-    final _userChangeNotifier = useProvider(userChangeNotifierProvider);
+    final _userChangeNotifier = ref.watch(userChangeNotifierProvider);
 
     void _showPromoteSignInPage() {
       showGeneralDialog(
