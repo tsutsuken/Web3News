@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:labo_flutter/components/comment_bottom_sheet.dart';
 import 'package:labo_flutter/components/comment_list_item.dart';
 import 'package:labo_flutter/components/loading_indicator.dart';
 import 'package:labo_flutter/models/comment/comment.dart';
@@ -12,6 +13,7 @@ const String commentsQuery = '''
       id
       text
       created_at
+      user_id
       user {
         id
         name
@@ -21,10 +23,71 @@ const String commentsQuery = '''
   }
 ''';
 
+const String deleteCommentMutation = '''
+  mutation MyMutation(\$id: uuid!) {
+    delete_comments_by_pk(id: \$id) {
+      id
+    }
+  }
+''';
+
 class CommentListPage extends HookWidget {
   const CommentListPage({Key? key, required this.articleId}) : super(key: key);
 
   final String? articleId;
+
+  Future<void> _onTapMenuButton(
+      BuildContext context, GraphQLClient client, Comment comment) async {
+    await showCommentBottomSheet(
+      context,
+      comment: comment,
+      onTapDeleteContent: () async {
+        final didSuccess = await _deleteComment(client, comment);
+
+        // スナックバーを表示
+        var message = '';
+        if (didSuccess) {
+          message = '削除しました';
+        } else {
+          message = 'エラーが発信しました。もう一度お試しください';
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+          ),
+        );
+
+        // TODO: リストを更新
+      },
+      onTapReportContent: () {
+        debugPrint('onTapReportContent');
+      },
+      onTapBlockUser: () {
+        debugPrint('onTapBlockUser');
+      },
+    );
+  }
+
+  Future<bool> _deleteComment(GraphQLClient client, Comment comment) async {
+    var didSuccess = false;
+
+    final result = await client.mutate(
+      MutationOptions(
+        document: gql(deleteCommentMutation),
+        variables: <String, dynamic>{
+          'id': comment.id,
+        },
+      ),
+    );
+    if (result.hasException) {
+      debugPrint('_deleteComment exception: ${result.exception.toString()}');
+      didSuccess = false;
+    } else {
+      didSuccess = true;
+    }
+
+    return didSuccess;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +101,16 @@ class CommentListPage extends HookWidget {
       }
     }
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('CommentListPage')),
-      body: (articleId == null)
-          ? _buildEmptyBody()
-          : _buildCommentsQuery(_refreshControllerNotifier.value, _refreshList),
+    return GraphQLConsumer(
+      builder: (GraphQLClient client) {
+        return Scaffold(
+          appBar: AppBar(title: const Text('CommentListPage')),
+          body: (articleId == null)
+              ? _buildEmptyBody()
+              : _buildCommentsQuery(
+                  _refreshControllerNotifier.value, client, _refreshList),
+        );
+      },
     );
   }
 
@@ -50,7 +118,9 @@ class CommentListPage extends HookWidget {
     return const Text('最初のコメントを投稿しましょう');
   }
 
-  Widget _buildCommentsQuery(RefreshController _refreshController,
+  Widget _buildCommentsQuery(
+      RefreshController _refreshController,
+      GraphQLClient client,
       Future<void> Function(VoidCallback? _refetch) _refreshList) {
     return Query(
       options: QueryOptions(
@@ -84,20 +154,22 @@ class CommentListPage extends HookWidget {
           onRefresh: () async {
             await _refreshList(refetch);
           },
-          child: _buildListView(comments),
+          child: ListView.builder(
+            physics: const AlwaysScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: comments.length,
+            itemBuilder: (BuildContext context, int index) {
+              final comment = comments[index];
+              return CommentListItem(
+                comment: comment,
+                onTapMenuButton: () async {
+                  await _onTapMenuButton(context, client, comment);
+                },
+              );
+            },
+          ),
         );
       },
     );
-  }
-
-  ListView _buildListView(List<Comment> comments) {
-    return ListView.builder(
-        physics: const AlwaysScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: comments.length,
-        itemBuilder: (BuildContext context, int index) {
-          final comment = comments[index];
-          return CommentListItem(comment: comment);
-        });
   }
 }
