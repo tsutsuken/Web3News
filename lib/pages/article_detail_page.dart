@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/pages/comment_create_page.dart';
-import 'package:labo_flutter/pages/comment_list_page.dart';
+import 'package:labo_flutter/pages/comment_list/comment_list_page.dart';
 import 'package:labo_flutter/pages/promote_sign_in_page.dart';
 import 'package:labo_flutter/providers/user_change_notifier_provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';

@@ -1,8 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:labo_flutter/logger_http_client.dart';
+
+// TODO: urlを共通化する
+final graphQLClientProvider = Provider(
+    (ref) => clientFor(uri: 'https://labo-flutter.hasura.app/v1/graphql'));
 
 final authAuthorizationLink = AuthLink(
   headerKey: 'Authorization',
