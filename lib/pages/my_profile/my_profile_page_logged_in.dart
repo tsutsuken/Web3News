@@ -56,14 +56,14 @@ const String deleteCommentMutation = '''
   }
 ''';
 
-class MyPageLoggedIn extends StatefulWidget {
-  const MyPageLoggedIn({Key? key}) : super(key: key);
+class MyProfilePageLoggedIn extends StatefulWidget {
+  const MyProfilePageLoggedIn({Key? key}) : super(key: key);
 
   @override
-  _MyPageLoggedInState createState() => _MyPageLoggedInState();
+  _MyProfilePageLoggedInState createState() => _MyProfilePageLoggedInState();
 }
 
-class _MyPageLoggedInState extends State<MyPageLoggedIn>
+class _MyProfilePageLoggedInState extends State<MyProfilePageLoggedIn>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   static const List<Tab> tabs = <Tab>[
