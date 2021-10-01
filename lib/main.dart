@@ -6,7 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/graphql_api_client.dart';
-import 'package:labo_flutter/pages/home_page.dart';
+import 'package:labo_flutter/pages/home/home_page.dart';
 import 'package:labo_flutter/pages/my_profile/my_profile_page.dart';
 import 'package:labo_flutter/utils/app_themes.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';

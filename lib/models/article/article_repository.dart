@@ -1,28 +1,76 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:http/http.dart' as http;
+import 'package:labo_flutter/graphql_api_client.dart';
 import 'package:labo_flutter/models/article/article.dart';
 
-final articleRepositoryProvider = Provider((ref) => ArticleRepository());
+const String popularArticlesQuery = '''
+{
+  articles(order_by: {published_at: asc}, limit: 50) {
+    id
+    published_at
+    title
+    url
+    url_to_image
+  }
+}
+''';
 
-class ArticleRepository {
-  Future<List<Article>> fetch() async {
-    final apiKey = dotenv.env['SECRET_NEWS_API_KEY']!;
-    final response = await http.get(
-      Uri.parse('https://newsapi.org/v2/top-headlines?country=jp'),
-      headers: {
-        HttpHeaders.authorizationHeader: apiKey,
-      },
+const String newArticlesQuery = '''
+{
+  articles(order_by: {published_at: desc}, limit: 50) {
+    id
+    published_at
+    title
+    url
+    url_to_image
+  }
+}
+''';
+
+final articleRepositoryProvider = Provider.autoDispose<ArticleRepositoryImpl>(
+  (ref) {
+    final graphQLClientNotifier = ref.read(graphQLClientProvider);
+
+    return ArticleRepositoryImpl(graphQLClientNotifier.value);
+  },
+);
+
+abstract class ArticleRepository {
+  Future<List<Article>> fetchPopularArticles();
+  Future<List<Article>> fetchNewArticles();
+}
+
+class ArticleRepositoryImpl implements ArticleRepository {
+  ArticleRepositoryImpl(this._client);
+
+  final GraphQLClient _client;
+
+  @override
+  Future<List<Article>> fetchPopularArticles() async {
+    final _articles = await _fetchArticles(popularArticlesQuery);
+    return _articles;
+  }
+
+  @override
+  Future<List<Article>> fetchNewArticles() async {
+    final _articles = await _fetchArticles(newArticlesQuery);
+    return _articles;
+  }
+
+  Future<List<Article>> _fetchArticles(String query) async {
+    var articles = <Article>[];
+    final result = await _client.query(
+      QueryOptions(
+        document: gql(query),
+        fetchPolicy: FetchPolicy.cacheAndNetwork,
+      ),
     );
-    if (response.statusCode == 200) {
-      final articleListResponse = ArticleListResponse.fromJson(
-          jsonDecode(response.body) as Map<String, dynamic>);
-      return articleListResponse.articles;
-    } else {
-      throw Exception('Failed to load article');
+
+    final resultData = result.data;
+    if (resultData != null) {
+      articles = ArticleListResponse.fromJson(resultData).articles;
     }
+
+    return articles;
   }
 }

@@ -1,36 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/components/loading_indicator.dart';
 import 'package:labo_flutter/models/article/article.dart';
 import 'package:labo_flutter/pages/article_detail_page.dart';
+import 'package:labo_flutter/pages/home/home_page_notifier.dart';
 import 'package:labo_flutter/utils/app_colors.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-
-const String queryArticlesPopular = '''
-{
-  articles(order_by: {published_at: asc}, limit: 50) {
-    id
-    published_at
-    title
-    url
-    url_to_image
-  }
-}
-''';
-
-const String queryArticlesNew = '''
-{
-  articles(order_by: {published_at: desc}, limit: 50) {
-    id
-    published_at
-    title
-    url
-    url_to_image
-  }
-}
-''';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -52,12 +28,12 @@ class _HomePageState extends State<HomePage>
     const Center(
         child: _ArticlesQuery(
       key: PageStorageKey(0),
-      query: queryArticlesPopular,
+      contentType: HomePageContentType.popularArticle,
     )),
     const Center(
         child: _ArticlesQuery(
       key: PageStorageKey(1),
-      query: queryArticlesNew,
+      contentType: HomePageContentType.newArticle,
     )),
   ];
 
@@ -88,45 +64,29 @@ class _HomePageState extends State<HomePage>
   }
 }
 
-class _ArticlesQuery extends HookWidget {
-  const _ArticlesQuery({Key? key, required this.query}) : super(key: key);
-  final String query;
+class _ArticlesQuery extends HookConsumerWidget {
+  const _ArticlesQuery({Key? key, required this.contentType}) : super(key: key);
+  final HomePageContentType contentType;
 
   @override
-  Widget build(BuildContext context) {
-    final _refreshControllerNotifier =
-        useState<RefreshController>(RefreshController(initialRefresh: false));
+  Widget build(BuildContext context, WidgetRef ref) {
+    final _pageNotifier = ref.watch(homePageNotifierProvider(contentType));
 
-    return Query(
-      options: QueryOptions(
-        document: gql(query),
-      ),
-      builder: (QueryResult result,
-          {VoidCallback? refetch, FetchMore? fetchMore}) {
-        if (result.hasException) {
-          return Text(result.exception.toString());
-        }
-
-        if (result.isLoading && result.data == null) {
-          return const LoadingIndicator();
-        }
-
-        var articles = <Article>[];
-        final resultData = result.data;
-        if (resultData != null) {
-          articles = ArticleListResponse.fromJson(resultData).articles;
-        }
-
+    return _pageNotifier.articlesValue.when(
+      data: (articles) {
         return SmartRefresher(
-          controller: _refreshControllerNotifier.value,
+          controller: _pageNotifier.refreshController,
           onRefresh: () async {
-            _refreshControllerNotifier.value.refreshCompleted();
-            if (refetch != null) {
-              refetch();
-            }
+            await _pageNotifier.onRefresh();
           },
           child: _buildListView(articles),
         );
+      },
+      loading: () {
+        return const LoadingIndicator();
+      },
+      error: (error, stackTrace) {
+        return Text('エラーが発生しました: $error');
       },
     );
   }
