@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/graphql_api_client.dart';
@@ -27,6 +28,14 @@ const String newArticlesQuery = '''
 }
 ''';
 
+const String insertArticleMutation = '''
+  mutation MyMutation(\$url: String!) {
+    insert_articles_one(object: {url: \$url}) {
+      id
+    }
+  }
+''';
+
 final articleRepositoryProvider = Provider.autoDispose<ArticleRepositoryImpl>(
   (ref) {
     final graphQLClientNotifier = ref.read(graphQLClientProvider);
@@ -38,6 +47,7 @@ final articleRepositoryProvider = Provider.autoDispose<ArticleRepositoryImpl>(
 abstract class ArticleRepository {
   Future<List<Article>> fetchPopularArticles();
   Future<List<Article>> fetchNewArticles();
+  Future<String?> addArticle(String url);
 }
 
 class ArticleRepositoryImpl implements ArticleRepository {
@@ -72,5 +82,31 @@ class ArticleRepositoryImpl implements ArticleRepository {
     }
 
     return articles;
+  }
+
+  @override
+  Future<String?> addArticle(String url) async {
+    Article? addedArticle;
+    try {
+      final result = await _client.mutate(
+        MutationOptions(
+          document: gql(insertArticleMutation),
+          variables: <String, dynamic>{
+            'url': url,
+          },
+        ),
+      );
+
+      final resultData = result.data;
+      if (resultData != null) {
+        addedArticle =
+            InsertArticlesOneResponse.fromJson(resultData).insertArticlesOne;
+      }
+    } on Exception catch (e) {
+      debugPrint('addArticle error: $e');
+      return null;
+    }
+
+    return addedArticle?.id;
   }
 }

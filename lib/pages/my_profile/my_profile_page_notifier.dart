@@ -27,7 +27,6 @@ class MyProfilePageNotifier extends ChangeNotifier {
   AsyncValue<List<Comment>> commentsValue = const AsyncValue.loading();
 
   Future<void> fetchMyComments() async {
-    debugPrint('ttmm fetchMyComments 0');
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId == null) {
       commentsValue = const AsyncValue.data([]);
@@ -40,7 +39,6 @@ class MyProfilePageNotifier extends ChangeNotifier {
       orderType = CommentsOrderType.descending;
     }
 
-    debugPrint('ttmm fetchMyComments 1');
     try {
       final _comments = await _commentRepository.fetchCommentsOfUser(
         userId,

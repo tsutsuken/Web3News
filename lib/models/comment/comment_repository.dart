@@ -52,6 +52,14 @@ const String myCommentsAscendingQuery = '''
   }
 ''';
 
+const String insertCommentMutation = '''
+  mutation MyMutation(\$text: String!, \$article_id: String!) {
+    insert_comments_one(object: {text: \$text, article_id: \$article_id}) {
+      id
+    }
+  }
+''';
+
 const String deleteCommentMutation = '''
   mutation MyMutation(\$id: uuid!) {
     delete_comments_by_pk(id: \$id) {
@@ -74,6 +82,7 @@ abstract class CommentRepository {
     String userId,
     CommentsOrderType orderType,
   );
+  Future<bool> addComment(String articleId, String text);
   Future<bool> deleteComment(String commentId);
 }
 
@@ -132,6 +141,27 @@ class CommentRepositoryImpl implements CommentRepository {
     }
 
     return comments;
+  }
+
+  @override
+  Future<bool> addComment(String articleId, String text) async {
+    var didAddComment = false;
+    try {
+      final _ = await _client.mutate(
+        MutationOptions(
+          document: gql(insertCommentMutation),
+          variables: <String, dynamic>{
+            'text': text,
+            'article_id': articleId,
+          },
+        ),
+      );
+      didAddComment = true;
+    } on Exception catch (e) {
+      debugPrint('addComment error: $e');
+      didAddComment = false;
+    }
+    return didAddComment;
   }
 
   @override
