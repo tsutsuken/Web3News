@@ -2,11 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/components/comment_bottom_sheet.dart';
 import 'package:labo_flutter/components/comment_list_item.dart';
 import 'package:labo_flutter/models/app_user/app_user.dart';
 import 'package:labo_flutter/models/comment/comment.dart';
 import 'package:labo_flutter/pages/edit_profile_page.dart';
+import 'package:labo_flutter/pages/my_profile/my_profile_page_notifier.dart';
 import 'package:labo_flutter/pages/setting_page.dart';
 import 'package:labo_flutter/utils/app_colors.dart';
 
@@ -20,50 +22,14 @@ query MyQuery(\$id: String!) {
 }
 ''';
 
-const String myCommentsDescendingQuery = '''
-  query MyQuery(\$user_id: String!) {
-    comments(order_by: {created_at: desc}, where: {user_id: {_eq: \$user_id}}) {
-      id
-      created_at
-      text
-      user_id
-      user {
-        id
-        name
-        profile_image_url
-      }
-    }
-  }
-''';
-
-const String myCommentsAscendingQuery = '''
-  query MyQuery(\$user_id: String!) {
-    comments(order_by: {created_at: asc}, where: {user_id: {_eq: \$user_id}}) {
-      id
-      created_at
-      text
-      user_id
-      article_id
-    }
-  }
-''';
-
-const String deleteCommentMutation = '''
-  mutation MyMutation(\$id: uuid!) {
-    delete_comments_by_pk(id: \$id) {
-      id
-    }
-  }
-''';
-
-class MyProfilePageLoggedIn extends StatefulWidget {
+class MyProfilePageLoggedIn extends ConsumerStatefulWidget {
   const MyProfilePageLoggedIn({Key? key}) : super(key: key);
 
   @override
   _MyProfilePageLoggedInState createState() => _MyProfilePageLoggedInState();
 }
 
-class _MyProfilePageLoggedInState extends State<MyProfilePageLoggedIn>
+class _MyProfilePageLoggedInState extends ConsumerState<MyProfilePageLoggedIn>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   static const List<Tab> tabs = <Tab>[
@@ -90,14 +56,14 @@ class _MyProfilePageLoggedInState extends State<MyProfilePageLoggedIn>
       },
       body: TabBarView(
         controller: _tabController,
-        children: [
-          _buildContentScrollView(
-            const PageStorageKey<String>('0'),
-            myCommentsDescendingQuery,
+        children: const [
+          _ContentScrollView(
+            key: PageStorageKey<String>('0'),
+            contentType: MyProfilePageContentType.descendingMyComments,
           ),
-          _buildContentScrollView(
-            const PageStorageKey<String>('1'),
-            myCommentsAscendingQuery,
+          _ContentScrollView(
+            key: PageStorageKey<String>('1'),
+            contentType: MyProfilePageContentType.ascendingMyComments,
           ),
         ],
       ),
@@ -224,13 +190,33 @@ class _MyProfilePageLoggedInState extends State<MyProfilePageLoggedIn>
       ),
     );
   }
+}
 
-  Builder _buildContentScrollView(Key key, String query) {
+class _ContentScrollView extends ConsumerStatefulWidget {
+  const _ContentScrollView({Key? key, required this.contentType})
+      : super(key: key);
+
+  final MyProfilePageContentType contentType;
+
+  @override
+  _ContentScrollViewState createState() => _ContentScrollViewState();
+}
+
+class _ContentScrollViewState extends ConsumerState<_ContentScrollView>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final pageNotifier =
+        ref.watch(myProfilePageNotifierProvider(widget.contentType));
     return Builder(
       builder: (BuildContext _context) {
         return GraphQLConsumer(builder: (GraphQLClient client) {
           return CustomScrollView(
-            key: key,
+            key: widget.key,
             slivers: [
               SliverOverlapInjector(
                 handle:
@@ -239,7 +225,7 @@ class _MyProfilePageLoggedInState extends State<MyProfilePageLoggedIn>
               SliverPadding(
                 padding: const EdgeInsets.all(8),
                 sliver: _ContentQuery(
-                  query: query,
+                  pageNotifier: pageNotifier,
                   client: client,
                 ),
               ),
@@ -252,18 +238,20 @@ class _MyProfilePageLoggedInState extends State<MyProfilePageLoggedIn>
 }
 
 class _ContentQuery extends StatelessWidget {
-  const _ContentQuery({Key? key, required this.query, required this.client})
+  const _ContentQuery(
+      {Key? key, required this.pageNotifier, required this.client})
       : super(key: key);
 
-  final String query;
+  final MyProfilePageNotifier pageNotifier;
   final GraphQLClient client;
 
-  Future<void> _onTapMenuButton(BuildContext context, Comment comment) async {
+  Future<void> _onTapMenuButton(BuildContext context,
+      MyProfilePageNotifier pageNotifier, Comment comment) async {
     await showCommentBottomSheet(
       context,
       comment: comment,
       onTapDeleteContent: () async {
-        final didSuccess = await _deleteComment(comment);
+        final didSuccess = await pageNotifier.deleteComment(comment.id);
 
         // スナックバーを表示
         var message = '';
@@ -289,68 +277,29 @@ class _ContentQuery extends StatelessWidget {
     );
   }
 
-  Future<bool> _deleteComment(Comment comment) async {
-    var didSuccess = false;
-
-    final result = await client.mutate(
-      MutationOptions(
-        document: gql(deleteCommentMutation),
-        variables: <String, dynamic>{
-          'id': comment.id,
-        },
-      ),
-    );
-    if (result.hasException) {
-      debugPrint('_deleteComment exception: ${result.exception.toString()}');
-      didSuccess = false;
-    } else {
-      didSuccess = true;
-    }
-
-    return didSuccess;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Query(
-      options: QueryOptions(
-        document: gql(query),
-        variables: <String, dynamic>{
-          'user_id': FirebaseAuth.instance.currentUser?.uid ?? '',
-        },
-      ),
-      builder: (QueryResult result,
-          {VoidCallback? refetch, FetchMore? fetchMore}) {
-        if (result.hasException) {
-          return SliverToBoxAdapter(child: Text(result.exception.toString()));
-        }
-
-        if (result.isLoading) {
-          return const SliverToBoxAdapter(child: Text('Loading'));
-        }
-
-        var comments = <Comment>[];
-        final resultData = result.data;
-        if (resultData != null) {
-          comments = CommentListResponse.fromJson(resultData).comments;
-        }
-
-        return _buildSliverList(comments);
-      },
-    );
-  }
-
-  SliverList _buildSliverList(List<Comment> comments) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-        final comment = comments[index];
-        return CommentListItem(
-          comment: comment,
-          onTapMenuButton: () async {
-            await _onTapMenuButton(context, comment);
-          },
+    return pageNotifier.commentsValue.when(
+      data: (comments) {
+        return SliverList(
+          delegate:
+              SliverChildBuilderDelegate((BuildContext context, int index) {
+            final comment = comments[index];
+            return CommentListItem(
+              comment: comment,
+              onTapMenuButton: () async {
+                await _onTapMenuButton(context, pageNotifier, comment);
+              },
+            );
+          }, childCount: comments.length),
         );
-      }, childCount: comments.length),
+      },
+      loading: () {
+        return const SliverToBoxAdapter(child: Text('ローディング中...'));
+      },
+      error: (error, stackTrace) {
+        return SliverToBoxAdapter(child: Text('エラーが発生しました: $error'));
+      },
     );
   }
 }

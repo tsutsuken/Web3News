@@ -20,6 +20,38 @@ const String commentsQuery = '''
   }
 ''';
 
+const String myCommentsDescendingQuery = '''
+  query MyQuery(\$user_id: String!) {
+    comments(order_by: {created_at: desc}, where: {user_id: {_eq: \$user_id}}) {
+      id
+      created_at
+      text
+      user_id
+      user {
+        id
+        name
+        profile_image_url
+      }
+    }
+  }
+''';
+
+const String myCommentsAscendingQuery = '''
+  query MyQuery(\$user_id: String!) {
+    comments(order_by: {created_at: asc}, where: {user_id: {_eq: \$user_id}}) {
+      id
+      created_at
+      text
+      user_id
+      user {
+        id
+        name
+        profile_image_url
+      }
+    }
+  }
+''';
+
 const String deleteCommentMutation = '''
   mutation MyMutation(\$id: uuid!) {
     delete_comments_by_pk(id: \$id) {
@@ -38,7 +70,16 @@ final commentRepositoryProvider = Provider.autoDispose<CommentRepositoryImpl>(
 
 abstract class CommentRepository {
   Future<List<Comment>> fetchComments(String articleId);
+  Future<List<Comment>> fetchCommentsOfUser(
+    String userId,
+    CommentsOrderType orderType,
+  );
   Future<bool> deleteComment(String commentId);
+}
+
+enum CommentsOrderType {
+  ascending,
+  descending,
 }
 
 class CommentRepositoryImpl implements CommentRepository {
@@ -53,6 +94,33 @@ class CommentRepositoryImpl implements CommentRepository {
         document: gql(commentsQuery),
         variables: <String, dynamic>{
           'article_id': articleId,
+        },
+        fetchPolicy: FetchPolicy.cacheAndNetwork,
+      ),
+    );
+
+    final resultData = result.data;
+    if (resultData != null) {
+      comments = CommentListResponse.fromJson(resultData).comments;
+    }
+
+    return comments;
+  }
+
+  @override
+  Future<List<Comment>> fetchCommentsOfUser(
+    String userId,
+    CommentsOrderType orderType,
+  ) async {
+    var comments = <Comment>[];
+    final query = (orderType == CommentsOrderType.ascending)
+        ? myCommentsAscendingQuery
+        : myCommentsDescendingQuery;
+    final result = await _client.query(
+      QueryOptions(
+        document: gql(query),
+        variables: <String, dynamic>{
+          'user_id': userId,
         },
         fetchPolicy: FetchPolicy.cacheAndNetwork,
       ),
