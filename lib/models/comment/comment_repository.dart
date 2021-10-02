@@ -4,9 +4,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/graphql_api_client.dart';
 import 'package:labo_flutter/models/comment/comment.dart';
 
-const String commentsQuery = '''
+const String commentsOfArticleQuery = '''
   query MyQuery(\$article_id: String!) {
-    comments(where: {article_id: {_eq: \$article_id}}) {
+    comments(where: {is_banned: {_neq: true}, article_id: {_eq: \$article_id}}) {
       id
       text
       created_at
@@ -100,7 +100,7 @@ class CommentRepositoryImpl implements CommentRepository {
     var comments = <Comment>[];
     final result = await _client.query(
       QueryOptions(
-        document: gql(commentsQuery),
+        document: gql(commentsOfArticleQuery),
         variables: <String, dynamic>{
           'article_id': articleId,
         },
