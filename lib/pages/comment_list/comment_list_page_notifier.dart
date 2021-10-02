@@ -2,20 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/models/comment/comment.dart';
 import 'package:labo_flutter/models/comment/comment_repository.dart';
+import 'package:labo_flutter/models/report/report_repository.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 final commentListPageNotifierProvider = ChangeNotifierProvider.family
     .autoDispose<CommentListPageNotifier, String?>((ref, articleId) {
   final commentRepository = ref.read(commentRepositoryProvider);
-  return CommentListPageNotifier(commentRepository, articleId);
+  final reportRepository = ref.read(reportRepositoryProvider);
+  return CommentListPageNotifier(
+      commentRepository, reportRepository, articleId);
 });
 
 class CommentListPageNotifier extends ChangeNotifier {
-  CommentListPageNotifier(this._commentRepository, this._articleId) {
+  CommentListPageNotifier(
+    this._commentRepository,
+    this._reportRepository,
+    this._articleId,
+  ) {
     fetchComments(_articleId);
   }
 
   final CommentRepository _commentRepository;
+  final ReportRepository _reportRepository;
   final String? _articleId;
 
   AsyncValue<List<Comment>> commentsValue = const AsyncValue.loading();
@@ -47,5 +55,10 @@ class CommentListPageNotifier extends ChangeNotifier {
   Future<void> onRefresh() async {
     await fetchComments(_articleId);
     refreshController.refreshCompleted();
+  }
+
+  Future<bool> addReport(String commentId) async {
+    final didSuccess = await _reportRepository.addReport(commentId);
+    return didSuccess;
   }
 }

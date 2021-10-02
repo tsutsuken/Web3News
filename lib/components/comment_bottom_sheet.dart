@@ -7,8 +7,8 @@ Future<void> showCommentBottomSheet(
   BuildContext context, {
   required Comment comment,
   required VoidCallback onTapDeleteContent,
-  required VoidCallback onTapReportContent,
-  required VoidCallback onTapBlockUser,
+  VoidCallback? onTapReportContent,
+  VoidCallback? onTapBlockUser,
 }) async {
   final isMyComment = FirebaseAuth.instance.currentUser?.uid == comment.userId;
   await showModalBottomSheet<void>(
@@ -30,28 +30,30 @@ Future<void> showCommentBottomSheet(
                   Navigator.of(context).pop();
                 },
               ),
-            ListTile(
-              leading: const Icon(Icons.report),
-              title: Text(
-                '不適切なコンテンツを報告',
-                style: TextStyle(color: AppColors().textPrimary),
+            if (onTapReportContent != null)
+              ListTile(
+                leading: const Icon(Icons.report),
+                title: Text(
+                  '不適切なコンテンツを報告',
+                  style: TextStyle(color: AppColors().textPrimary),
+                ),
+                onTap: () {
+                  onTapReportContent();
+                  Navigator.of(context).pop();
+                },
               ),
-              onTap: () {
-                onTapReportContent();
-                Navigator.of(context).pop();
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.block),
-              title: Text(
-                'このユーザをブロック',
-                style: TextStyle(color: AppColors().textPrimary),
+            if (onTapBlockUser != null)
+              ListTile(
+                leading: const Icon(Icons.block),
+                title: Text(
+                  'このユーザをブロック',
+                  style: TextStyle(color: AppColors().textPrimary),
+                ),
+                onTap: () {
+                  onTapBlockUser();
+                  Navigator.of(context).pop();
+                },
               ),
-              onTap: () {
-                onTapBlockUser();
-                Navigator.of(context).pop();
-              },
-            ),
           ],
         ),
       );

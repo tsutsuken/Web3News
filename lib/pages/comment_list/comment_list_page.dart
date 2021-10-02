@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/components/comment_bottom_sheet.dart';
@@ -14,6 +15,28 @@ class CommentListPage extends HookConsumerWidget {
 
   Future<void> _onTapMenuButton(BuildContext context,
       CommentListPageNotifier pageNotifier, Comment comment) async {
+    // 「不適切なコンテンツを報告」タップ時
+    VoidCallback? onTapReportContent;
+    final isMyComment =
+        FirebaseAuth.instance.currentUser?.uid == comment.userId;
+    if (!isMyComment) {
+      onTapReportContent = () async {
+        final didSuccess = await pageNotifier.addReport(comment.id);
+        debugPrint('onTapReportContent didSuccess: $didSuccess');
+
+        // スナックバーを表示
+        var message = '';
+        if (didSuccess) {
+          message = '報告しました';
+        } else {
+          message = 'エラーが発生しました。もう一度お試しください';
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(message)),
+        );
+      };
+    }
+
     await showCommentBottomSheet(
       context,
       comment: comment,
@@ -25,19 +48,15 @@ class CommentListPage extends HookConsumerWidget {
         if (didSuccess) {
           message = '削除しました';
         } else {
-          message = 'エラーが発信しました。もう一度お試しください';
+          message = 'エラーが発生しました。もう一度お試しください';
         }
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(message),
-          ),
+          SnackBar(content: Text(message)),
         );
 
         await pageNotifier.onRefresh();
       },
-      onTapReportContent: () {
-        debugPrint('onTapReportContent');
-      },
+      onTapReportContent: onTapReportContent,
       onTapBlockUser: () {
         debugPrint('onTapBlockUser');
       },

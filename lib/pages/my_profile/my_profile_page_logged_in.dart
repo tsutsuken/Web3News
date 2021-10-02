@@ -268,12 +268,6 @@ class _ContentQuery extends StatelessWidget {
 
         // TODO: リストを更新
       },
-      onTapReportContent: () {
-        debugPrint('onTapReportContent');
-      },
-      onTapBlockUser: () {
-        debugPrint('onTapBlockUser');
-      },
     );
   }
 
