@@ -15,10 +15,11 @@ class CommentListPage extends HookConsumerWidget {
 
   Future<void> _onTapMenuButton(BuildContext context,
       CommentListPageNotifier pageNotifier, Comment comment) async {
-    // 「不適切なコンテンツを報告」タップ時
-    VoidCallback? onTapReportContent;
     final isMyComment =
         FirebaseAuth.instance.currentUser?.uid == comment.userId;
+
+    // 「不適切なコンテンツを報告」タップ時
+    VoidCallback? onTapReportContent;
     if (!isMyComment) {
       onTapReportContent = () async {
         final didSuccess = await pageNotifier.addReport(comment.id);
@@ -28,6 +29,26 @@ class CommentListPage extends HookConsumerWidget {
         var message = '';
         if (didSuccess) {
           message = '報告しました';
+        } else {
+          message = 'エラーが発生しました。もう一度お試しください';
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(message)),
+        );
+      };
+    }
+
+    // 「このユーザをブロック」タップ時
+    VoidCallback? onTapBlockUser;
+    if (!isMyComment) {
+      onTapBlockUser = () async {
+        final didSuccess = await pageNotifier.blockUser(comment.userId);
+        debugPrint('onTapBlockUser didSuccess: $didSuccess');
+
+        // スナックバーを表示
+        var message = '';
+        if (didSuccess) {
+          message = 'ユーザをブロックしました';
         } else {
           message = 'エラーが発生しました。もう一度お試しください';
         }
@@ -57,9 +78,7 @@ class CommentListPage extends HookConsumerWidget {
         await pageNotifier.onRefresh();
       },
       onTapReportContent: onTapReportContent,
-      onTapBlockUser: () {
-        debugPrint('onTapBlockUser');
-      },
+      onTapBlockUser: onTapBlockUser,
     );
   }
 
