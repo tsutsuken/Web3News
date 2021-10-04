@@ -5,7 +5,7 @@ import 'package:labo_flutter/graphql_api_client.dart';
 import 'package:labo_flutter/models/comment/comment.dart';
 
 const String commentsOfArticleQuery = '''
-  query MyQuery(\$article_id: String!) {
+  query MyQuery(\$article_id: uuid!) {
     comments(where: {is_banned: {_neq: true}, article_id: {_eq: \$article_id}}) {
       id
       text
@@ -53,7 +53,7 @@ const String myCommentsAscendingQuery = '''
 ''';
 
 const String insertCommentMutation = '''
-  mutation MyMutation(\$text: String!, \$article_id: String!) {
+  mutation MyMutation(\$text: String!, \$article_id: uuid!) {
     insert_comments_one(object: {text: \$text, article_id: \$article_id}) {
       id
     }
@@ -161,6 +161,7 @@ class CommentRepositoryImpl implements CommentRepository {
         debugPrint('addComment exception: ${result.exception.toString()}');
       } else {
         didSuccess = true;
+        debugPrint('addComment success');
       }
     } on Exception catch (e) {
       debugPrint('addComment error: $e');
