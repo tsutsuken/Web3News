@@ -145,9 +145,10 @@ class CommentRepositoryImpl implements CommentRepository {
 
   @override
   Future<bool> addComment(String articleId, String text) async {
-    var didAddComment = false;
+    debugPrint('addComment articleId: $articleId');
+    var didSuccess = false;
     try {
-      final _ = await _client.mutate(
+      final result = await _client.mutate(
         MutationOptions(
           document: gql(insertCommentMutation),
           variables: <String, dynamic>{
@@ -156,12 +157,15 @@ class CommentRepositoryImpl implements CommentRepository {
           },
         ),
       );
-      didAddComment = true;
+      if (result.hasException) {
+        debugPrint('addComment exception: ${result.exception.toString()}');
+      } else {
+        didSuccess = true;
+      }
     } on Exception catch (e) {
       debugPrint('addComment error: $e');
-      didAddComment = false;
     }
-    return didAddComment;
+    return didSuccess;
   }
 
   @override
