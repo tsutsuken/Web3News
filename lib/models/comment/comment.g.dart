@@ -22,6 +22,22 @@ Map<String, dynamic> _$_$_CommentListResponseToJson(
       'comments': instance.comments,
     };
 
+_$_CommentListFilteredResponse _$_$_CommentListFilteredResponseFromJson(
+    Map<String, dynamic> json) {
+  return _$_CommentListFilteredResponse(
+    commentsFiltered: (json['comments_filtered'] as List<dynamic>?)
+            ?.map((dynamic e) => Comment.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [],
+  );
+}
+
+Map<String, dynamic> _$_$_CommentListFilteredResponseToJson(
+        _$_CommentListFilteredResponse instance) =>
+    <String, dynamic>{
+      'comments_filtered': instance.commentsFiltered,
+    };
+
 _$_Comment _$_$_CommentFromJson(Map<String, dynamic> json) {
   return _$_Comment(
     id: json['id'] as String? ?? '',

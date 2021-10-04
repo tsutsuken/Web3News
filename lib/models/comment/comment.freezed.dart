@@ -165,6 +165,169 @@ abstract class _CommentListResponse implements CommentListResponse {
       throw _privateConstructorUsedError;
 }
 
+CommentListFilteredResponse _$CommentListFilteredResponseFromJson(
+    Map<String, dynamic> json) {
+  return _CommentListFilteredResponse.fromJson(json);
+}
+
+/// @nodoc
+class _$CommentListFilteredResponseTearOff {
+  const _$CommentListFilteredResponseTearOff();
+
+  _CommentListFilteredResponse call(
+      {List<Comment> commentsFiltered = const <Comment>[]}) {
+    return _CommentListFilteredResponse(
+      commentsFiltered: commentsFiltered,
+    );
+  }
+
+  CommentListFilteredResponse fromJson(Map<String, Object> json) {
+    return CommentListFilteredResponse.fromJson(json);
+  }
+}
+
+/// @nodoc
+const $CommentListFilteredResponse = _$CommentListFilteredResponseTearOff();
+
+/// @nodoc
+mixin _$CommentListFilteredResponse {
+  List<Comment> get commentsFiltered => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $CommentListFilteredResponseCopyWith<CommentListFilteredResponse>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $CommentListFilteredResponseCopyWith<$Res> {
+  factory $CommentListFilteredResponseCopyWith(
+          CommentListFilteredResponse value,
+          $Res Function(CommentListFilteredResponse) then) =
+      _$CommentListFilteredResponseCopyWithImpl<$Res>;
+  $Res call({List<Comment> commentsFiltered});
+}
+
+/// @nodoc
+class _$CommentListFilteredResponseCopyWithImpl<$Res>
+    implements $CommentListFilteredResponseCopyWith<$Res> {
+  _$CommentListFilteredResponseCopyWithImpl(this._value, this._then);
+
+  final CommentListFilteredResponse _value;
+  // ignore: unused_field
+  final $Res Function(CommentListFilteredResponse) _then;
+
+  @override
+  $Res call({
+    Object? commentsFiltered = freezed,
+  }) {
+    return _then(_value.copyWith(
+      commentsFiltered: commentsFiltered == freezed
+          ? _value.commentsFiltered
+          : commentsFiltered // ignore: cast_nullable_to_non_nullable
+              as List<Comment>,
+    ));
+  }
+}
+
+/// @nodoc
+abstract class _$CommentListFilteredResponseCopyWith<$Res>
+    implements $CommentListFilteredResponseCopyWith<$Res> {
+  factory _$CommentListFilteredResponseCopyWith(
+          _CommentListFilteredResponse value,
+          $Res Function(_CommentListFilteredResponse) then) =
+      __$CommentListFilteredResponseCopyWithImpl<$Res>;
+  @override
+  $Res call({List<Comment> commentsFiltered});
+}
+
+/// @nodoc
+class __$CommentListFilteredResponseCopyWithImpl<$Res>
+    extends _$CommentListFilteredResponseCopyWithImpl<$Res>
+    implements _$CommentListFilteredResponseCopyWith<$Res> {
+  __$CommentListFilteredResponseCopyWithImpl(
+      _CommentListFilteredResponse _value,
+      $Res Function(_CommentListFilteredResponse) _then)
+      : super(_value, (v) => _then(v as _CommentListFilteredResponse));
+
+  @override
+  _CommentListFilteredResponse get _value =>
+      super._value as _CommentListFilteredResponse;
+
+  @override
+  $Res call({
+    Object? commentsFiltered = freezed,
+  }) {
+    return _then(_CommentListFilteredResponse(
+      commentsFiltered: commentsFiltered == freezed
+          ? _value.commentsFiltered
+          : commentsFiltered // ignore: cast_nullable_to_non_nullable
+              as List<Comment>,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(fieldRename: FieldRename.snake)
+class _$_CommentListFilteredResponse implements _CommentListFilteredResponse {
+  const _$_CommentListFilteredResponse(
+      {this.commentsFiltered = const <Comment>[]});
+
+  factory _$_CommentListFilteredResponse.fromJson(Map<String, dynamic> json) =>
+      _$_$_CommentListFilteredResponseFromJson(json);
+
+  @JsonKey(defaultValue: const <Comment>[])
+  @override
+  final List<Comment> commentsFiltered;
+
+  @override
+  String toString() {
+    return 'CommentListFilteredResponse(commentsFiltered: $commentsFiltered)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _CommentListFilteredResponse &&
+            (identical(other.commentsFiltered, commentsFiltered) ||
+                const DeepCollectionEquality()
+                    .equals(other.commentsFiltered, commentsFiltered)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(commentsFiltered);
+
+  @JsonKey(ignore: true)
+  @override
+  _$CommentListFilteredResponseCopyWith<_CommentListFilteredResponse>
+      get copyWith => __$CommentListFilteredResponseCopyWithImpl<
+          _CommentListFilteredResponse>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$_$_CommentListFilteredResponseToJson(this);
+  }
+}
+
+abstract class _CommentListFilteredResponse
+    implements CommentListFilteredResponse {
+  const factory _CommentListFilteredResponse({List<Comment> commentsFiltered}) =
+      _$_CommentListFilteredResponse;
+
+  factory _CommentListFilteredResponse.fromJson(Map<String, dynamic> json) =
+      _$_CommentListFilteredResponse.fromJson;
+
+  @override
+  List<Comment> get commentsFiltered => throw _privateConstructorUsedError;
+  @override
+  @JsonKey(ignore: true)
+  _$CommentListFilteredResponseCopyWith<_CommentListFilteredResponse>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
 Comment _$CommentFromJson(Map<String, dynamic> json) {
   return _Comment.fromJson(json);
 }

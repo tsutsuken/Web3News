@@ -16,6 +16,17 @@ abstract class CommentListResponse with _$CommentListResponse {
 }
 
 @freezed
+abstract class CommentListFilteredResponse with _$CommentListFilteredResponse {
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  const factory CommentListFilteredResponse({
+    @Default(<Comment>[]) List<Comment> commentsFiltered,
+  }) = _CommentListFilteredResponse;
+
+  factory CommentListFilteredResponse.fromJson(Map<String, dynamic> json) =>
+      _$CommentListFilteredResponseFromJson(json);
+}
+
+@freezed
 abstract class Comment with _$Comment {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory Comment({

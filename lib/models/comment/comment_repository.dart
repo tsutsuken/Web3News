@@ -1,23 +1,24 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/graphql_api_client.dart';
 import 'package:labo_flutter/models/comment/comment.dart';
 
-const String commentsOfArticleQuery = '''
-  query MyQuery(\$article_id: uuid!) {
-    comments(where: {is_banned: {_neq: true}, article_id: {_eq: \$article_id}}) {
+const String commentsFilteredOfArticleQuery = '''
+query MyQuery(\$viewer_user_id: String!, \$article_id: uuid!) {
+  comments_filtered(args: {viewer_user_id: \$viewer_user_id}, where: {is_banned: {_neq: true}, article_id: {_eq: \$article_id}}) {
+    id
+    text
+    created_at
+    user_id
+    user {
       id
-      text
-      created_at
-      user_id
-      user {
-        id
-        name
-        profile_image_url
-      }
+      name
+      profile_image_url
     }
   }
+}
 ''';
 
 const String myCommentsDescendingQuery = '''
@@ -98,19 +99,26 @@ class CommentRepositoryImpl implements CommentRepository {
   @override
   Future<List<Comment>> fetchComments(String articleId) async {
     var comments = <Comment>[];
+    final myUserId = FirebaseAuth.instance.currentUser?.uid ?? '';
     final result = await _client.query(
       QueryOptions(
-        document: gql(commentsOfArticleQuery),
+        document: gql(commentsFilteredOfArticleQuery),
         variables: <String, dynamic>{
+          'viewer_user_id': myUserId,
           'article_id': articleId,
         },
         fetchPolicy: FetchPolicy.cacheAndNetwork,
       ),
     );
 
+    if (result.hasException) {
+      debugPrint('fetchComments exception: ${result.exception.toString()}');
+    }
+
     final resultData = result.data;
     if (resultData != null) {
-      comments = CommentListResponse.fromJson(resultData).comments;
+      comments =
+          CommentListFilteredResponse.fromJson(resultData).commentsFiltered;
     }
 
     return comments;

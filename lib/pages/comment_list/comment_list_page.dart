@@ -55,6 +55,11 @@ class CommentListPage extends HookConsumerWidget {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(message)),
         );
+
+        // 画面をリロード
+        if (didSuccess) {
+          await pageNotifier.onRefresh();
+        }
       };
     }
 
