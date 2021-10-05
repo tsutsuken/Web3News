@@ -26,7 +26,6 @@ class CommentCreatePage extends HookConsumerWidget {
                 articleId,
                 articleUrl,
               );
-              debugPrint('addCommentAndArticle response: $response');
               if (response.didAddComment) {
                 Navigator.of(context).pop<String?>(response.articleId);
                 ScaffoldMessenger.of(context).showSnackBar(
