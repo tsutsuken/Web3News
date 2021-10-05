@@ -16,8 +16,6 @@ class CommentListItem extends StatelessWidget {
       onTap: () {},
       child: Container(
           padding: const EdgeInsets.all(8),
-          decoration: const BoxDecoration(
-              border: Border(bottom: BorderSide(width: 1, color: Colors.grey))),
           child: Row(
             children: <Widget>[
               Column(
