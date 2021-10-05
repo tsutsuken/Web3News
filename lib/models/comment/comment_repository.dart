@@ -78,7 +78,7 @@ final commentRepositoryProvider = Provider.autoDispose<CommentRepositoryImpl>(
 );
 
 abstract class CommentRepository {
-  Future<List<Comment>> fetchComments(String articleId);
+  Future<List<Comment>> fetchCommentsOfArticle(String articleId);
   Future<List<Comment>> fetchCommentsOfUser(
     String userId,
     CommentsOrderType orderType,
@@ -97,7 +97,7 @@ class CommentRepositoryImpl implements CommentRepository {
   final GraphQLClient _client;
 
   @override
-  Future<List<Comment>> fetchComments(String articleId) async {
+  Future<List<Comment>> fetchCommentsOfArticle(String articleId) async {
     var comments = <Comment>[];
     final myUserId = FirebaseAuth.instance.currentUser?.uid ?? '';
     final result = await _client.query(

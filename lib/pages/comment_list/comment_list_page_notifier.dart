@@ -22,7 +22,7 @@ class CommentListPageNotifier extends ChangeNotifier {
     this._blockRepository,
     this._articleId,
   ) {
-    fetchComments(_articleId);
+    fetchCommentsOfArticle(_articleId);
   }
 
   final CommentRepository _commentRepository;
@@ -33,7 +33,7 @@ class CommentListPageNotifier extends ChangeNotifier {
   AsyncValue<List<Comment>> commentsValue = const AsyncValue.loading();
   final RefreshController refreshController = RefreshController();
 
-  Future<void> fetchComments(String? articleId) async {
+  Future<void> fetchCommentsOfArticle(String? articleId) async {
     if (articleId == null) {
       commentsValue = const AsyncValue.data([]);
       notifyListeners();
@@ -41,7 +41,8 @@ class CommentListPageNotifier extends ChangeNotifier {
     }
 
     try {
-      final _comments = await _commentRepository.fetchComments(articleId);
+      final _comments =
+          await _commentRepository.fetchCommentsOfArticle(articleId);
       commentsValue = AsyncValue.data(_comments);
       notifyListeners();
     } on Exception catch (e) {
@@ -57,7 +58,7 @@ class CommentListPageNotifier extends ChangeNotifier {
   }
 
   Future<void> onRefresh() async {
-    await fetchComments(_articleId);
+    await fetchCommentsOfArticle(_articleId);
     refreshController.refreshCompleted();
   }
 
