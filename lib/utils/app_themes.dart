@@ -97,18 +97,18 @@ class AppThemes {
   );
 
   final _darkTextTheme = const TextTheme(
-    headline1: TextStyle(color: AppColors.textLightSecondary),
-    headline2: TextStyle(color: AppColors.textLightSecondary),
-    headline3: TextStyle(color: AppColors.textLightSecondary),
-    headline4: TextStyle(color: AppColors.textLightSecondary),
-    headline5: TextStyle(color: AppColors.textLightSecondary),
-    headline6: TextStyle(color: AppColors.textLightPrimary),
-    subtitle1: TextStyle(color: AppColors.textLightPrimary),
-    subtitle2: TextStyle(color: AppColors.textLightPrimary),
-    bodyText1: TextStyle(color: AppColors.textLightPrimary),
-    bodyText2: TextStyle(color: AppColors.textLightSecondary),
-    caption: TextStyle(color: AppColors.textLightSecondary),
-    button: TextStyle(color: AppColors.textLightPrimary),
-    overline: TextStyle(color: AppColors.textLightSecondary),
+    headline1: TextStyle(color: AppColors.textDarkSecondary),
+    headline2: TextStyle(color: AppColors.textDarkSecondary),
+    headline3: TextStyle(color: AppColors.textDarkSecondary),
+    headline4: TextStyle(color: AppColors.textDarkSecondary),
+    headline5: TextStyle(color: AppColors.textDarkSecondary),
+    headline6: TextStyle(color: AppColors.textDarkPrimary),
+    subtitle1: TextStyle(color: AppColors.textDarkPrimary),
+    subtitle2: TextStyle(color: AppColors.textDarkPrimary),
+    bodyText1: TextStyle(color: AppColors.textDarkPrimary),
+    bodyText2: TextStyle(color: AppColors.textDarkSecondary),
+    caption: TextStyle(color: AppColors.textDarkSecondary),
+    button: TextStyle(color: AppColors.textDarkPrimary),
+    overline: TextStyle(color: AppColors.textDarkSecondary),
   );
 }
