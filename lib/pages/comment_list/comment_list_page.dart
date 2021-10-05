@@ -18,6 +18,30 @@ class CommentListPage extends HookConsumerWidget {
     final isMyComment =
         FirebaseAuth.instance.currentUser?.uid == comment.userId;
 
+    // 「コメントを削除」タップ時
+    VoidCallback? onTapDeleteComment;
+    if (isMyComment) {
+      onTapDeleteComment = () async {
+        final didSuccess = await pageNotifier.deleteComment(comment.id);
+
+        // スナックバーを表示
+        var message = '';
+        if (didSuccess) {
+          message = '削除しました';
+        } else {
+          message = 'エラーが発生しました。もう一度お試しください';
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(message)),
+        );
+
+        // 画面をリロード
+        if (didSuccess) {
+          await pageNotifier.onRefresh();
+        }
+      };
+    }
+
     // 「不適切なコンテンツを報告」タップ時
     VoidCallback? onTapReportContent;
     if (!isMyComment) {
@@ -66,22 +90,7 @@ class CommentListPage extends HookConsumerWidget {
     await showCommentBottomSheet(
       context,
       comment: comment,
-      onTapDeleteContent: () async {
-        final didSuccess = await pageNotifier.deleteComment(comment.id);
-
-        // スナックバーを表示
-        var message = '';
-        if (didSuccess) {
-          message = '削除しました';
-        } else {
-          message = 'エラーが発生しました。もう一度お試しください';
-        }
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(message)),
-        );
-
-        await pageNotifier.onRefresh();
-      },
+      onTapDeleteComment: onTapDeleteComment,
       onTapReportContent: onTapReportContent,
       onTapBlockUser: onTapBlockUser,
     );

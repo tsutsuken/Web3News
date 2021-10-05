@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:labo_flutter/models/comment/comment.dart';
 import 'package:labo_flutter/utils/app_colors.dart';
@@ -6,11 +5,10 @@ import 'package:labo_flutter/utils/app_colors.dart';
 Future<void> showCommentBottomSheet(
   BuildContext context, {
   required Comment comment,
-  required VoidCallback onTapDeleteContent,
+  VoidCallback? onTapDeleteComment,
   VoidCallback? onTapReportContent,
   VoidCallback? onTapBlockUser,
 }) async {
-  final isMyComment = FirebaseAuth.instance.currentUser?.uid == comment.userId;
   await showModalBottomSheet<void>(
     context: context,
     builder: (context) {
@@ -18,7 +16,7 @@ Future<void> showCommentBottomSheet(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            if (isMyComment)
+            if (onTapDeleteComment != null)
               ListTile(
                 leading: const Icon(Icons.delete),
                 title: Text(
@@ -26,7 +24,7 @@ Future<void> showCommentBottomSheet(
                   style: TextStyle(color: AppColors().textPrimary),
                 ),
                 onTap: () {
-                  onTapDeleteContent();
+                  onTapDeleteComment();
                   Navigator.of(context).pop();
                 },
               ),

@@ -250,7 +250,7 @@ class _ContentQuery extends StatelessWidget {
     await showCommentBottomSheet(
       context,
       comment: comment,
-      onTapDeleteContent: () async {
+      onTapDeleteComment: () async {
         final didSuccess = await pageNotifier.deleteComment(comment.id);
 
         // スナックバーを表示
