@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:labo_flutter/pages/common_webview_page.dart';
 import 'package:labo_flutter/utils/app_colors.dart';
 
 final _signUpModelProvider =
@@ -146,6 +148,58 @@ class SignUpPage extends HookConsumerWidget {
                       },
                       child: const Text('新規登録'),
                     ),
+                  ),
+                ),
+                Text.rich(
+                  TextSpan(
+                    text: '新規登録ボタンをタップすると、',
+                    style: TextStyle(color: AppColors().textPrimary),
+                    children: [
+                      TextSpan(
+                        text: '利用規約',
+                        style: const TextStyle(
+                          color: AppColors.primary,
+                          decoration: TextDecoration.underline,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<String?>(
+                                builder: (context) => const CommonWebviewPage(
+                                  title: '利用規約',
+                                  url:
+                                      'https://policies.google.com/terms?hl=ja&fg=1',
+                                ),
+                                fullscreenDialog: true,
+                              ),
+                            );
+                          },
+                      ),
+                      const TextSpan(text: 'および'),
+                      TextSpan(
+                        text: 'プライバシーポリシー',
+                        style: const TextStyle(
+                          color: AppColors.primary,
+                          decoration: TextDecoration.underline,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<String?>(
+                                builder: (context) => const CommonWebviewPage(
+                                  title: 'プライバシーポリシー',
+                                  url:
+                                      'https://policies.google.com/privacy?hl=ja&fg=1',
+                                ),
+                                fullscreenDialog: true,
+                              ),
+                            );
+                          },
+                      ),
+                      const TextSpan(text: 'に同意したものとみなします'),
+                    ],
                   ),
                 ),
               ],
