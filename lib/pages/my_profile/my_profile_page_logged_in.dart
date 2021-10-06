@@ -4,6 +4,7 @@ import 'package:labo_flutter/models/app_user/app_user.dart';
 import 'package:labo_flutter/pages/edit_profile_page.dart';
 import 'package:labo_flutter/pages/my_comment_list/my_comment_list_page.dart';
 import 'package:labo_flutter/pages/my_profile/my_profile_page_notifier.dart';
+import 'package:labo_flutter/pages/setting_page.dart';
 import 'package:labo_flutter/utils/app_colors.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -18,6 +19,17 @@ class MyProfilePageLoggedIn extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('マイページ'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                      builder: (context) => const SettingPage()));
+            },
+            icon: const Icon(Icons.settings),
+          )
+        ],
       ),
       body: pageNotifier.myAppUserValue.when(
         data: (appUser) {
