@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/models/app_user/app_user.dart';
 import 'package:labo_flutter/models/app_user/app_user_repository.dart';
 import 'package:labo_flutter/models/comment/comment.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 final myProfilePageNotifierProvider = ChangeNotifierProvider.autoDispose(
   (ref) {
@@ -17,6 +18,7 @@ class MyProfilePageNotifier extends ChangeNotifier {
     fetchMyAppUser();
   }
   final AppUserRepository _appUserRepository;
+  final RefreshController refreshController = RefreshController();
 
   AsyncValue<List<Comment>> commentsValue = const AsyncValue.loading();
   AsyncValue<AppUser?> myAppUserValue = const AsyncValue.loading();
@@ -32,5 +34,10 @@ class MyProfilePageNotifier extends ChangeNotifier {
     final myAppUser = await _appUserRepository.fetchAppUser(userId);
     myAppUserValue = AsyncValue.data(myAppUser);
     notifyListeners();
+  }
+
+  Future<void> onRefresh() async {
+    await fetchMyAppUser();
+    refreshController.refreshCompleted();
   }
 }
