@@ -4,6 +4,17 @@ part 'app_user.freezed.dart';
 part 'app_user.g.dart';
 
 @freezed
+abstract class AppUserResponse with _$AppUserResponse {
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  const factory AppUserResponse({
+    AppUser? usersByPk,
+  }) = _AppUserResponse;
+
+  factory AppUserResponse.fromJson(Map<String, dynamic> json) =>
+      _$AppUserResponseFromJson(json);
+}
+
+@freezed
 abstract class AppUser with _$AppUser {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory AppUser({

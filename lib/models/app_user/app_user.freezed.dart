@@ -12,6 +12,173 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+AppUserResponse _$AppUserResponseFromJson(Map<String, dynamic> json) {
+  return _AppUserResponse.fromJson(json);
+}
+
+/// @nodoc
+class _$AppUserResponseTearOff {
+  const _$AppUserResponseTearOff();
+
+  _AppUserResponse call({AppUser? usersByPk}) {
+    return _AppUserResponse(
+      usersByPk: usersByPk,
+    );
+  }
+
+  AppUserResponse fromJson(Map<String, Object> json) {
+    return AppUserResponse.fromJson(json);
+  }
+}
+
+/// @nodoc
+const $AppUserResponse = _$AppUserResponseTearOff();
+
+/// @nodoc
+mixin _$AppUserResponse {
+  AppUser? get usersByPk => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $AppUserResponseCopyWith<AppUserResponse> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AppUserResponseCopyWith<$Res> {
+  factory $AppUserResponseCopyWith(
+          AppUserResponse value, $Res Function(AppUserResponse) then) =
+      _$AppUserResponseCopyWithImpl<$Res>;
+  $Res call({AppUser? usersByPk});
+
+  $AppUserCopyWith<$Res>? get usersByPk;
+}
+
+/// @nodoc
+class _$AppUserResponseCopyWithImpl<$Res>
+    implements $AppUserResponseCopyWith<$Res> {
+  _$AppUserResponseCopyWithImpl(this._value, this._then);
+
+  final AppUserResponse _value;
+  // ignore: unused_field
+  final $Res Function(AppUserResponse) _then;
+
+  @override
+  $Res call({
+    Object? usersByPk = freezed,
+  }) {
+    return _then(_value.copyWith(
+      usersByPk: usersByPk == freezed
+          ? _value.usersByPk
+          : usersByPk // ignore: cast_nullable_to_non_nullable
+              as AppUser?,
+    ));
+  }
+
+  @override
+  $AppUserCopyWith<$Res>? get usersByPk {
+    if (_value.usersByPk == null) {
+      return null;
+    }
+
+    return $AppUserCopyWith<$Res>(_value.usersByPk!, (value) {
+      return _then(_value.copyWith(usersByPk: value));
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$AppUserResponseCopyWith<$Res>
+    implements $AppUserResponseCopyWith<$Res> {
+  factory _$AppUserResponseCopyWith(
+          _AppUserResponse value, $Res Function(_AppUserResponse) then) =
+      __$AppUserResponseCopyWithImpl<$Res>;
+  @override
+  $Res call({AppUser? usersByPk});
+
+  @override
+  $AppUserCopyWith<$Res>? get usersByPk;
+}
+
+/// @nodoc
+class __$AppUserResponseCopyWithImpl<$Res>
+    extends _$AppUserResponseCopyWithImpl<$Res>
+    implements _$AppUserResponseCopyWith<$Res> {
+  __$AppUserResponseCopyWithImpl(
+      _AppUserResponse _value, $Res Function(_AppUserResponse) _then)
+      : super(_value, (v) => _then(v as _AppUserResponse));
+
+  @override
+  _AppUserResponse get _value => super._value as _AppUserResponse;
+
+  @override
+  $Res call({
+    Object? usersByPk = freezed,
+  }) {
+    return _then(_AppUserResponse(
+      usersByPk: usersByPk == freezed
+          ? _value.usersByPk
+          : usersByPk // ignore: cast_nullable_to_non_nullable
+              as AppUser?,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(fieldRename: FieldRename.snake)
+class _$_AppUserResponse implements _AppUserResponse {
+  const _$_AppUserResponse({this.usersByPk});
+
+  factory _$_AppUserResponse.fromJson(Map<String, dynamic> json) =>
+      _$_$_AppUserResponseFromJson(json);
+
+  @override
+  final AppUser? usersByPk;
+
+  @override
+  String toString() {
+    return 'AppUserResponse(usersByPk: $usersByPk)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _AppUserResponse &&
+            (identical(other.usersByPk, usersByPk) ||
+                const DeepCollectionEquality()
+                    .equals(other.usersByPk, usersByPk)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(usersByPk);
+
+  @JsonKey(ignore: true)
+  @override
+  _$AppUserResponseCopyWith<_AppUserResponse> get copyWith =>
+      __$AppUserResponseCopyWithImpl<_AppUserResponse>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$_$_AppUserResponseToJson(this);
+  }
+}
+
+abstract class _AppUserResponse implements AppUserResponse {
+  const factory _AppUserResponse({AppUser? usersByPk}) = _$_AppUserResponse;
+
+  factory _AppUserResponse.fromJson(Map<String, dynamic> json) =
+      _$_AppUserResponse.fromJson;
+
+  @override
+  AppUser? get usersByPk => throw _privateConstructorUsedError;
+  @override
+  @JsonKey(ignore: true)
+  _$AppUserResponseCopyWith<_AppUserResponse> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 AppUser _$AppUserFromJson(Map<String, dynamic> json) {
   return _AppUser.fromJson(json);
 }

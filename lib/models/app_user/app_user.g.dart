@@ -6,6 +6,19 @@ part of 'app_user.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+_$_AppUserResponse _$_$_AppUserResponseFromJson(Map<String, dynamic> json) {
+  return _$_AppUserResponse(
+    usersByPk: json['users_by_pk'] == null
+        ? null
+        : AppUser.fromJson(json['users_by_pk'] as Map<String, dynamic>),
+  );
+}
+
+Map<String, dynamic> _$_$_AppUserResponseToJson(_$_AppUserResponse instance) =>
+    <String, dynamic>{
+      'users_by_pk': instance.usersByPk,
+    };
+
 _$_AppUser _$_$_AppUserFromJson(Map<String, dynamic> json) {
   return _$_AppUser(
     id: json['id'] as String? ?? '',
