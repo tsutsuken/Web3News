@@ -33,9 +33,6 @@ class MyProfilePageLoggedIn extends StatelessWidget {
       ),
       body: pageNotifier.myAppUserValue.when(
         data: (appUser) {
-          if (appUser == null) {
-            return const Text('エラーが発生しました');
-          }
           return SmartRefresher(
             controller: pageNotifier.refreshController,
             onRefresh: () async {
@@ -82,7 +79,7 @@ class ProfileHeaderWidget extends StatelessWidget {
     required this.appUser,
   }) : super(key: key);
 
-  final AppUser appUser;
+  final AppUser? appUser;
 
   @override
   Widget build(BuildContext context) {
@@ -101,12 +98,13 @@ class ProfileHeaderWidget extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                        image: NetworkImage(appUser.profileImageUrl)),
+                        image: NetworkImage(appUser?.profileImageUrl ??
+                            'http://placehold.jp/150x150.png')),
                   ),
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  appUser.name,
+                  appUser?.name ?? 'エラーが発生しました',
                   style: TextStyle(color: AppColors().textPrimary),
                 ),
                 const SizedBox(height: 12),
