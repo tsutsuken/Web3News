@@ -7,33 +7,13 @@ final userChangeNotifierProvider =
 
 class UserChangeNotifier extends ChangeNotifier {
   UserChangeNotifier() : super() {
-    // ログイン状態の変化と、トークンの更新を検知
-    FirebaseAuth.instance.idTokenChanges().listen((User? user) {
-      debugPrint('UserChangeNotifier idTokenChanges');
-      if (user == null) {
-        idToken = '';
-        notifyListeners();
-      } else {
-        user.getIdToken(false).then((value) {
-          idToken = value;
-          notifyListeners();
-        });
-      }
-
+    // ログイン状態の変化を検知
+    FirebaseAuth.instance.authStateChanges().listen((User? user) async {
+      debugPrint('UserChangeNotifier authStateChanges user: $user');
       currentUser = user;
       notifyListeners();
     });
   }
 
   User? currentUser;
-  String idToken = '';
-}
-
-class UserState {
-  UserState({
-    this.currentUser,
-    required this.idToken,
-  });
-  User? currentUser;
-  String idToken;
 }

@@ -199,7 +199,7 @@ class EditProfilePage extends HookConsumerWidget {
               onPressed: () {
                 runMutation(
                   <String, dynamic>{
-                    'id': _userChangeNotifier.currentUser?.uid ?? '',
+                    'id': FirebaseAuth.instance.currentUser?.uid ?? '',
                     'name': _editProfileViewModel.username,
                   },
                 );
