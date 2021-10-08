@@ -46,7 +46,8 @@ class SettingPage extends StatelessWidget {
                 MaterialPageRoute<String?>(
                   builder: (context) => const CommonWebviewPage(
                     title: '利用規約',
-                    url: 'https://policies.google.com/terms?hl=ja&fg=1',
+                    url:
+                        'https://labo-flutter-frontend.vercel.app/policies/terms',
                   ),
                   fullscreenDialog: true,
                 ),
@@ -67,7 +68,8 @@ class SettingPage extends StatelessWidget {
                 MaterialPageRoute<String?>(
                   builder: (context) => const CommonWebviewPage(
                     title: 'プライバシーポリシー',
-                    url: 'https://policies.google.com/privacy?hl=ja&fg=1',
+                    url:
+                        'https://labo-flutter-frontend.vercel.app/policies/privacy',
                   ),
                   fullscreenDialog: true,
                 ),
