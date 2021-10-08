@@ -40,6 +40,7 @@ class AppUserRepositoryImpl implements AppUserRepository {
           variables: <String, dynamic>{
             'id': userId,
           },
+          fetchPolicy: FetchPolicy.cacheAndNetwork,
         ),
       );
 
