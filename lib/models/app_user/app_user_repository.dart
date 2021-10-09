@@ -15,18 +15,9 @@ query MyQuery(\$id: String!) {
 ''';
 
 const String updateUserMutation = '''
-mutation MyMutation(\$id: String!, \$name: String!) {
-  update_users_by_pk(pk_columns: {id: \$id}, _set: {name: \$name}) {
+mutation MyMutation(\$id: String!, \$name: String!, \$profile_image_url: String!) {
+  update_users_by_pk(pk_columns: {id: \$id}, _set: {name: \$name, profile_image_url: \$profile_image_url}) {
     id
-  }
-}
-''';
-
-const String updateUserProfileImageMutation = '''
-mutation MyMutation(\$id: String!, \$profile_image_url: String!) {
-  update_users_by_pk(pk_columns: {id: \$id}, _set: {profile_image_url: \$profile_image_url}) {
-    id
-    profile_image_url
   }
 }
 ''';
@@ -40,8 +31,7 @@ final appUserRepositoryProvider = Provider.autoDispose<AppUserRepositoryImpl>(
 
 abstract class AppUserRepository {
   Future<AppUser?> fetchAppUser(String userId);
-  Future<bool> updateAppUser(String userId, String username);
-  Future<bool> updateAppUserProfileImageUrl(String userId, String url);
+  Future<bool> updateAppUser(AppUser newAppUser);
 }
 
 class AppUserRepositoryImpl implements AppUserRepository {
@@ -82,8 +72,8 @@ class AppUserRepositoryImpl implements AppUserRepository {
   }
 
   @override
-  Future<bool> updateAppUser(String userId, String username) async {
-    debugPrint('updateAppUser userId: $userId, username: $username');
+  Future<bool> updateAppUser(AppUser newAppUser) async {
+    debugPrint('updateAppUser newAppUser: $newAppUser');
     var didSuccess = false;
 
     try {
@@ -91,8 +81,9 @@ class AppUserRepositoryImpl implements AppUserRepository {
         MutationOptions(
           document: gql(updateUserMutation),
           variables: <String, dynamic>{
-            'id': userId,
-            'name': username,
+            'id': newAppUser.id,
+            'name': newAppUser.name,
+            'profile_image_url': newAppUser.profileImageUrl,
           },
         ),
       );
@@ -105,36 +96,6 @@ class AppUserRepositoryImpl implements AppUserRepository {
       }
     } on Exception catch (e) {
       debugPrint('updateAppUser error: $e');
-    }
-
-    return didSuccess;
-  }
-
-  @override
-  Future<bool> updateAppUserProfileImageUrl(String userId, String url) async {
-    debugPrint('updateAppUserProfileImageUrl userId: $userId, url: $url');
-    var didSuccess = false;
-
-    try {
-      final result = await _client.mutate(
-        MutationOptions(
-          document: gql(updateUserProfileImageMutation),
-          variables: <String, dynamic>{
-            'id': userId,
-            'profile_image_url': url,
-          },
-        ),
-      );
-
-      if (result.hasException) {
-        debugPrint(
-            'updateAppUserProfileImageUrl exception: ${result.exception.toString()}');
-      } else {
-        debugPrint('updateAppUserProfileImageUrl success');
-        didSuccess = true;
-      }
-    } on Exception catch (e) {
-      debugPrint('_updateAppUserProfileImageUrl error: $e');
     }
 
     return didSuccess;

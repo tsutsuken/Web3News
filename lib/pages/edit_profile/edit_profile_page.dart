@@ -28,7 +28,7 @@ class EditProfilePage extends HookConsumerWidget {
         TextButton(
           onPressed: () async {
             await EasyLoading.show(maskType: EasyLoadingMaskType.black);
-            final didSuccess = await _pageNotifier.updateUsername();
+            final didSuccess = await _pageNotifier.updateAppUser();
             await EasyLoading.dismiss();
 
             if (didSuccess) {
@@ -96,13 +96,13 @@ class EditProfilePage extends HookConsumerWidget {
           TextButton(
             onPressed: () async {
               final didSuccess = await _pageNotifier.updateProfileImage();
-              final message =
-                  didSuccess ? 'プロフィール写真を変更しました' : 'エラーが発生しました。もう一度お試しください';
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(message),
-                ),
-              );
+              if (didSuccess == false) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('エラーが発生しました。もう一度お試しください'),
+                  ),
+                );
+              }
             },
             child: Column(
               children: [
@@ -137,7 +137,7 @@ class EditProfilePage extends HookConsumerWidget {
               hintText: 'ユーザ名を入力してください',
             ),
             onChanged: (value) {
-              _pageNotifier.username = value;
+              _pageNotifier.setAppUserName(value);
             },
           ),
         ],

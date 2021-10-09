@@ -29,7 +29,6 @@ class EditProfilePageNotifier extends ChangeNotifier {
   final User? currentUser;
 
   AsyncValue<AppUser?> myAppUserValue = const AsyncValue.loading();
-  String username = '';
 
   Future<void> fetchMyAppUser() async {
     final userId = currentUser?.uid;
@@ -44,19 +43,32 @@ class EditProfilePageNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> updateUsername() async {
-    var didSuccess = false;
+  void setAppUserName(String newName) {
+    final appUser = myAppUserValue.data?.value;
+    if (appUser != null) {
+      final editedAppUser = appUser.copyWith(name: newName);
+      myAppUserValue = AsyncValue.data(editedAppUser);
+      // リビルドでキーボードが閉じるのを防ぐため、notifyListenersは呼ばない
+    }
+  }
 
-    final userId = currentUser?.uid;
-    if (userId == null) {
-      return didSuccess;
+  Future<bool> updateAppUser() async {
+    final editedAppUser = myAppUserValue.data?.value;
+
+    if (editedAppUser == null) {
+      return false;
     }
 
-    didSuccess = await _appUserRepository.updateAppUser(userId, username);
+    final didSuccess = await _appUserRepository.updateAppUser(editedAppUser);
     return didSuccess;
   }
 
   Future<bool> updateProfileImage() async {
+    final currentAppUser = myAppUserValue.data?.value;
+    if (currentAppUser == null) {
+      return false;
+    }
+
     final pickedImageFile = await _pickImageFromGallery();
     if (pickedImageFile == null) {
       return false;
@@ -73,10 +85,11 @@ class EditProfilePageNotifier extends ChangeNotifier {
       return false;
     }
 
-    final didSuccessUpdate = await _updateProfileImageUrl(newImageUrl);
     await EasyLoading.dismiss();
-
-    return didSuccessUpdate;
+    final newAppUser = currentAppUser.copyWith(profileImageUrl: newImageUrl);
+    myAppUserValue = AsyncValue.data(newAppUser);
+    notifyListeners();
+    return true;
   }
 
   Future<XFile?> _pickImageFromGallery() async {
@@ -126,17 +139,5 @@ class EditProfilePageNotifier extends ChangeNotifier {
       debugPrint('error $error');
       return null;
     }
-  }
-
-  Future<bool> _updateProfileImageUrl(String url) async {
-    var didSuccess = false;
-    final userId = currentUser?.uid;
-    if (userId == null) {
-      return didSuccess;
-    }
-
-    didSuccess =
-        await _appUserRepository.updateAppUserProfileImageUrl(userId, url);
-    return didSuccess;
   }
 }
