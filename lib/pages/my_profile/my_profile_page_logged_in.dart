@@ -40,7 +40,10 @@ class MyProfilePageLoggedIn extends StatelessWidget {
             },
             child: ListView(
               children: [
-                ProfileHeaderWidget(appUser: appUser),
+                ProfileHeaderWidget(
+                  pageNotifier: pageNotifier,
+                  appUser: appUser,
+                ),
                 ListTile(
                   onTap: () {
                     Navigator.push(
@@ -76,9 +79,11 @@ class MyProfilePageLoggedIn extends StatelessWidget {
 class ProfileHeaderWidget extends StatelessWidget {
   const ProfileHeaderWidget({
     Key? key,
+    required this.pageNotifier,
     required this.appUser,
   }) : super(key: key);
 
+  final MyProfilePageNotifier pageNotifier;
   final AppUser? appUser;
 
   @override
@@ -112,14 +117,19 @@ class ProfileHeaderWidget extends StatelessWidget {
                   height: 36,
                   width: 160,
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
+                    onPressed: () async {
+                      final didEditProfile = await Navigator.push(
                         context,
-                        MaterialPageRoute<void>(
+                        MaterialPageRoute<bool>(
                           builder: (context) => const EditProfilePage(),
                           fullscreenDialog: true,
                         ),
                       );
+
+                      // 変更を画面に反映させる
+                      if (didEditProfile != null) {
+                        await pageNotifier.onRefresh();
+                      }
                     },
                     style: ElevatedButton.styleFrom(primary: Colors.white),
                     child: const Text('プロフィールを編集',

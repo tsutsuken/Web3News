@@ -32,7 +32,7 @@ class EditProfilePage extends HookConsumerWidget {
             await EasyLoading.dismiss();
 
             if (didSuccess) {
-              Navigator.of(context).pop();
+              Navigator.of(context).pop<bool>(true);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('プロフィールを更新しました'),
