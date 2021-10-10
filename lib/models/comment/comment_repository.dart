@@ -21,25 +21,9 @@ query MyQuery(\$viewer_user_id: String!, \$article_id: uuid!) {
 }
 ''';
 
-const String myCommentsDescendingQuery = '''
+const String commentsOfUserQuery = '''
   query MyQuery(\$user_id: String!) {
     comments(order_by: {created_at: desc}, where: {user_id: {_eq: \$user_id}}) {
-      id
-      created_at
-      text
-      user_id
-      user {
-        id
-        name
-        profile_image_url
-      }
-    }
-  }
-''';
-
-const String myCommentsAscendingQuery = '''
-  query MyQuery(\$user_id: String!) {
-    comments(order_by: {created_at: asc}, where: {user_id: {_eq: \$user_id}}) {
       id
       created_at
       text
@@ -79,10 +63,7 @@ final commentRepositoryProvider = Provider.autoDispose<CommentRepositoryImpl>(
 
 abstract class CommentRepository {
   Future<List<Comment>> fetchCommentsOfArticle(String articleId);
-  Future<List<Comment>> fetchCommentsOfUser(
-    String userId,
-    CommentsOrderType orderType,
-  );
+  Future<List<Comment>> fetchCommentsOfUser(String userId);
   Future<bool> addComment(String articleId, String text);
   Future<bool> deleteComment(String commentId);
 }
@@ -125,17 +106,11 @@ class CommentRepositoryImpl implements CommentRepository {
   }
 
   @override
-  Future<List<Comment>> fetchCommentsOfUser(
-    String userId,
-    CommentsOrderType orderType,
-  ) async {
+  Future<List<Comment>> fetchCommentsOfUser(String userId) async {
     var comments = <Comment>[];
-    final query = (orderType == CommentsOrderType.ascending)
-        ? myCommentsAscendingQuery
-        : myCommentsDescendingQuery;
     final result = await _client.query(
       QueryOptions(
-        document: gql(query),
+        document: gql(commentsOfUserQuery),
         variables: <String, dynamic>{
           'user_id': userId,
         },

@@ -32,10 +32,7 @@ class MyCommentListPageNotifier extends ChangeNotifier {
     }
 
     try {
-      final _comments = await _commentRepository.fetchCommentsOfUser(
-        userId,
-        CommentsOrderType.descending,
-      );
+      final _comments = await _commentRepository.fetchCommentsOfUser(userId);
       commentsValue = AsyncValue.data(_comments);
       notifyListeners();
     } on Exception catch (e) {
