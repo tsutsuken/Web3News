@@ -124,6 +124,10 @@ class CommentListPage extends HookConsumerWidget {
           onRefresh: () async {
             await pageNotifier.onRefresh();
           },
+          onLoading: () async {
+            await pageNotifier.onLoadMore();
+          },
+          enablePullUp: true,
           child: ListView.builder(
             physics: const AlwaysScrollableScrollPhysics(),
             shrinkWrap: true,

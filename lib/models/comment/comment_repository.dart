@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/graphql_api_client.dart';
-import 'package:labo_flutter/models/comment/comment.dart';
 
 const String commentsFilteredOfArticleQuery = '''
-query MyQuery(\$viewer_user_id: String!, \$article_id: uuid!) {
-  comments_filtered(args: {viewer_user_id: \$viewer_user_id}, where: {is_banned: {_neq: true}, article_id: {_eq: \$article_id}}) {
+query MyQuery(\$limit: Int!, \$offset: Int!, \$viewer_user_id: String!, \$article_id: uuid!) {
+  comments_filtered(limit: \$limit, offset: \$offset, args: {viewer_user_id: \$viewer_user_id}, where: {is_banned: {_neq: true}, article_id: {_eq: \$article_id}}) {
     id
     text
     created_at
@@ -22,8 +21,8 @@ query MyQuery(\$viewer_user_id: String!, \$article_id: uuid!) {
 ''';
 
 const String commentsOfUserQuery = '''
-  query MyQuery(\$user_id: String!) {
-    comments(order_by: {created_at: desc}, where: {user_id: {_eq: \$user_id}}) {
+  query MyQuery(\$limit: Int!, \$offset: Int!, \$user_id: String!) {
+    comments(limit: \$limit, offset: \$offset, order_by: {created_at: desc}, where: {user_id: {_eq: \$user_id}}) {
       id
       created_at
       text
@@ -62,8 +61,27 @@ final commentRepositoryProvider = Provider.autoDispose<CommentRepositoryImpl>(
 );
 
 abstract class CommentRepository {
-  Future<List<Comment>> fetchCommentsOfArticle(String articleId);
-  Future<List<Comment>> fetchCommentsOfUser(String userId);
+  Future<QueryResult> fetchCommentsOfArticle({
+    required String articleId,
+    int limit = 20,
+  });
+  Future<QueryResult> fetchMoreCommentsOfArticle({
+    required String articleId,
+    int limit = 20,
+    int offset = 0,
+    required QueryResult previousResult,
+  });
+  Future<QueryResult> fetchCommentsOfUser({
+    required String userId,
+    int limit = 20,
+    int offset = 0,
+  });
+  Future<QueryResult> fetchMoreCommentsOfUser({
+    required String userId,
+    int limit = 20,
+    int offset = 0,
+    required QueryResult previousResult,
+  });
   Future<bool> addComment(String articleId, String text);
   Future<bool> deleteComment(String commentId);
 }
@@ -78,52 +96,128 @@ class CommentRepositoryImpl implements CommentRepository {
   final GraphQLClient _client;
 
   @override
-  Future<List<Comment>> fetchCommentsOfArticle(String articleId) async {
-    var comments = <Comment>[];
-    final myUserId = FirebaseAuth.instance.currentUser?.uid ?? '';
+  Future<QueryResult> fetchCommentsOfArticle({
+    required String articleId,
+    int limit = 20,
+  }) async {
     final result = await _client.query(
-      QueryOptions(
-        document: gql(commentsFilteredOfArticleQuery),
-        variables: <String, dynamic>{
-          'viewer_user_id': myUserId,
-          'article_id': articleId,
-        },
-        fetchPolicy: FetchPolicy.cacheAndNetwork,
-      ),
+      _queryOptionsFetchCommentsOfArticle(articleId: articleId, limit: limit),
     );
-
-    if (result.hasException) {
-      debugPrint('fetchComments exception: ${result.exception.toString()}');
-    }
-
-    final resultData = result.data;
-    if (resultData != null) {
-      comments =
-          CommentListFilteredResponse.fromJson(resultData).commentsFiltered;
-    }
-
-    return comments;
+    return result;
   }
 
   @override
-  Future<List<Comment>> fetchCommentsOfUser(String userId) async {
-    var comments = <Comment>[];
+  Future<QueryResult> fetchMoreCommentsOfArticle({
+    required String articleId,
+    int limit = 20,
+    int offset = 0,
+    required QueryResult previousResult,
+  }) async {
+    debugPrint('fetchMoreCommentsOfArticle articleId: $articleId');
+    final originalQueryOptions =
+        _queryOptionsFetchCommentsOfArticle(articleId: articleId, limit: limit);
+    final myUserId = FirebaseAuth.instance.currentUser?.uid ?? '';
+    final result = await _client.fetchMore(
+      FetchMoreOptions(
+        variables: <String, dynamic>{
+          'viewer_user_id': myUserId,
+          'article_id': articleId,
+          'limit': limit,
+          'offset': offset,
+        },
+        updateQuery: (previousResultData, fetchMoreResultData) {
+          final totalFetchedComments = <dynamic>[
+            ...previousResultData?['comments_filtered'] as List<dynamic>,
+            ...fetchMoreResultData?['comments_filtered'] as List<dynamic>
+          ];
+          fetchMoreResultData?['comments_filtered'] = totalFetchedComments;
+
+          return fetchMoreResultData;
+        },
+      ),
+      originalOptions: originalQueryOptions,
+      previousResult: previousResult,
+    );
+    return result;
+  }
+
+  QueryOptions _queryOptionsFetchCommentsOfArticle({
+    required String articleId,
+    required int limit,
+  }) {
+    final myUserId = FirebaseAuth.instance.currentUser?.uid ?? '';
+    return QueryOptions(
+      document: gql(commentsFilteredOfArticleQuery),
+      variables: <String, dynamic>{
+        'viewer_user_id': myUserId,
+        'article_id': articleId,
+        'limit': limit,
+        'offset': 0,
+      },
+      fetchPolicy: FetchPolicy.cacheAndNetwork,
+    );
+  }
+
+  @override
+  Future<QueryResult> fetchCommentsOfUser({
+    required String userId,
+    int limit = 20,
+    int offset = 0,
+  }) async {
     final result = await _client.query(
       QueryOptions(
         document: gql(commentsOfUserQuery),
         variables: <String, dynamic>{
           'user_id': userId,
+          'limit': limit,
+          'offset': offset,
         },
         fetchPolicy: FetchPolicy.cacheAndNetwork,
       ),
     );
+    return result;
+  }
 
-    final resultData = result.data;
-    if (resultData != null) {
-      comments = CommentListResponse.fromJson(resultData).comments;
-    }
+  @override
+  Future<QueryResult> fetchMoreCommentsOfUser({
+    required String userId,
+    int limit = 20,
+    int offset = 0,
+    required QueryResult previousResult,
+  }) async {
+    debugPrint('fetchMoreCommentsOfUser userId: $userId');
+    final originalQueryOptions = QueryOptions(
+      document: gql(commentsOfUserQuery),
+      variables: <String, dynamic>{
+        'user_id': userId,
+        'limit': limit,
+        'offset': 0,
+      },
+      fetchPolicy: FetchPolicy.cacheAndNetwork,
+    );
 
-    return comments;
+    final result = await _client.fetchMore(
+      FetchMoreOptions(
+        variables: <String, dynamic>{
+          'user_id': userId,
+          'limit': limit,
+          'offset': offset,
+        },
+        updateQuery: (previousResultData, fetchMoreResultData) {
+          final totalFetchedComments = <dynamic>[
+            ...previousResultData?['comments'] as List<dynamic>,
+            ...fetchMoreResultData?['comments'] as List<dynamic>
+          ];
+          fetchMoreResultData?['comments'] = totalFetchedComments;
+
+          return fetchMoreResultData;
+        },
+      ),
+      originalOptions: originalQueryOptions,
+      previousResult: previousResult,
+    );
+
+    return result;
   }
 
   @override

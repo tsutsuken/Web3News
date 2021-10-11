@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/models/block/block_repository.dart';
 import 'package:labo_flutter/models/comment/comment.dart';
@@ -22,34 +23,88 @@ class CommentListPageNotifier extends ChangeNotifier {
     this._blockRepository,
     this._articleId,
   ) {
-    fetchCommentsOfArticle(_articleId);
+    fetchCommentsOfArticle();
   }
 
   final CommentRepository _commentRepository;
   final ReportRepository _reportRepository;
   final BlockRepository _blockRepository;
   final String? _articleId;
-
-  AsyncValue<List<Comment>> commentsValue = const AsyncValue.loading();
   final RefreshController refreshController = RefreshController();
 
-  Future<void> fetchCommentsOfArticle(String? articleId) async {
-    if (articleId == null) {
+  AsyncValue<List<Comment>> commentsValue = const AsyncValue.loading();
+  late QueryResult? _previousResultFetchComments;
+  final int _limitFetchComments = 20;
+  int _offsetFetchComments = 0;
+
+  Future<void> fetchCommentsOfArticle() async {
+    debugPrint('fetchCommentsOfArticle articleId: $_articleId');
+    if (_articleId == null) {
       commentsValue = const AsyncValue.data([]);
       notifyListeners();
       return;
     }
 
-    try {
-      final _comments =
-          await _commentRepository.fetchCommentsOfArticle(articleId);
-      commentsValue = AsyncValue.data(_comments);
+    final result = await _commentRepository.fetchCommentsOfArticle(
+        articleId: _articleId!, limit: _limitFetchComments);
+
+    if (result.hasException) {
+      final exception = result.exception.toString();
+      debugPrint('fetchCommentsOfArticle exception: $exception');
+      commentsValue = AsyncValue.error(exception);
       notifyListeners();
-    } on Exception catch (e) {
-      debugPrint('fetchComments error: $e');
-      commentsValue = AsyncValue.error(e);
-      notifyListeners();
+      return;
     }
+
+    var comments = <Comment>[];
+    final resultData = result.data;
+    if (resultData != null) {
+      comments =
+          CommentListFilteredResponse.fromJson(resultData).commentsFiltered;
+    }
+    commentsValue = AsyncValue.data(comments);
+    notifyListeners();
+    setVariablesForLoadMore(result, comments.length);
+  }
+
+  Future<void> onLoadMore() async {
+    debugPrint('onLoadMore');
+    if (_articleId == null || _previousResultFetchComments == null) {
+      refreshController.loadComplete();
+      return;
+    }
+
+    final result = await _commentRepository.fetchMoreCommentsOfArticle(
+      articleId: _articleId!,
+      limit: _limitFetchComments,
+      offset: _offsetFetchComments,
+      previousResult: _previousResultFetchComments!,
+    );
+
+    if (result.hasException) {
+      final exception = result.exception.toString();
+      debugPrint('onLoadMore exception: $exception');
+      commentsValue = AsyncValue.error(exception);
+      notifyListeners();
+      refreshController.loadComplete();
+      return;
+    }
+
+    var comments = <Comment>[];
+    final resultData = result.data;
+    if (resultData != null) {
+      comments =
+          CommentListFilteredResponse.fromJson(resultData).commentsFiltered;
+    }
+    commentsValue = AsyncValue.data(comments);
+    notifyListeners();
+    setVariablesForLoadMore(result, comments.length);
+    refreshController.loadComplete();
+  }
+
+  void setVariablesForLoadMore(QueryResult result, int lengthOfList) {
+    _previousResultFetchComments = result;
+    _offsetFetchComments = lengthOfList;
   }
 
   Future<bool> deleteComment(String commentId) async {
@@ -58,7 +113,7 @@ class CommentListPageNotifier extends ChangeNotifier {
   }
 
   Future<void> onRefresh() async {
-    await fetchCommentsOfArticle(_articleId);
+    await fetchCommentsOfArticle();
     refreshController.refreshCompleted();
   }
 
