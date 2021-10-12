@@ -20,31 +20,86 @@ class EditProfilePage extends HookConsumerWidget {
     );
   }
 
+  Future<void> updateProfile({
+    required BuildContext context,
+    required EditProfilePageNotifier pageNotifier,
+    required bool isShowingDialog,
+  }) async {
+    await EasyLoading.show(maskType: EasyLoadingMaskType.black);
+    final didSuccess = await pageNotifier.updateAppUser();
+    await EasyLoading.dismiss();
+
+    if (didSuccess) {
+      // ダイアログを閉じる
+      if (isShowingDialog) {
+        Navigator.pop(context);
+      }
+      Navigator.of(context).pop<bool>(true);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('プロフィールを更新しました'),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('エラーが発生しました'),
+        ),
+      );
+    }
+  }
+
   AppBar _buildAppBar(
       BuildContext context, EditProfilePageNotifier _pageNotifier) {
     return AppBar(
       title: const Text('プロフィール編集'),
+      leading: IconButton(
+        onPressed: () {
+          final isEditedProfile = _pageNotifier.isEditedProfile();
+          if (isEditedProfile) {
+            showDialog<void>(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) {
+                return AlertDialog(
+                  content: const Text('変更された情報があります\n変更を保存しますか？'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        // ダイアログと編集画面を閉じる
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                      child: const Text('破棄する'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        updateProfile(
+                          context: context,
+                          pageNotifier: _pageNotifier,
+                          isShowingDialog: true,
+                        );
+                      },
+                      child: const Text('保存する'),
+                    ),
+                  ],
+                );
+              },
+            );
+          } else {
+            Navigator.of(context).pop();
+          }
+        },
+        icon: const Icon(Icons.close),
+      ),
       actions: [
         TextButton(
-          onPressed: () async {
-            await EasyLoading.show(maskType: EasyLoadingMaskType.black);
-            final didSuccess = await _pageNotifier.updateAppUser();
-            await EasyLoading.dismiss();
-
-            if (didSuccess) {
-              Navigator.of(context).pop<bool>(true);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('プロフィールを更新しました'),
-                ),
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('エラーが発生しました'),
-                ),
-              );
-            }
+          onPressed: () {
+            updateProfile(
+              context: context,
+              pageNotifier: _pageNotifier,
+              isShowingDialog: false,
+            );
           },
           style: TextButton.styleFrom(
             textStyle: const TextStyle(
@@ -65,7 +120,7 @@ class EditProfilePage extends HookConsumerWidget {
     return Center(
       child: Container(
         padding: const EdgeInsets.all(24),
-        child: _pageNotifier.myAppUserValue.when(
+        child: _pageNotifier.editingAppUserValue.when(
           data: (appUser) {
             if (appUser == null) {
               return const Text('エラーが発生しました');

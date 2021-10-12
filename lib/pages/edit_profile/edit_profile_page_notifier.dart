@@ -28,32 +28,46 @@ class EditProfilePageNotifier extends ChangeNotifier {
   final AppUserRepository _appUserRepository;
   final User? currentUser;
 
-  AsyncValue<AppUser?> myAppUserValue = const AsyncValue.loading();
+  AsyncValue<AppUser?> editingAppUserValue = const AsyncValue.loading();
+  AppUser? beforeEditingAppUser;
 
   Future<void> fetchMyAppUser() async {
     final userId = currentUser?.uid;
     if (userId == null) {
-      myAppUserValue = const AsyncValue.data(null);
+      editingAppUserValue = const AsyncValue.data(null);
       notifyListeners();
       return;
     }
 
     final myAppUser = await _appUserRepository.fetchAppUser(userId);
-    myAppUserValue = AsyncValue.data(myAppUser);
+    editingAppUserValue = AsyncValue.data(myAppUser);
     notifyListeners();
+
+    // 編集したかの判定用に保持
+    beforeEditingAppUser = myAppUser;
+  }
+
+  bool isEditedProfile() {
+    final editingAppUser = editingAppUserValue.data?.value;
+    if (editingAppUser == null || beforeEditingAppUser == null) {
+      return false;
+    }
+
+    final edited = editingAppUser != beforeEditingAppUser;
+    return edited;
   }
 
   void setAppUserName(String newName) {
-    final appUser = myAppUserValue.data?.value;
+    final appUser = editingAppUserValue.data?.value;
     if (appUser != null) {
       final editedAppUser = appUser.copyWith(name: newName);
-      myAppUserValue = AsyncValue.data(editedAppUser);
+      editingAppUserValue = AsyncValue.data(editedAppUser);
       // リビルドでキーボードが閉じるのを防ぐため、notifyListenersは呼ばない
     }
   }
 
   Future<bool> updateAppUser() async {
-    final editedAppUser = myAppUserValue.data?.value;
+    final editedAppUser = editingAppUserValue.data?.value;
 
     if (editedAppUser == null) {
       return false;
@@ -64,7 +78,7 @@ class EditProfilePageNotifier extends ChangeNotifier {
   }
 
   Future<bool> updateProfileImage() async {
-    final currentAppUser = myAppUserValue.data?.value;
+    final currentAppUser = editingAppUserValue.data?.value;
     if (currentAppUser == null) {
       return false;
     }
@@ -87,7 +101,7 @@ class EditProfilePageNotifier extends ChangeNotifier {
 
     await EasyLoading.dismiss();
     final newAppUser = currentAppUser.copyWith(profileImageUrl: newImageUrl);
-    myAppUserValue = AsyncValue.data(newAppUser);
+    editingAppUserValue = AsyncValue.data(newAppUser);
     notifyListeners();
     return true;
   }
