@@ -65,92 +65,95 @@ class SignInPage extends HookConsumerWidget {
       appBar: AppBar(
         title: const Text('サインイン'),
       ),
-      body: Center(
-          child: Container(
-        padding: const EdgeInsets.all(24),
-        child: Form(
-            key: _formKey,
-            child: Column(children: <Widget>[
-              TextFormField(
-                initialValue: loginModel.email,
-                style: TextStyle(
-                  color: AppColors().textPrimary,
+      body: SingleChildScrollView(
+        child: Center(
+            child: Container(
+          padding: const EdgeInsets.all(24),
+          child: Form(
+              key: _formKey,
+              child: Column(children: <Widget>[
+                TextFormField(
+                  initialValue: loginModel.email,
+                  style: TextStyle(
+                    color: AppColors().textPrimary,
+                  ),
+                  decoration: const InputDecoration(
+                    labelText: 'メールアドレス',
+                    hintText: 'メールアドレスを入力してください',
+                  ),
+                  validator: loginModel.emptyValidator,
+                  textInputAction: TextInputAction.next,
+                  onFieldSubmitted: (_) {
+                    FocusScope.of(context)
+                        .requestFocus(_passwordFocusNode); // 変更
+                  },
+                  onSaved: (value) {
+                    ref.read(_loginModelProvider).email = value ?? '';
+                  },
                 ),
-                decoration: const InputDecoration(
-                  labelText: 'メールアドレス',
-                  hintText: 'メールアドレスを入力してください',
+                TextFormField(
+                  initialValue: loginModel.password,
+                  focusNode: _passwordFocusNode,
+                  obscureText: !loginModel.shouldShowPassword,
+                  style: TextStyle(
+                    color: AppColors().textPrimary,
+                  ),
+                  decoration: InputDecoration(
+                    labelText: 'パスワード',
+                    hintText: 'パスワードを入力してください',
+                    suffixIcon: IconButton(
+                      icon: Icon(loginModel.shouldShowPassword
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                      onPressed: loginModel.togglePasswordVisible,
+                    ),
+                  ),
+                  validator: loginModel.emptyValidator,
+                  onSaved: (value) {
+                    ref.read(_loginModelProvider).password = value ?? '';
+                  },
                 ),
-                validator: loginModel.emptyValidator,
-                textInputAction: TextInputAction.next,
-                onFieldSubmitted: (_) {
-                  FocusScope.of(context).requestFocus(_passwordFocusNode); // 変更
-                },
-                onSaved: (value) {
-                  ref.read(_loginModelProvider).email = value ?? '';
-                },
-              ),
-              TextFormField(
-                initialValue: loginModel.password,
-                focusNode: _passwordFocusNode,
-                obscureText: !loginModel.shouldShowPassword,
-                style: TextStyle(
-                  color: AppColors().textPrimary,
-                ),
-                decoration: InputDecoration(
-                  labelText: 'パスワード',
-                  hintText: 'パスワードを入力してください',
-                  suffixIcon: IconButton(
-                    icon: Icon(loginModel.shouldShowPassword
-                        ? Icons.visibility
-                        : Icons.visibility_off),
-                    onPressed: loginModel.togglePasswordVisible,
+                Container(
+                  // エラー文言表示エリア
+                  margin: const EdgeInsets.fromLTRB(0, 16, 0, 8),
+                  child: Text(
+                    loginModel.message,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.red,
+                    ),
                   ),
                 ),
-                validator: loginModel.emptyValidator,
-                onSaved: (value) {
-                  ref.read(_loginModelProvider).password = value ?? '';
-                },
-              ),
-              Container(
-                // エラー文言表示エリア
-                margin: const EdgeInsets.fromLTRB(0, 16, 0, 8),
-                child: Text(
-                  loginModel.message,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.red,
-                  ),
-                ),
-              ),
-              Container(
-                  width: double.infinity,
-                  child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            final errorMessage =
-                                await loginModel.signinWithEmailAndPassword();
+                Container(
+                    width: double.infinity,
+                    child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              _formKey.currentState!.save();
+                              final errorMessage =
+                                  await loginModel.signinWithEmailAndPassword();
 
-                            if (errorMessage == null) {
-                              // ログインに成功した場合
-                              const didLogin = true;
-                              Navigator.of(context).pop<bool>(didLogin);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('ログインしました'),
-                                ),
-                              );
-                            } else {
-                              loginModel.setMessage(errorMessage);
+                              if (errorMessage == null) {
+                                // ログインに成功した場合
+                                const didLogin = true;
+                                Navigator.of(context).pop<bool>(didLogin);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('ログインしました'),
+                                  ),
+                                );
+                              } else {
+                                loginModel.setMessage(errorMessage);
+                              }
                             }
-                          }
-                        },
-                        child: const Text('ログイン'),
-                      )))
-            ])),
-      )),
+                          },
+                          child: const Text('ログイン'),
+                        )))
+              ])),
+        )),
+      ),
     );
   }
 }

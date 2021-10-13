@@ -64,145 +64,147 @@ class SignUpPage extends HookConsumerWidget {
       appBar: AppBar(
         title: const Text('新規登録'),
       ),
-      body: Center(
-        child: Container(
-          padding: const EdgeInsets.all(24),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  initialValue: signUpModel.email,
-                  style: TextStyle(
-                    color: AppColors().textPrimary,
+      body: SingleChildScrollView(
+        child: Center(
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  TextFormField(
+                    initialValue: signUpModel.email,
+                    style: TextStyle(
+                      color: AppColors().textPrimary,
+                    ),
+                    decoration: const InputDecoration(
+                      labelText: 'メールアドレス',
+                      hintText: 'メールアドレスを入力してください',
+                    ),
+                    validator: signUpModel.emptyValidator,
+                    textInputAction: TextInputAction.next,
+                    onFieldSubmitted: (_) {
+                      FocusScope.of(context)
+                          .requestFocus(_passwordFocusNode); // 変更
+                    },
+                    onSaved: (value) {
+                      ref.read(_signUpModelProvider).email = value ?? '';
+                    },
                   ),
-                  decoration: const InputDecoration(
-                    labelText: 'メールアドレス',
-                    hintText: 'メールアドレスを入力してください',
+                  TextFormField(
+                    initialValue: signUpModel.password,
+                    focusNode: _passwordFocusNode,
+                    obscureText: !signUpModel.shouldShowPassword,
+                    style: TextStyle(
+                      color: AppColors().textPrimary,
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'パスワード',
+                      hintText: 'パスワードを入力してください',
+                      suffixIcon: IconButton(
+                        icon: Icon(signUpModel.shouldShowPassword
+                            ? Icons.visibility
+                            : Icons.visibility_off),
+                        onPressed: signUpModel.togglePasswordVisible,
+                      ),
+                    ),
+                    validator: signUpModel.emptyValidator,
+                    onSaved: (value) {
+                      ref.read(_signUpModelProvider).password = value ?? '';
+                    },
                   ),
-                  validator: signUpModel.emptyValidator,
-                  textInputAction: TextInputAction.next,
-                  onFieldSubmitted: (_) {
-                    FocusScope.of(context)
-                        .requestFocus(_passwordFocusNode); // 変更
-                  },
-                  onSaved: (value) {
-                    ref.read(_signUpModelProvider).email = value ?? '';
-                  },
-                ),
-                TextFormField(
-                  initialValue: signUpModel.password,
-                  focusNode: _passwordFocusNode,
-                  obscureText: !signUpModel.shouldShowPassword,
-                  style: TextStyle(
-                    color: AppColors().textPrimary,
-                  ),
-                  decoration: InputDecoration(
-                    labelText: 'パスワード',
-                    hintText: 'パスワードを入力してください',
-                    suffixIcon: IconButton(
-                      icon: Icon(signUpModel.shouldShowPassword
-                          ? Icons.visibility
-                          : Icons.visibility_off),
-                      onPressed: signUpModel.togglePasswordVisible,
+                  Container(
+                    // エラー文言表示エリア
+                    margin: const EdgeInsets.fromLTRB(0, 16, 0, 8),
+                    child: Text(
+                      signUpModel.message,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.red,
+                      ),
                     ),
                   ),
-                  validator: signUpModel.emptyValidator,
-                  onSaved: (value) {
-                    ref.read(_signUpModelProvider).password = value ?? '';
-                  },
-                ),
-                Container(
-                  // エラー文言表示エリア
-                  margin: const EdgeInsets.fromLTRB(0, 16, 0, 8),
-                  child: Text(
-                    signUpModel.message,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.red,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          _formKey.currentState!.save();
-                          final errorMessage = await signUpModel.signUp();
-                          if (errorMessage == null) {
-                            // 成功した場合
-                            const didSignUp = true;
-                            Navigator.of(context).pop(didSignUp);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('新規登録しました'),
-                              ),
-                            );
-                          } else {
-                            signUpModel.setMessage(errorMessage);
+                  SizedBox(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            final errorMessage = await signUpModel.signUp();
+                            if (errorMessage == null) {
+                              // 成功した場合
+                              const didSignUp = true;
+                              Navigator.of(context).pop(didSignUp);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('新規登録しました'),
+                                ),
+                              );
+                            } else {
+                              signUpModel.setMessage(errorMessage);
+                            }
                           }
-                        }
-                      },
-                      child: const Text('新規登録'),
+                        },
+                        child: const Text('新規登録'),
+                      ),
                     ),
                   ),
-                ),
-                Text.rich(
-                  TextSpan(
-                    text: '新規登録ボタンをタップすると、',
-                    style: TextStyle(color: AppColors().textPrimary),
-                    children: [
-                      TextSpan(
-                        text: '利用規約',
-                        style: const TextStyle(
-                          color: AppColors.primary,
-                          decoration: TextDecoration.underline,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute<String?>(
-                                builder: (context) => const CommonWebviewPage(
-                                  title: '利用規約',
-                                  url:
-                                      'https://policies.google.com/terms?hl=ja&fg=1',
+                  Text.rich(
+                    TextSpan(
+                      text: '新規登録ボタンをタップすると、',
+                      style: TextStyle(color: AppColors().textPrimary),
+                      children: [
+                        TextSpan(
+                          text: '利用規約',
+                          style: const TextStyle(
+                            color: AppColors.primary,
+                            decoration: TextDecoration.underline,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute<String?>(
+                                  builder: (context) => const CommonWebviewPage(
+                                    title: '利用規約',
+                                    url:
+                                        'https://policies.google.com/terms?hl=ja&fg=1',
+                                  ),
+                                  fullscreenDialog: true,
                                 ),
-                                fullscreenDialog: true,
-                              ),
-                            );
-                          },
-                      ),
-                      const TextSpan(text: 'および'),
-                      TextSpan(
-                        text: 'プライバシーポリシー',
-                        style: const TextStyle(
-                          color: AppColors.primary,
-                          decoration: TextDecoration.underline,
+                              );
+                            },
                         ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute<String?>(
-                                builder: (context) => const CommonWebviewPage(
-                                  title: 'プライバシーポリシー',
-                                  url:
-                                      'https://policies.google.com/privacy?hl=ja&fg=1',
+                        const TextSpan(text: 'および'),
+                        TextSpan(
+                          text: 'プライバシーポリシー',
+                          style: const TextStyle(
+                            color: AppColors.primary,
+                            decoration: TextDecoration.underline,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute<String?>(
+                                  builder: (context) => const CommonWebviewPage(
+                                    title: 'プライバシーポリシー',
+                                    url:
+                                        'https://policies.google.com/privacy?hl=ja&fg=1',
+                                  ),
+                                  fullscreenDialog: true,
                                 ),
-                                fullscreenDialog: true,
-                              ),
-                            );
-                          },
-                      ),
-                      const TextSpan(text: 'に同意したものとみなします'),
-                    ],
+                              );
+                            },
+                        ),
+                        const TextSpan(text: 'に同意したものとみなします'),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
