@@ -6,8 +6,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 final homePageNotifierProvider = ChangeNotifierProvider.family
     .autoDispose<HomePageNotifier, HomePageContentType>((ref, contentType) {
-  final articleRepository = ref.read(articleRepositoryProvider);
-  return HomePageNotifier(articleRepository, contentType);
+  return HomePageNotifier(ref.read, contentType);
 });
 
 enum HomePageContentType {
@@ -16,12 +15,15 @@ enum HomePageContentType {
 }
 
 class HomePageNotifier extends ChangeNotifier {
-  HomePageNotifier(this._articleRepository, this.contentType) {
+  HomePageNotifier(this._reader, this.contentType) {
     fetchArticles();
   }
 
-  final ArticleRepository _articleRepository;
+  final Reader _reader;
   final HomePageContentType contentType;
+
+  late final ArticleRepository _articleRepository =
+      _reader(articleRepositoryProvider);
   AsyncValue<List<Article>> articlesValue = const AsyncValue.loading();
   final RefreshController refreshController = RefreshController();
 

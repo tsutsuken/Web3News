@@ -14,20 +14,21 @@ import 'package:labo_flutter/providers/user_change_notifier_provider.dart';
 
 final editProfilePageNotifierProvider =
     ChangeNotifierProvider.autoDispose((ref) {
-  final appUserRepository = ref.read(appUserRepositoryProvider);
   final currentUser = ref
       .watch(userChangeNotifierProvider.select((value) => value.currentUser));
-  return EditProfilePageNotifier(appUserRepository, currentUser);
+  return EditProfilePageNotifier(ref.read, currentUser);
 });
 
 class EditProfilePageNotifier extends ChangeNotifier {
-  EditProfilePageNotifier(this._appUserRepository, this.currentUser) {
+  EditProfilePageNotifier(this._reader, this.currentUser) {
     fetchMyAppUser();
   }
 
-  final AppUserRepository _appUserRepository;
+  final Reader _reader;
   final User? currentUser;
 
+  late final AppUserRepository _appUserRepository =
+      _reader(appUserRepositoryProvider);
   AsyncValue<AppUser?> editingAppUserValue = const AsyncValue.loading();
   AppUser? beforeEditingAppUser;
 

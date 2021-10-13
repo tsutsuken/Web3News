@@ -9,21 +9,23 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 final myProfilePageNotifierProvider = ChangeNotifierProvider.autoDispose(
   (ref) {
-    final appUserRepository = ref.read(appUserRepositoryProvider);
     final currentUser = ref
         .watch(userChangeNotifierProvider.select((value) => value.currentUser));
-    return MyProfilePageNotifier(appUserRepository, currentUser);
+    return MyProfilePageNotifier(ref.read, currentUser);
   },
 );
 
 class MyProfilePageNotifier extends ChangeNotifier {
-  MyProfilePageNotifier(this._appUserRepository, this.currentUser) {
+  MyProfilePageNotifier(this._reader, this.currentUser) {
     fetchMyAppUser();
   }
-  final AppUserRepository _appUserRepository;
-  final User? currentUser;
-  final RefreshController refreshController = RefreshController();
 
+  final Reader _reader;
+  final User? currentUser;
+
+  late final AppUserRepository _appUserRepository =
+      _reader(appUserRepositoryProvider);
+  final RefreshController refreshController = RefreshController();
   AsyncValue<List<Comment>> commentsValue = const AsyncValue.loading();
   AsyncValue<AppUser?> myAppUserValue = const AsyncValue.loading();
 

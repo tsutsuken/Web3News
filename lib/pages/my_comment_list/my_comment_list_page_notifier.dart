@@ -8,19 +8,20 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 final myCommentListPageNotifierProvider = ChangeNotifierProvider.autoDispose(
   (ref) {
-    final commentRepository = ref.read(commentRepositoryProvider);
-    return MyCommentListPageNotifier(commentRepository);
+    return MyCommentListPageNotifier(ref.read);
   },
 );
 
 class MyCommentListPageNotifier extends ChangeNotifier {
-  MyCommentListPageNotifier(this._commentRepository) {
+  MyCommentListPageNotifier(this._reader) {
     fetchMyComments();
   }
 
-  final CommentRepository _commentRepository;
-  final RefreshController refreshController = RefreshController();
+  final Reader _reader;
 
+  late final CommentRepository _commentRepository =
+      _reader(commentRepositoryProvider);
+  final RefreshController refreshController = RefreshController();
   AsyncValue<List<Comment>> commentsValue = const AsyncValue.loading();
   QueryResult? _previousResultFetchComments;
   final int _limitFetchComments = 20;

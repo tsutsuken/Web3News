@@ -5,9 +5,7 @@ import 'package:labo_flutter/models/comment/comment_repository.dart';
 
 final commentCreatePageNotifierProvider = ChangeNotifierProvider.autoDispose(
   (ref) {
-    final articleRepository = ref.read(articleRepositoryProvider);
-    final commentRepository = ref.read(commentRepositoryProvider);
-    return CommentCreatePageNotifier(articleRepository, commentRepository);
+    return CommentCreatePageNotifier(ref.read);
   },
 );
 
@@ -19,10 +17,14 @@ class ResponseAddCommentAndArticle {
 }
 
 class CommentCreatePageNotifier extends ChangeNotifier {
-  CommentCreatePageNotifier(this.articleRepository, this.commentRepository);
+  CommentCreatePageNotifier(this._reader);
 
-  final ArticleRepository articleRepository;
-  final CommentRepository commentRepository;
+  final Reader _reader;
+
+  late final ArticleRepository articleRepository =
+      _reader(articleRepositoryProvider);
+  late final CommentRepository commentRepository =
+      _reader(commentRepositoryProvider);
   String commentText = '';
 
   Future<ResponseAddCommentAndArticle> addCommentAndArticleIfNeeded(
