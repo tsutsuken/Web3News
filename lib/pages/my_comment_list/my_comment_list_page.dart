@@ -3,6 +3,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/components/comment_bottom_sheet.dart';
 import 'package:labo_flutter/components/comment_list_item.dart';
 import 'package:labo_flutter/components/loading_indicator.dart';
+import 'package:labo_flutter/components/refresher_footer.dart';
+import 'package:labo_flutter/components/refresher_header.dart';
 import 'package:labo_flutter/models/comment/comment.dart';
 import 'package:labo_flutter/pages/my_comment_list/my_comment_list_page_notifier.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -26,13 +28,15 @@ class MyCommentListPage extends HookConsumerWidget {
 
           return SmartRefresher(
             controller: pageNotifier.refreshController,
+            enablePullUp: true,
+            header: const RefresherHeader(),
+            footer: const RefresherFooter(),
             onRefresh: () async {
               await pageNotifier.onRefresh();
             },
             onLoading: () async {
               await pageNotifier.onLoadMore();
             },
-            enablePullUp: true,
             child: ListView.builder(
               physics: const AlwaysScrollableScrollPhysics(),
               shrinkWrap: true,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:labo_flutter/components/loading_indicator.dart';
+import 'package:labo_flutter/components/refresher_header.dart';
 import 'package:labo_flutter/models/app_user/app_user.dart';
 import 'package:labo_flutter/pages/edit_profile/edit_profile_page.dart';
 import 'package:labo_flutter/pages/my_comment_list/my_comment_list_page.dart';
@@ -35,6 +36,7 @@ class MyProfilePageLoggedIn extends StatelessWidget {
         data: (appUser) {
           return SmartRefresher(
             controller: pageNotifier.refreshController,
+            header: const RefresherHeader(),
             onRefresh: () async {
               await pageNotifier.onRefresh();
             },

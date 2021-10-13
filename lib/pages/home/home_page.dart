@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/components/loading_indicator.dart';
+import 'package:labo_flutter/components/refresher_header.dart';
 import 'package:labo_flutter/models/article/article.dart';
 import 'package:labo_flutter/pages/article_detail_page.dart';
 import 'package:labo_flutter/pages/home/home_page_notifier.dart';
@@ -76,6 +77,7 @@ class _ArticlesQuery extends HookConsumerWidget {
       data: (articles) {
         return SmartRefresher(
           controller: _pageNotifier.refreshController,
+          header: const RefresherHeader(),
           onRefresh: () async {
             await _pageNotifier.onRefresh();
           },
