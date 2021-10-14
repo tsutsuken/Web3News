@@ -31,22 +31,18 @@ class ReportRepositoryImpl implements ReportRepository {
     debugPrint('addReport commentId: $commentId');
     var didSuccess = false;
 
-    try {
-      final result = await _client.mutate(
-        MutationOptions(
-          document: gql(insertReportMutation),
-          variables: <String, dynamic>{
-            'comment_id': commentId,
-          },
-        ),
-      );
-      if (result.hasException) {
-        debugPrint('addReport exception: ${result.exception.toString()}');
-      } else {
-        didSuccess = true;
-      }
-    } on Exception catch (e) {
-      debugPrint('addReport error: $e');
+    final result = await _client.mutate(
+      MutationOptions(
+        document: gql(insertReportMutation),
+        variables: <String, dynamic>{
+          'comment_id': commentId,
+        },
+      ),
+    );
+    if (result.hasException) {
+      debugPrint('addReport exception: ${result.exception.toString()}');
+    } else {
+      didSuccess = true;
     }
 
     return didSuccess;

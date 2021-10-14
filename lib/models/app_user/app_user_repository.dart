@@ -42,33 +42,28 @@ class AppUserRepositoryImpl implements AppUserRepository {
   @override
   Future<AppUser?> fetchAppUser(String userId) async {
     debugPrint('fetchAppUser userId: $userId');
-    try {
-      final result = await _client.query(
-        QueryOptions(
-          document: gql(appUserQuery),
-          variables: <String, dynamic>{
-            'id': userId,
-          },
-          fetchPolicy: FetchPolicy.cacheAndNetwork,
-        ),
-      );
+    final result = await _client.query(
+      QueryOptions(
+        document: gql(appUserQuery),
+        variables: <String, dynamic>{
+          'id': userId,
+        },
+        fetchPolicy: FetchPolicy.cacheAndNetwork,
+      ),
+    );
 
-      if (result.hasException) {
-        debugPrint('fetchAppUser exception: ${result.exception.toString()}');
-        return null;
-      }
-
-      final resultData = result.data;
-      if (resultData == null) {
-        return null;
-      }
-
-      final appUser = AppUserResponse.fromJson(resultData).usersByPk;
-      return appUser;
-    } on Exception catch (e) {
-      debugPrint('fetchAppUser: $e');
+    if (result.hasException) {
+      debugPrint('fetchAppUser exception: ${result.exception.toString()}');
       return null;
     }
+
+    final resultData = result.data;
+    if (resultData == null) {
+      return null;
+    }
+
+    final appUser = AppUserResponse.fromJson(resultData).usersByPk;
+    return appUser;
   }
 
   @override
@@ -76,26 +71,22 @@ class AppUserRepositoryImpl implements AppUserRepository {
     debugPrint('updateAppUser newAppUser: $newAppUser');
     var didSuccess = false;
 
-    try {
-      final result = await _client.mutate(
-        MutationOptions(
-          document: gql(updateUserMutation),
-          variables: <String, dynamic>{
-            'id': newAppUser.id,
-            'name': newAppUser.name,
-            'profile_image_url': newAppUser.profileImageUrl,
-          },
-        ),
-      );
+    final result = await _client.mutate(
+      MutationOptions(
+        document: gql(updateUserMutation),
+        variables: <String, dynamic>{
+          'id': newAppUser.id,
+          'name': newAppUser.name,
+          'profile_image_url': newAppUser.profileImageUrl,
+        },
+      ),
+    );
 
-      if (result.hasException) {
-        debugPrint('updateAppUser exception: ${result.exception.toString()}');
-      } else {
-        debugPrint('updateAppUser success');
-        didSuccess = true;
-      }
-    } on Exception catch (e) {
-      debugPrint('updateAppUser error: $e');
+    if (result.hasException) {
+      debugPrint('updateAppUser exception: ${result.exception.toString()}');
+    } else {
+      debugPrint('updateAppUser success');
+      didSuccess = true;
     }
 
     return didSuccess;

@@ -224,25 +224,23 @@ class CommentRepositoryImpl implements CommentRepository {
   Future<bool> addComment(String articleId, String text) async {
     debugPrint('addComment articleId: $articleId');
     var didSuccess = false;
-    try {
-      final result = await _client.mutate(
-        MutationOptions(
-          document: gql(insertCommentMutation),
-          variables: <String, dynamic>{
-            'text': text,
-            'article_id': articleId,
-          },
-        ),
-      );
-      if (result.hasException) {
-        debugPrint('addComment exception: ${result.exception.toString()}');
-      } else {
-        didSuccess = true;
-        debugPrint('addComment success');
-      }
-    } on Exception catch (e) {
-      debugPrint('addComment error: $e');
+
+    final result = await _client.mutate(
+      MutationOptions(
+        document: gql(insertCommentMutation),
+        variables: <String, dynamic>{
+          'text': text,
+          'article_id': articleId,
+        },
+      ),
+    );
+    if (result.hasException) {
+      debugPrint('addComment exception: ${result.exception.toString()}');
+    } else {
+      didSuccess = true;
+      debugPrint('addComment success');
     }
+
     return didSuccess;
   }
 

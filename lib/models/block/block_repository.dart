@@ -32,24 +32,20 @@ class BlockRepositoryImpl implements BlockRepository {
     debugPrint('blockUser userId: $userId');
     var didSuccess = false;
 
-    try {
-      final result = await _client.mutate(
-        MutationOptions(
-          document: gql(insertBlockMutation),
-          variables: <String, dynamic>{
-            'to_user_id': userId,
-          },
-        ),
-      );
+    final result = await _client.mutate(
+      MutationOptions(
+        document: gql(insertBlockMutation),
+        variables: <String, dynamic>{
+          'to_user_id': userId,
+        },
+      ),
+    );
 
-      if (result.hasException) {
-        debugPrint('blockUser exception: ${result.exception.toString()}');
-        didSuccess = false;
-      } else {
-        didSuccess = true;
-      }
-    } on Exception catch (e) {
-      debugPrint('blockUser error: $e');
+    if (result.hasException) {
+      debugPrint('blockUser exception: ${result.exception.toString()}');
+      didSuccess = false;
+    } else {
+      didSuccess = true;
     }
 
     return didSuccess;

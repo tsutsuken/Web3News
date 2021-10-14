@@ -76,6 +76,11 @@ class ArticleRepositoryImpl implements ArticleRepository {
       ),
     );
 
+    if (result.hasException) {
+      debugPrint('_fetchArticles exception: ${result.exception.toString()}');
+      return articles;
+    }
+
     final resultData = result.data;
     if (resultData != null) {
       articles = ArticleListResponse.fromJson(resultData).articles;
@@ -87,25 +92,27 @@ class ArticleRepositoryImpl implements ArticleRepository {
   @override
   Future<String?> addArticle(String url) async {
     Article? addedArticle;
-    try {
-      final result = await _client.mutate(
-        MutationOptions(
-          document: gql(insertArticleMutation),
-          variables: <String, dynamic>{
-            'url': url,
-          },
-        ),
-      );
+    final result = await _client.mutate(
+      MutationOptions(
+        document: gql(insertArticleMutation),
+        variables: <String, dynamic>{
+          'url': url,
+        },
+      ),
+    );
 
-      final resultData = result.data;
-      if (resultData != null) {
-        addedArticle =
-            InsertArticlesOneResponse.fromJson(resultData).insertArticlesOne;
-      }
-    } on Exception catch (e) {
-      debugPrint('addArticle error: $e');
+    if (result.hasException) {
+      debugPrint('addArticle exception: ${result.exception.toString()}');
       return null;
     }
+
+    final resultData = result.data;
+    if (resultData == null) {
+      return null;
+    }
+
+    addedArticle =
+        InsertArticlesOneResponse.fromJson(resultData).insertArticlesOne;
 
     return addedArticle?.id;
   }

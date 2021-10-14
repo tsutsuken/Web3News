@@ -29,22 +29,16 @@ class HomePageNotifier extends ChangeNotifier {
 
   Future<void> fetchArticles() async {
     var _articles = <Article>[];
-    try {
-      switch (contentType) {
-        case HomePageContentType.popularArticle:
-          _articles = await _articleRepository.fetchPopularArticles();
-          break;
-        case HomePageContentType.newArticle:
-          _articles = await _articleRepository.fetchNewArticles();
-          break;
-      }
-      articlesValue = AsyncValue.data(_articles);
-      notifyListeners();
-    } on Exception catch (e) {
-      debugPrint('fetchArticles error: $e');
-      articlesValue = AsyncValue.error(e);
-      notifyListeners();
+    switch (contentType) {
+      case HomePageContentType.popularArticle:
+        _articles = await _articleRepository.fetchPopularArticles();
+        break;
+      case HomePageContentType.newArticle:
+        _articles = await _articleRepository.fetchNewArticles();
+        break;
     }
+    articlesValue = AsyncValue.data(_articles);
+    notifyListeners();
   }
 
   Future<void> onRefresh() async {
