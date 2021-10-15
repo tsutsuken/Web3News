@@ -6,7 +6,7 @@ import 'package:labo_flutter/graphql_api_client.dart';
 
 const String commentsFilteredOfArticleQuery = '''
 query MyQuery(\$limit: Int!, \$offset: Int!, \$viewer_user_id: String!, \$article_id: uuid!) {
-  comments_filtered(limit: \$limit, offset: \$offset, args: {viewer_user_id: \$viewer_user_id}, where: {is_banned: {_neq: true}, article_id: {_eq: \$article_id}}) {
+  comments_filtered(limit: \$limit, offset: \$offset, args: {viewer_user_id: \$viewer_user_id}, where: {is_banned: {_neq: true}, article_id: {_eq: \$article_id}, user: {is_deleted: {_neq: true}}}) {
     id
     text
     created_at

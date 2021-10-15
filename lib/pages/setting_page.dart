@@ -1,10 +1,76 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:labo_flutter/components/error_dialog.dart';
 import 'package:labo_flutter/pages/common_webview_page.dart';
 import 'package:labo_flutter/utils/app_colors.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({Key? key}) : super(key: key);
+
+  void showDeleteUserDialog(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return AlertDialog(
+          content: const Text('\n本当に退会しますか？'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // ダイアログを閉じる
+                Navigator.pop(context);
+              },
+              child: const Text('キャンセル'),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.pop(context);
+                await EasyLoading.show(maskType: EasyLoadingMaskType.black);
+                final errorMessage = await deleteUser();
+                await EasyLoading.dismiss();
+                if (errorMessage != null) {
+                  // 失敗時
+                  showErrorDialog(context, errorMessage);
+                } else {
+                  // 成功時
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('退会しました'),
+                    ),
+                  );
+                }
+              },
+              child: const Text('退会する'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<String?> deleteUser() async {
+    String? errorMessage;
+
+    try {
+      final _ = FirebaseAuth.instance.currentUser?.delete();
+      errorMessage = null;
+      debugPrint('deleteUser success');
+    } on FirebaseAuthException catch (e) {
+      debugPrint('deleteUser FirebaseAuthException: $e');
+      if (e.code == 'requires-recent-login') {
+        errorMessage = 'もう一度ログインする必要があります。ログアウトして再度ログインしてからお試しください。';
+      } else {
+        errorMessage = 'エラーが発生しました';
+      }
+    } on Exception catch (e) {
+      debugPrint('deleteUser Exception: $e');
+      errorMessage = 'エラーが発生しました';
+    }
+
+    return errorMessage;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +141,21 @@ class SettingPage extends StatelessWidget {
                 ),
               );
             },
+          ),
+          ListTile(
+            onTap: () {
+              showDeleteUserDialog(context);
+            },
+            leading: const Icon(
+              Icons.logout,
+              color: Colors.red,
+            ),
+            title: const Text(
+              '退会する',
+              style: TextStyle(
+                color: Colors.red,
+              ),
+            ),
           ),
         ],
       ),
