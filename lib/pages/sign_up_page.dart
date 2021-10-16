@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/pages/common_webview_page.dart';
 import 'package:labo_flutter/utils/app_colors.dart';
@@ -34,7 +36,28 @@ class _SignUpModel extends ChangeNotifier {
     return null;
   }
 
-  Future<String?> signUp() async {
+  Future<void> signUpAndRefreshToken({
+    required VoidCallback onSuccess,
+    required Function(String errorMessage) onError,
+  }) async {
+    debugPrint('signUpAndRefreshToken');
+    final errorMessage = await _signUp();
+    if (errorMessage != null) {
+      onError(errorMessage);
+    }
+
+    _waitTokenRefresh(
+      onSuccess: () {
+        onSuccess();
+      },
+      onError: () {
+        onError('トークンの取得に失敗しました');
+      },
+    );
+  }
+
+  Future<String?> _signUp() async {
+    debugPrint('_signUp');
     String? errorMessage;
     try {
       final _ = await FirebaseAuth.instance
@@ -42,12 +65,37 @@ class _SignUpModel extends ChangeNotifier {
       return errorMessage;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        errorMessage = 'The password provided is too weak.';
+        errorMessage = '推測されにくいパスワードを設定してください';
       } else if (e.code == 'email-already-in-use') {
-        errorMessage = 'The account already exists for that email.';
+        errorMessage = 'このメールアドレスで作成されたアカウントがすでに存在します';
       }
       return errorMessage;
     }
+  }
+
+  void _waitTokenRefresh({
+    required VoidCallback onSuccess,
+    required VoidCallback onError,
+  }) {
+    debugPrint('_waitTokenRefresh');
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      onError();
+    }
+
+    // （Firebase Functionsでセットされる）トリガーを監視して、CustomClaimの反映を待ち、トークンを更新する
+    final triggerRef =
+        FirebaseFirestore.instance.collection('user_meta').doc(userId);
+    triggerRef.snapshots().listen((documentSnapshot) {
+      if (documentSnapshot.exists) {
+        debugPrint('refresh idToken by trigger');
+        // トークンを強制更新する
+        FirebaseAuth.instance.currentUser?.getIdToken(true);
+        onSuccess();
+      } else {
+        debugPrint('trigger not exists');
+      }
+    });
   }
 }
 
@@ -132,19 +180,24 @@ class SignUpPage extends HookConsumerWidget {
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
-                            final errorMessage = await signUpModel.signUp();
-                            if (errorMessage == null) {
-                              // 成功した場合
-                              const didSignUp = true;
-                              Navigator.of(context).pop(didSignUp);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('新規登録しました'),
-                                ),
-                              );
-                            } else {
-                              signUpModel.setMessage(errorMessage);
-                            }
+
+                            await EasyLoading.show(
+                                maskType: EasyLoadingMaskType.black);
+                            await signUpModel.signUpAndRefreshToken(
+                              onSuccess: () async {
+                                await EasyLoading.dismiss();
+                                Navigator.of(context).pop();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('新規登録しました'),
+                                  ),
+                                );
+                              },
+                              onError: (errorMessage) async {
+                                await EasyLoading.dismiss();
+                                signUpModel.setMessage(errorMessage);
+                              },
+                            );
                           }
                         },
                         child: const Text('新規登録'),
