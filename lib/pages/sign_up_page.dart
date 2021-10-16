@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/pages/common_webview_page.dart';
+import 'package:labo_flutter/providers/user_change_notifier_provider.dart';
 import 'package:labo_flutter/utils/app_colors.dart';
 
 final _signUpModelProvider =
@@ -105,6 +106,7 @@ class SignUpPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final signUpModel = ref.watch(_signUpModelProvider);
+    final _userNotifier = ref.watch(userChangeNotifierProvider);
     final _formKey = GlobalKey<FormState>();
     final _passwordFocusNode = FocusNode();
 
@@ -186,6 +188,7 @@ class SignUpPage extends HookConsumerWidget {
                             await signUpModel.signUpAndRefreshToken(
                               onSuccess: () async {
                                 await EasyLoading.dismiss();
+                                _userNotifier.refreshCurrentUser();
                                 Navigator.of(context).pop();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(

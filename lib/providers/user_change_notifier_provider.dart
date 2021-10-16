@@ -17,4 +17,11 @@ class UserChangeNotifier extends ChangeNotifier {
   }
 
   User? currentUser;
+
+  // currentUserを参照しているウィジェットを強制リビルドさせる時に使う
+  void refreshCurrentUser() {
+    debugPrint('refreshCurrentUser');
+    currentUser = FirebaseAuth.instance.currentUser;
+    notifyListeners();
+  }
 }
