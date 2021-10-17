@@ -8,13 +8,42 @@ import 'package:labo_flutter/utils/app_colors.dart';
 class SettingPage extends StatelessWidget {
   const SettingPage({Key? key}) : super(key: key);
 
+  void showLogoutDialog(BuildContext context) {
+    showDialog<void>(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            content: const Text('本当にログアウトしますか？'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  // ダイアログを閉じる
+                  Navigator.pop(context);
+                },
+                child: const Text('キャンセル'),
+              ),
+              TextButton(
+                onPressed: () async {
+                  // ダイアログを閉じる
+                  Navigator.pop(context);
+                  await FirebaseAuth.instance.signOut();
+                  // 設定画面を閉じる
+                  Navigator.of(context).pop();
+                },
+                child: const Text('ログアウトする'),
+              ),
+            ],
+          );
+        });
+  }
+
   void showDeleteUserDialog(BuildContext context) {
     showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (_) {
         return AlertDialog(
-          content: const Text('\n本当に退会しますか？'),
+          content: const Text('本当に退会しますか？'),
           actions: [
             TextButton(
               onPressed: () {
@@ -81,14 +110,8 @@ class SettingPage extends StatelessWidget {
       body: ListView(
         children: [
           ListTile(
-            onTap: () async {
-              await FirebaseAuth.instance.signOut();
-              Navigator.of(context).pop();
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('ログアウトしました'),
-                ),
-              );
+            onTap: () {
+              showLogoutDialog(context);
             },
             leading: const Icon(Icons.logout),
             title: Text(
