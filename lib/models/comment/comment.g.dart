@@ -10,7 +10,7 @@ _$_CommentListResponse _$_$_CommentListResponseFromJson(
     Map<String, dynamic> json) {
   return _$_CommentListResponse(
     comments: (json['comments'] as List<dynamic>?)
-            ?.map((dynamic e) => Comment.fromJson(e as Map<String, dynamic>))
+            ?.map((e) => Comment.fromJson(e as Map<String, dynamic>))
             .toList() ??
         [],
   );
@@ -26,7 +26,7 @@ _$_CommentListFilteredResponse _$_$_CommentListFilteredResponseFromJson(
     Map<String, dynamic> json) {
   return _$_CommentListFilteredResponse(
     commentsFiltered: (json['comments_filtered'] as List<dynamic>?)
-            ?.map((dynamic e) => Comment.fromJson(e as Map<String, dynamic>))
+            ?.map((e) => Comment.fromJson(e as Map<String, dynamic>))
             .toList() ??
         [],
   );
