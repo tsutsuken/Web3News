@@ -1,63 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:labo_flutter/pages/sign_in/sign_in_page_notifier.dart';
 import 'package:labo_flutter/utils/app_colors.dart';
-
-final _loginModelProvider =
-    ChangeNotifierProvider.autoDispose((ref) => _LoginModel());
-
-class _LoginModel extends ChangeNotifier {
-  _LoginModel();
-
-  String email = '';
-  String password = '';
-  String message = '';
-  bool shouldShowPassword = false;
-
-  void setMessage(String value) {
-    //エラーメッセージ設定
-    message = value;
-    notifyListeners();
-  }
-
-  void togglePasswordVisible() {
-    shouldShowPassword = !shouldShowPassword;
-    notifyListeners();
-  }
-
-  String? emptyValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return '入力してください';
-    }
-    return null;
-  }
-
-  Future<String?> signinWithEmailAndPassword() async {
-    String? errorMessage;
-    try {
-      final _ = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email, // ken@example.com
-          password: password); // test1234
-      return errorMessage;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        errorMessage = 'No user found for that email.';
-      } else if (e.code == 'wrong-password') {
-        errorMessage = 'Wrong password provided for that user.';
-      } else {
-        errorMessage = '$e';
-      }
-      return errorMessage;
-    }
-  }
-}
 
 class SignInPage extends HookConsumerWidget {
   const SignInPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final loginModel = ref.watch(_loginModelProvider);
+    final pageNotifier = ref.watch(signInPageNotifierProvider);
     final _formKey = GlobalKey<FormState>();
     final _passwordFocusNode = FocusNode();
 
@@ -73,7 +24,7 @@ class SignInPage extends HookConsumerWidget {
               key: _formKey,
               child: Column(children: <Widget>[
                 TextFormField(
-                  initialValue: loginModel.email,
+                  initialValue: pageNotifier.email,
                   style: TextStyle(
                     color: AppColors().textPrimary,
                   ),
@@ -81,20 +32,20 @@ class SignInPage extends HookConsumerWidget {
                     labelText: 'メールアドレス',
                     hintText: 'メールアドレスを入力してください',
                   ),
-                  validator: loginModel.emptyValidator,
+                  validator: pageNotifier.emptyValidator,
                   textInputAction: TextInputAction.next,
                   onFieldSubmitted: (_) {
                     FocusScope.of(context)
                         .requestFocus(_passwordFocusNode); // 変更
                   },
                   onSaved: (value) {
-                    ref.read(_loginModelProvider).email = value ?? '';
+                    pageNotifier.email = value ?? '';
                   },
                 ),
                 TextFormField(
-                  initialValue: loginModel.password,
+                  initialValue: pageNotifier.password,
                   focusNode: _passwordFocusNode,
-                  obscureText: !loginModel.shouldShowPassword,
+                  obscureText: !pageNotifier.shouldShowPassword,
                   style: TextStyle(
                     color: AppColors().textPrimary,
                   ),
@@ -102,22 +53,22 @@ class SignInPage extends HookConsumerWidget {
                     labelText: 'パスワード',
                     hintText: 'パスワードを入力してください',
                     suffixIcon: IconButton(
-                      icon: Icon(loginModel.shouldShowPassword
+                      icon: Icon(pageNotifier.shouldShowPassword
                           ? Icons.visibility
                           : Icons.visibility_off),
-                      onPressed: loginModel.togglePasswordVisible,
+                      onPressed: pageNotifier.togglePasswordVisible,
                     ),
                   ),
-                  validator: loginModel.emptyValidator,
+                  validator: pageNotifier.emptyValidator,
                   onSaved: (value) {
-                    ref.read(_loginModelProvider).password = value ?? '';
+                    pageNotifier.password = value ?? '';
                   },
                 ),
                 Container(
                   // エラー文言表示エリア
                   margin: const EdgeInsets.fromLTRB(0, 16, 0, 8),
                   child: Text(
-                    loginModel.message,
+                    pageNotifier.message,
                     style: const TextStyle(
                       fontSize: 16,
                       color: Colors.red,
@@ -132,8 +83,8 @@ class SignInPage extends HookConsumerWidget {
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                               _formKey.currentState!.save();
-                              final errorMessage =
-                                  await loginModel.signinWithEmailAndPassword();
+                              final errorMessage = await pageNotifier
+                                  .signinWithEmailAndPassword();
 
                               if (errorMessage == null) {
                                 // ログインに成功した場合
@@ -145,7 +96,7 @@ class SignInPage extends HookConsumerWidget {
                                   ),
                                 );
                               } else {
-                                loginModel.setMessage(errorMessage);
+                                pageNotifier.setMessage(errorMessage);
                               }
                             }
                           },

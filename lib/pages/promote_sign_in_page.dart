@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:labo_flutter/pages/sign_in_page.dart';
+import 'package:labo_flutter/pages/sign_in/sign_in_page.dart';
 import 'package:labo_flutter/pages/sign_up_page.dart';
 import 'package:labo_flutter/utils/app_colors.dart';
 
