@@ -1,111 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/pages/common_webview_page.dart';
+import 'package:labo_flutter/pages/sign_up/sign_up_page_notifier.dart';
 import 'package:labo_flutter/providers/user_change_notifier_provider.dart';
 import 'package:labo_flutter/utils/app_colors.dart';
-
-final _signUpModelProvider =
-    ChangeNotifierProvider.autoDispose((ref) => _SignUpModel());
-
-class _SignUpModel extends ChangeNotifier {
-  _SignUpModel();
-
-  String email = '';
-  String password = '';
-  String message = '';
-  bool shouldShowPassword = false;
-
-  void setMessage(String value) {
-    //エラーメッセージ設定
-    message = value;
-    notifyListeners();
-  }
-
-  void togglePasswordVisible() {
-    shouldShowPassword = !shouldShowPassword;
-    notifyListeners();
-  }
-
-  String? emptyValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return '入力してください';
-    }
-    return null;
-  }
-
-  Future<void> signUpAndRefreshToken({
-    required VoidCallback onSuccess,
-    required Function(String errorMessage) onError,
-  }) async {
-    debugPrint('signUpAndRefreshToken');
-    final errorMessage = await _signUp();
-    if (errorMessage != null) {
-      onError(errorMessage);
-    }
-
-    _waitTokenRefresh(
-      onSuccess: () {
-        onSuccess();
-      },
-      onError: () {
-        onError('トークンの取得に失敗しました');
-      },
-    );
-  }
-
-  Future<String?> _signUp() async {
-    debugPrint('_signUp');
-    String? errorMessage;
-    try {
-      final _ = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
-      return errorMessage;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        errorMessage = '推測されにくいパスワードを設定してください';
-      } else if (e.code == 'email-already-in-use') {
-        errorMessage = 'このメールアドレスで作成されたアカウントがすでに存在します';
-      }
-      return errorMessage;
-    }
-  }
-
-  void _waitTokenRefresh({
-    required VoidCallback onSuccess,
-    required VoidCallback onError,
-  }) {
-    debugPrint('_waitTokenRefresh');
-    final userId = FirebaseAuth.instance.currentUser?.uid;
-    if (userId == null) {
-      onError();
-    }
-
-    // （Firebase Functionsでセットされる）トリガーを監視して、CustomClaimの反映を待ち、トークンを更新する
-    final triggerRef =
-        FirebaseFirestore.instance.collection('user_meta').doc(userId);
-    triggerRef.snapshots().listen((documentSnapshot) {
-      if (documentSnapshot.exists) {
-        debugPrint('refresh idToken by trigger');
-        // トークンを強制更新する
-        FirebaseAuth.instance.currentUser?.getIdToken(true);
-        onSuccess();
-      } else {
-        debugPrint('trigger not exists');
-      }
-    });
-  }
-}
 
 class SignUpPage extends HookConsumerWidget {
   const SignUpPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final signUpModel = ref.watch(_signUpModelProvider);
+    final signUpPageNotifier = ref.watch(signUpPageNotifierProvider);
     final _userNotifier = ref.watch(userChangeNotifierProvider);
     final _formKey = GlobalKey<FormState>();
     final _passwordFocusNode = FocusNode();
@@ -123,7 +30,7 @@ class SignUpPage extends HookConsumerWidget {
               child: Column(
                 children: <Widget>[
                   TextFormField(
-                    initialValue: signUpModel.email,
+                    initialValue: signUpPageNotifier.email,
                     style: TextStyle(
                       color: AppColors().textPrimary,
                     ),
@@ -131,20 +38,20 @@ class SignUpPage extends HookConsumerWidget {
                       labelText: 'メールアドレス',
                       hintText: 'メールアドレスを入力してください',
                     ),
-                    validator: signUpModel.emptyValidator,
+                    validator: signUpPageNotifier.emptyValidator,
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (_) {
                       FocusScope.of(context)
                           .requestFocus(_passwordFocusNode); // 変更
                     },
                     onSaved: (value) {
-                      ref.read(_signUpModelProvider).email = value ?? '';
+                      signUpPageNotifier.email = value ?? '';
                     },
                   ),
                   TextFormField(
-                    initialValue: signUpModel.password,
+                    initialValue: signUpPageNotifier.password,
                     focusNode: _passwordFocusNode,
-                    obscureText: !signUpModel.shouldShowPassword,
+                    obscureText: !signUpPageNotifier.shouldShowPassword,
                     style: TextStyle(
                       color: AppColors().textPrimary,
                     ),
@@ -152,22 +59,22 @@ class SignUpPage extends HookConsumerWidget {
                       labelText: 'パスワード',
                       hintText: 'パスワードを入力してください',
                       suffixIcon: IconButton(
-                        icon: Icon(signUpModel.shouldShowPassword
+                        icon: Icon(signUpPageNotifier.shouldShowPassword
                             ? Icons.visibility
                             : Icons.visibility_off),
-                        onPressed: signUpModel.togglePasswordVisible,
+                        onPressed: signUpPageNotifier.togglePasswordVisible,
                       ),
                     ),
-                    validator: signUpModel.emptyValidator,
+                    validator: signUpPageNotifier.emptyValidator,
                     onSaved: (value) {
-                      ref.read(_signUpModelProvider).password = value ?? '';
+                      signUpPageNotifier.password = value ?? '';
                     },
                   ),
                   Container(
                     // エラー文言表示エリア
                     margin: const EdgeInsets.fromLTRB(0, 16, 0, 8),
                     child: Text(
-                      signUpModel.message,
+                      signUpPageNotifier.message,
                       style: const TextStyle(
                         fontSize: 16,
                         color: Colors.red,
@@ -185,7 +92,7 @@ class SignUpPage extends HookConsumerWidget {
 
                             await EasyLoading.show(
                                 maskType: EasyLoadingMaskType.black);
-                            await signUpModel.signUpAndRefreshToken(
+                            await signUpPageNotifier.signUpAndRefreshToken(
                               onSuccess: () async {
                                 await EasyLoading.dismiss();
                                 _userNotifier.refreshCurrentUser();
@@ -198,7 +105,7 @@ class SignUpPage extends HookConsumerWidget {
                               },
                               onError: (errorMessage) async {
                                 await EasyLoading.dismiss();
-                                signUpModel.setMessage(errorMessage);
+                                signUpPageNotifier.setMessage(errorMessage);
                               },
                             );
                           }
