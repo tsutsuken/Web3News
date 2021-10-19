@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/components/loading_indicator.dart';
 import 'package:labo_flutter/components/refresher_header.dart';
 import 'package:labo_flutter/models/article/article.dart';
-import 'package:labo_flutter/pages/article_detail_page.dart';
+import 'package:labo_flutter/pages/article_detail/article_detail_page.dart';
 import 'package:labo_flutter/pages/home/home_page_notifier.dart';
 import 'package:labo_flutter/utils/app_colors.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
