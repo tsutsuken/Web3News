@@ -128,12 +128,16 @@ class _ArticleListItemState extends State<_ArticleListItem>
     super.build(context);
     return GestureDetector(
       onTap: () {
+        final isFavorite = widget.article.favorites.isNotEmpty;
         Navigator.push(
           context,
           MaterialPageRoute<void>(
-              builder: (context) => ArticleDetailPage(
-                  articleId: widget.article.id,
-                  articleUrl: widget.article.url)),
+            builder: (context) => ArticleDetailPage(
+              articleId: widget.article.id,
+              articleUrl: widget.article.url,
+              isFavorite: isFavorite,
+            ),
+          ),
         );
       },
       child: Container(

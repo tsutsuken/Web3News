@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -5,6 +6,7 @@ import 'package:labo_flutter/graphql_api_client.dart';
 import 'package:labo_flutter/models/article/article.dart';
 
 const String popularArticlesQuery = '''
+query MyQuery(\$user_id: String!)
 {
   articles(order_by: {published_at: asc}, limit: 50) {
     id
@@ -12,11 +14,15 @@ const String popularArticlesQuery = '''
     title
     url
     url_to_image
+    favorites(where: {user_id: {_eq: \$user_id}}) {
+      id
+    }
   }
 }
 ''';
 
 const String newArticlesQuery = '''
+query MyQuery(\$user_id: String!)
 {
   articles(order_by: {published_at: desc}, limit: 50) {
     id
@@ -24,6 +30,9 @@ const String newArticlesQuery = '''
     title
     url
     url_to_image
+    favorites(where: {user_id: {_eq: \$user_id}}) {
+      id
+    }
   }
 }
 ''';
@@ -69,9 +78,13 @@ class ArticleRepositoryImpl implements ArticleRepository {
 
   Future<List<Article>> _fetchArticles(String query) async {
     var articles = <Article>[];
+    final userId = FirebaseAuth.instance.currentUser?.uid ?? '';
     final result = await _client.query(
       QueryOptions(
         document: gql(query),
+        variables: <String, dynamic>{
+          'user_id': userId,
+        },
         fetchPolicy: FetchPolicy.cacheAndNetwork,
       ),
     );
@@ -91,6 +104,7 @@ class ArticleRepositoryImpl implements ArticleRepository {
 
   @override
   Future<String?> addArticle(String url) async {
+    debugPrint('addArticle url: $url');
     Article? addedArticle;
     final result = await _client.mutate(
       MutationOptions(

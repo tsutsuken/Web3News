@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:labo_flutter/models/favorite/favorite.dart';
 
 part 'article.freezed.dart';
 part 'article.g.dart';
@@ -33,6 +34,7 @@ abstract class Article with _$Article {
     @Default('') String url,
     @Default('http://placehold.jp/150x150.png') String urlToImage,
     @Default('') String publishedAt,
+    @Default(<Favorite>[]) List<Favorite> favorites,
   }) = _Article;
 
   factory Article.fromJson(Map<String, dynamic> json) =>

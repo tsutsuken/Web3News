@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -12,9 +13,11 @@ const String insertFavoriteMutation = '''
 ''';
 
 const String deleteFavoriteMutation = '''
-  mutation MyMutation(\$id: uuid!) {
-    delete_favorites_by_pk(id: \$id) {
-      id
+  mutation MyMutation(\$user_id: String!, \$article_id: uuid!) {
+    delete_favorites(where: {user_id: {_eq: \$user_id}, article_id: {_eq: \$article_id}}) {
+      returning {
+        id
+      }
     }
   }
 ''';
@@ -27,7 +30,7 @@ final favoriteRepositoryProvider = Provider.autoDispose<FavoriteRepositoryImpl>(
 
 abstract class FavoriteRepository {
   Future<bool> addFavorite(String articleId);
-  Future<bool> deleteFavorite(String id);
+  Future<bool> deleteFavorite(String articleId);
 }
 
 class FavoriteRepositoryImpl implements FavoriteRepository {
@@ -62,15 +65,17 @@ class FavoriteRepositoryImpl implements FavoriteRepository {
   }
 
   @override
-  Future<bool> deleteFavorite(String id) async {
-    debugPrint('deleteFavorite id: $id');
+  Future<bool> deleteFavorite(String articleId) async {
+    debugPrint('deleteFavorite articleId: $articleId');
     var didSuccess = false;
+    final userId = FirebaseAuth.instance.currentUser?.uid ?? '';
 
     final result = await _client.mutate(
       MutationOptions(
-        document: gql(insertFavoriteMutation),
+        document: gql(deleteFavoriteMutation),
         variables: <String, dynamic>{
-          'id': id,
+          'user_id': userId,
+          'article_id': articleId,
         },
       ),
     );

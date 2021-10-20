@@ -45,6 +45,10 @@ _$_Article _$_$_ArticleFromJson(Map<String, dynamic> json) {
     urlToImage:
         json['url_to_image'] as String? ?? 'http://placehold.jp/150x150.png',
     publishedAt: json['published_at'] as String? ?? '',
+    favorites: (json['favorites'] as List<dynamic>?)
+            ?.map((e) => Favorite.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [],
   );
 }
 
@@ -55,4 +59,5 @@ Map<String, dynamic> _$_$_ArticleToJson(_$_Article instance) =>
       'url': instance.url,
       'url_to_image': instance.urlToImage,
       'published_at': instance.publishedAt,
+      'favorites': instance.favorites,
     };
