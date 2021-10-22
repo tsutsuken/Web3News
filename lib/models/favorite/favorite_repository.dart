@@ -4,6 +4,22 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/graphql_api_client.dart';
 
+const String favoritesOfUserQuery = '''
+  query MyQuery(\$limit: Int!, \$offset: Int!, \$user_id: String!) {
+    favorites(limit: \$limit, offset: \$offset, order_by: {created_at: desc}, where: {user_id: {_eq: \$user_id}}) {
+      id
+      created_at
+      article {
+        id
+        published_at
+        title
+        url
+        url_to_image
+      }
+    }
+  }
+''';
+
 const String insertFavoriteMutation = '''
   mutation MyMutation(\$article_id: uuid!) {
     insert_favorites_one(object: {article_id: \$article_id}) {
@@ -29,6 +45,14 @@ final favoriteRepositoryProvider = Provider.autoDispose<FavoriteRepositoryImpl>(
 );
 
 abstract class FavoriteRepository {
+  Future<QueryResult> fetchMyFavorites({
+    int limit = 20,
+  });
+  Future<QueryResult> fetchMoreMyFavorites({
+    int limit = 20,
+    int offset = 0,
+    required QueryResult previousResult,
+  });
   Future<bool> addFavorite(String articleId);
   Future<bool> deleteFavorite(String articleId);
 }
@@ -39,6 +63,62 @@ class FavoriteRepositoryImpl implements FavoriteRepository {
   final Reader _reader;
 
   late final GraphQLClient _client = _reader(graphQLClientProvider).value;
+
+  @override
+  Future<QueryResult> fetchMyFavorites({
+    int limit = 20,
+  }) async {
+    final result = await _client.query(
+      _queryOptionsFetchMyFavorites(limit: limit),
+    );
+    return result;
+  }
+
+  @override
+  Future<QueryResult> fetchMoreMyFavorites({
+    int limit = 20,
+    int offset = 0,
+    required QueryResult previousResult,
+  }) async {
+    debugPrint('fetchMoreMyFavorites');
+    final originalQueryOptions = _queryOptionsFetchMyFavorites(limit: limit);
+    final myUserId = FirebaseAuth.instance.currentUser?.uid ?? '';
+    final result = await _client.fetchMore(
+      FetchMoreOptions(
+        variables: <String, dynamic>{
+          'user_id': myUserId,
+          'limit': limit,
+          'offset': offset,
+        },
+        updateQuery: (previousResultData, fetchMoreResultData) {
+          final totalFetchedFavorites = <dynamic>[
+            ...previousResultData?['favorites'] as List<dynamic>,
+            ...fetchMoreResultData?['favorites'] as List<dynamic>
+          ];
+          fetchMoreResultData?['favorites'] = totalFetchedFavorites;
+          return fetchMoreResultData;
+        },
+      ),
+      originalOptions: originalQueryOptions,
+      previousResult: previousResult,
+    );
+    return result;
+  }
+
+  QueryOptions _queryOptionsFetchMyFavorites({
+    required int limit,
+  }) {
+    final userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+    return QueryOptions(
+      document: gql(favoritesOfUserQuery),
+      variables: <String, dynamic>{
+        'limit': limit,
+        'offset': 0,
+        'user_id': userId,
+      },
+      fetchPolicy: FetchPolicy.cacheAndNetwork,
+    );
+  }
 
   @override
   Future<bool> addFavorite(String articleId) async {

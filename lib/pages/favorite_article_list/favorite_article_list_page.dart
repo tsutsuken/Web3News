@@ -1,0 +1,75 @@
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:labo_flutter/components/article_list_item.dart';
+import 'package:labo_flutter/components/loading_indicator.dart';
+import 'package:labo_flutter/components/refresher_footer.dart';
+import 'package:labo_flutter/components/refresher_header.dart';
+import 'package:labo_flutter/pages/article_detail/article_detail_page.dart';
+import 'package:labo_flutter/pages/favorite_article_list/favorite_article_list_page_notifier.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+class FavoriteArticleListPage extends HookConsumerWidget {
+  const FavoriteArticleListPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pageNotifier = ref.watch(favoriteArticleListPageNotifierProvider);
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('お気に入りした記事')),
+      body: pageNotifier.favoritesValue.when(
+        data: (favorites) {
+          return SmartRefresher(
+            controller: pageNotifier.refreshController,
+            enablePullUp: true,
+            header: const RefresherHeader(),
+            footer: const RefresherFooter(),
+            onRefresh: () async {
+              await pageNotifier.onRefresh();
+            },
+            onLoading: () async {
+              await pageNotifier.onLoadMore();
+            },
+            child: ListView.builder(
+              shrinkWrap: true,
+              addAutomaticKeepAlives: true,
+              cacheExtent: 1000,
+              itemCount: favorites.length,
+              itemBuilder: (BuildContext context, int index) {
+                final article = favorites[index].article;
+                if (article == null) {
+                  return const ListTile(
+                    title: Text('記事を取得出来ませんでした'),
+                  );
+                }
+                return ArticleListItem(
+                  key: ValueKey(index),
+                  context: context,
+                  article: article,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (context) => ArticleDetailPage(
+                          articleId: article.id,
+                          articleUrl: article.url,
+                          isFavorite: true,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          );
+        },
+        loading: () {
+          return const LoadingIndicator();
+        },
+        error: (error, stackTrace) {
+          return Text('エラーが発生しました: $error');
+        },
+      ),
+    );
+  }
+}

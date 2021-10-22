@@ -3,6 +3,7 @@ import 'package:labo_flutter/components/loading_indicator.dart';
 import 'package:labo_flutter/components/refresher_header.dart';
 import 'package:labo_flutter/models/app_user/app_user.dart';
 import 'package:labo_flutter/pages/edit_profile/edit_profile_page.dart';
+import 'package:labo_flutter/pages/favorite_article_list/favorite_article_list_page.dart';
 import 'package:labo_flutter/pages/my_comment_list/my_comment_list_page.dart';
 import 'package:labo_flutter/pages/my_profile/my_profile_page_notifier.dart';
 import 'package:labo_flutter/pages/setting_page.dart';
@@ -62,7 +63,22 @@ class MyProfilePageLoggedIn extends StatelessWidget {
                       color: AppColors().textPrimary,
                     ),
                   ),
-                )
+                ),
+                ListTile(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (context) => const FavoriteArticleListPage(),
+                      ),
+                    );
+                  },
+                  leading: const Icon(Icons.favorite),
+                  title: Text(
+                    'お気に入りした記事',
+                    style: TextStyle(color: AppColors().textPrimary),
+                  ),
+                ),
               ],
             ),
           );
