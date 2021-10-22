@@ -37,6 +37,22 @@ query MyQuery(\$user_id: String!)
 }
 ''';
 
+const String articlesByUrlQuery = '''
+query MyQuery(\$url: String!, \$user_id: String!)
+{
+  articles(where: {url: {_eq: \$url}}, limit: 1) {
+    id
+    published_at
+    title
+    url
+    url_to_image
+    favorites(where: {user_id: {_eq: \$user_id}}) {
+      id
+    }
+  }
+}
+''';
+
 const String insertArticleMutation = '''
   mutation MyMutation(\$url: String!) {
     insert_articles_one(object: {url: \$url}) {
@@ -56,6 +72,7 @@ final articleRepositoryProvider = Provider.autoDispose<ArticleRepositoryImpl>(
 abstract class ArticleRepository {
   Future<List<Article>> fetchPopularArticles();
   Future<List<Article>> fetchNewArticles();
+  Future<Article?> fetchArticleByUrl(String url);
   Future<String?> addArticle(String url);
 }
 
@@ -100,6 +117,39 @@ class ArticleRepositoryImpl implements ArticleRepository {
     }
 
     return articles;
+  }
+
+  @override
+  Future<Article?> fetchArticleByUrl(String url) async {
+    debugPrint('fetchArticleByUrl url: $url');
+    final myUserId = FirebaseAuth.instance.currentUser?.uid ?? '';
+    final result = await _client.query(
+      QueryOptions(
+        document: gql(articlesByUrlQuery),
+        fetchPolicy: FetchPolicy.cacheAndNetwork,
+        variables: <String, dynamic>{
+          'url': url,
+          'user_id': myUserId,
+        },
+      ),
+    );
+
+    if (result.hasException) {
+      debugPrint('fetchArticleByUrl exception: ${result.exception.toString()}');
+      return null;
+    }
+
+    final resultData = result.data;
+    if (resultData == null) {
+      return null;
+    }
+
+    final articles = ArticleListResponse.fromJson(resultData).articles;
+    Article? article;
+    if (articles.isNotEmpty) {
+      article = articles.first;
+    }
+    return article;
   }
 
   @override

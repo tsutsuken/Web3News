@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:labo_flutter/models/article/article.dart';
 import 'package:labo_flutter/models/article/article_repository.dart';
 import 'package:labo_flutter/models/favorite/favorite_repository.dart';
 
@@ -50,6 +51,11 @@ class ArticleDetailPageNotifier extends ChangeNotifier {
       reader(favoriteRepositoryProvider);
   late final ArticleRepository _articleRepository =
       reader(articleRepositoryProvider);
+
+  Future<Article?> fetchArticle(String articleUrl) async {
+    final article = await _articleRepository.fetchArticleByUrl(articleUrl);
+    return article;
+  }
 
   Future<ResponseOnPushFavoriteButton> onPushFavoriteButton() async {
     debugPrint('onPushFavoriteButton');

@@ -34,7 +34,20 @@ class ArticleDetailPage extends HookConsumerWidget {
     );
     final pageNotifier = ref.watch(articleDetailPageNotifierProvider(params));
 
+    Future<void> fetchArticleIfNeeded() async {
+      if (articleId != null) {
+        return;
+      }
+
+      final article = await pageNotifier.fetchArticle(articleUrl);
+      if (article != null) {
+        articleIdNotifier.value = article.id;
+        isFavoriteNotifier.value = article.favorites.isNotEmpty;
+      }
+    }
+
     useEffect(() {
+      fetchArticleIfNeeded();
       if (Platform.isAndroid) {
         // Androidで日本語入力を可能にするため
         WebView.platform = SurfaceAndroidWebView();
