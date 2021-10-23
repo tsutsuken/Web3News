@@ -27,19 +27,20 @@ class ArticleDetailPage extends HookConsumerWidget {
     // article追加時にarticleIdの変更を反映させるため
     final articleIdNotifier = useState(articleId);
     final isFavoriteNotifier = useState(isFavorite);
-    final params = ArticleDetailPageNotifierParams(
+    final pageNotifierParams = ArticleDetailPageNotifierParams(
       articleUrl: articleUrl,
       articleId: articleIdNotifier.value,
       isFavorite: isFavoriteNotifier.value,
     );
-    final pageNotifier = ref.watch(articleDetailPageNotifierProvider(params));
+    final pageNotifier =
+        ref.watch(articleDetailPageNotifierProvider(pageNotifierParams));
 
-    Future<void> fetchArticleIfNeeded() async {
+    Future<void> _fetchArticleIfNeeded() async {
       if (articleId != null) {
         return;
       }
 
-      final article = await pageNotifier.fetchArticle(articleUrl);
+      final article = await pageNotifier.fetchArticle();
       if (article != null) {
         articleIdNotifier.value = article.id;
         isFavoriteNotifier.value = article.favorites.isNotEmpty;
@@ -47,7 +48,7 @@ class ArticleDetailPage extends HookConsumerWidget {
     }
 
     useEffect(() {
-      fetchArticleIfNeeded();
+      _fetchArticleIfNeeded();
       if (Platform.isAndroid) {
         // Androidで日本語入力を可能にするため
         WebView.platform = SurfaceAndroidWebView();
@@ -77,7 +78,7 @@ class ArticleDetailPage extends HookConsumerWidget {
         context,
         MaterialPageRoute<String?>(
           builder: (context) => CommentCreatePage(
-            articleId: pageNotifier.articleId,
+            articleId: articleIdNotifier.value,
             articleUrl: pageNotifier.articleUrl,
           ),
           fullscreenDialog: true,
@@ -135,7 +136,7 @@ class ArticleDetailPage extends HookConsumerWidget {
                   context,
                   MaterialPageRoute<void>(
                     builder: (context) => CommentListPage(
-                      articleId: pageNotifier.articleId,
+                      articleId: articleIdNotifier.value,
                     ),
                     fullscreenDialog: true,
                   ),

@@ -52,7 +52,7 @@ class ArticleDetailPageNotifier extends ChangeNotifier {
   late final ArticleRepository _articleRepository =
       reader(articleRepositoryProvider);
 
-  Future<Article?> fetchArticle(String articleUrl) async {
+  Future<Article?> fetchArticle() async {
     final article = await _articleRepository.fetchArticleByUrl(articleUrl);
     return article;
   }
@@ -94,14 +94,13 @@ class ArticleDetailPageNotifier extends ChangeNotifier {
   }
 
   Future<bool> _addFavorite(String targetArticleId) async {
-    var didSuccess = false;
-    didSuccess = await _favoriteRepository.addFavorite(targetArticleId);
+    final didSuccess = await _favoriteRepository.addFavorite(targetArticleId);
     return didSuccess;
   }
 
   Future<bool> _deleteFavorite(String targetArticleId) async {
-    var didSuccess = false;
-    didSuccess = await _favoriteRepository.deleteFavorite(targetArticleId);
+    final didSuccess =
+        await _favoriteRepository.deleteFavorite(targetArticleId);
     return didSuccess;
   }
 }
