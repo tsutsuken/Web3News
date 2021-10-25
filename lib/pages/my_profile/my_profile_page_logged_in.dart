@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/components/loading_indicator.dart';
 import 'package:labo_flutter/components/refresher_header.dart';
 import 'package:labo_flutter/models/app_user/app_user.dart';
@@ -83,10 +84,10 @@ class MyProfilePageLoggedIn extends StatelessWidget {
             ),
           );
         },
-        loading: () {
+        loading: (_) {
           return const LoadingIndicator();
         },
-        error: (error, stackTrace) {
+        error: (error, stackTrace, _) {
           return Text('エラーが発生しました: $error');
         },
       ),

@@ -127,10 +127,10 @@ class EditProfilePage extends HookConsumerWidget {
             }
             return _buildForm(_formKey, _pageNotifier, appUser, context);
           },
-          loading: () {
+          loading: (_) {
             return const LoadingIndicator();
           },
-          error: (error, stackTrace) {
+          error: (error, stackTrace, _) {
             return Text('エラーが発生しました: $error');
           },
         ),
