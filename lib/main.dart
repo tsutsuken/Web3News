@@ -20,6 +20,8 @@ Future main() async {
   // Firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  // ローカルエミュレータを使用する場合の設定
+  // FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
 
   // GraphQL
   await initHiveForFlutter();

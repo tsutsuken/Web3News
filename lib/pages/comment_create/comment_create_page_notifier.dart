@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/models/article/article_repository.dart';
+import 'package:labo_flutter/models/cloud_functions_repository.dart';
 import 'package:labo_flutter/models/comment/comment_repository.dart';
 
 final commentCreatePageNotifierProvider = ChangeNotifierProvider.autoDispose(
@@ -26,6 +27,8 @@ class CommentCreatePageNotifier extends ChangeNotifier {
   late final CommentRepository commentRepository =
       _reader(commentRepositoryProvider);
   String commentText = '';
+  late final CloudFunctionsRepository cloudFunctionsRepository =
+      _reader(cloudFunctionsRepositoryProvider);
 
   Future<ResponseAddCommentAndArticle> addCommentAndArticleIfNeeded(
     String? _articleId,
@@ -55,7 +58,7 @@ class CommentCreatePageNotifier extends ChangeNotifier {
   }
 
   Future<String?> addArticle(String url) async {
-    final addedArticleId = await articleRepository.addArticle(url);
+    final addedArticleId = await cloudFunctionsRepository.addArticleByUrl(url);
     return addedArticleId;
   }
 }

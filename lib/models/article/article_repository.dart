@@ -53,14 +53,6 @@ query MyQuery(\$url: String!, \$user_id: String!)
 }
 ''';
 
-const String insertArticleMutation = '''
-  mutation MyMutation(\$url: String!) {
-    insert_articles_one(object: {url: \$url}) {
-      id
-    }
-  }
-''';
-
 final articleRepositoryProvider = Provider.autoDispose<ArticleRepositoryImpl>(
   (ref) {
     final graphQLClientNotifier = ref.read(graphQLClientProvider);
@@ -73,7 +65,6 @@ abstract class ArticleRepository {
   Future<List<Article>> fetchPopularArticles();
   Future<List<Article>> fetchNewArticles();
   Future<Article?> fetchArticleByUrl(String url);
-  Future<String?> addArticle(String url);
 }
 
 class ArticleRepositoryImpl implements ArticleRepository {
@@ -150,34 +141,5 @@ class ArticleRepositoryImpl implements ArticleRepository {
       article = articles.first;
     }
     return article;
-  }
-
-  @override
-  Future<String?> addArticle(String url) async {
-    debugPrint('addArticle url: $url');
-    Article? addedArticle;
-    final result = await _client.mutate(
-      MutationOptions(
-        document: gql(insertArticleMutation),
-        variables: <String, dynamic>{
-          'url': url,
-        },
-      ),
-    );
-
-    if (result.hasException) {
-      debugPrint('addArticle exception: ${result.exception.toString()}');
-      return null;
-    }
-
-    final resultData = result.data;
-    if (resultData == null) {
-      return null;
-    }
-
-    addedArticle =
-        InsertArticlesOneResponse.fromJson(resultData).insertArticlesOne;
-
-    return addedArticle?.id;
   }
 }

@@ -43,5 +43,10 @@
 	<false/>
 	<key>NSPhotoLibraryUsageDescription</key>
     <string>写真を選択するためにフォトライブラリにアクセスします</string>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsLocalNetworking</key>
+        <true/>
+    </dict>
 </dict>
 </plist>

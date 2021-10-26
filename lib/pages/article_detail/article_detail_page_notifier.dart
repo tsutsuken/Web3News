@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/models/article/article.dart';
 import 'package:labo_flutter/models/article/article_repository.dart';
+import 'package:labo_flutter/models/cloud_functions_repository.dart';
 import 'package:labo_flutter/models/favorite/favorite_repository.dart';
 
 final articleDetailPageNotifierProvider = ChangeNotifierProvider.family
@@ -51,6 +52,8 @@ class ArticleDetailPageNotifier extends ChangeNotifier {
       reader(favoriteRepositoryProvider);
   late final ArticleRepository _articleRepository =
       reader(articleRepositoryProvider);
+  late final CloudFunctionsRepository _cloudFunctionsRepository =
+      reader(cloudFunctionsRepositoryProvider);
 
   Future<Article?> fetchArticle() async {
     final article = await _articleRepository.fetchArticleByUrl(articleUrl);
@@ -89,7 +92,7 @@ class ArticleDetailPageNotifier extends ChangeNotifier {
   }
 
   Future<String?> _addArticle(String url) async {
-    final addedArticleId = await _articleRepository.addArticle(url);
+    final addedArticleId = await _cloudFunctionsRepository.addArticleByUrl(url);
     return addedArticleId;
   }
 
