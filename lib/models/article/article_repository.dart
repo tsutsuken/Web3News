@@ -8,7 +8,7 @@ import 'package:labo_flutter/models/article/article.dart';
 const String popularArticlesQuery = '''
 query MyQuery(\$user_id: String!)
 {
-  articles(order_by: {published_at: asc}, limit: 50) {
+  articles(order_by: {created_at: asc}, limit: 50) {
     id
     published_at
     title
@@ -24,7 +24,7 @@ query MyQuery(\$user_id: String!)
 const String newArticlesQuery = '''
 query MyQuery(\$user_id: String!)
 {
-  articles(order_by: {published_at: desc}, limit: 50) {
+  articles(order_by: {created_at: desc}, limit: 50) {
     id
     published_at
     title
