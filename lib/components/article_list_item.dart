@@ -9,11 +9,13 @@ class ArticleListItem extends StatefulWidget {
     required this.context,
     required this.article,
     required this.onTap,
+    this.onTapMenuButton,
   }) : super(key: key);
 
   final BuildContext context;
   final Article article;
   final VoidCallback onTap;
+  final VoidCallback? onTapMenuButton;
 
   @override
   ArticleListItemState createState() => ArticleListItemState();
@@ -36,20 +38,41 @@ class ArticleListItemState extends State<ArticleListItem>
               Container(
                 margin: const EdgeInsets.only(right: 8),
                 child: CachedNetworkImage(
-                  width: 160,
+                  width: 112,
                   fit: BoxFit.cover,
                   imageUrl: widget.article.urlToImage,
                   errorWidget: (context, url, dynamic error) =>
                       Image.asset('assets/images/default_article.png'),
                 ),
               ),
-              Flexible(
-                child: Text(
-                  widget.article.title,
-                  style: TextStyle(
-                    color: AppColors().textPrimary,
-                    fontSize: 18,
-                  ),
+              Expanded(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        widget.article.title,
+                        style: TextStyle(
+                          color: AppColors().textPrimary,
+                          fontSize: 18,
+                        ),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: widget.onTapMenuButton,
+                          child: Icon(
+                            Icons.more_horiz,
+                            color: AppColors().textSecondary,
+                            size: 24,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ],

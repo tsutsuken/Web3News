@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/models/article/article.dart';
 import 'package:labo_flutter/models/article/article_repository.dart';
+import 'package:labo_flutter/models/favorite/favorite_repository.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 final homePageNotifierProvider = ChangeNotifierProvider.family
@@ -24,6 +25,8 @@ class HomePageNotifier extends ChangeNotifier {
 
   late final ArticleRepository _articleRepository =
       _reader(articleRepositoryProvider);
+  late final FavoriteRepository _favoriteRepository =
+      _reader(favoriteRepositoryProvider);
   AsyncValue<List<Article>> articlesValue = const AsyncValue.loading();
   final RefreshController refreshController = RefreshController();
 
@@ -44,5 +47,43 @@ class HomePageNotifier extends ChangeNotifier {
   Future<void> onRefresh() async {
     await fetchArticles();
     refreshController.refreshCompleted();
+  }
+
+  void updateFavoriteOfArticleOnLocal({
+    required Article article,
+    required bool shouldFavorite,
+  }) {
+    debugPrint('updateFavoriteOfArticleOnLocal article: $article');
+    final updatedArticle = article.copyWith(isFavorite: shouldFavorite);
+    final articles = articlesValue.value;
+    articles[
+            articles.indexWhere((element) => element.id == updatedArticle.id)] =
+        updatedArticle;
+    notifyListeners();
+  }
+
+  Future<bool> updateFavoriteOfArticleOnServer({
+    required Article article,
+    required bool shouldFavorite,
+  }) async {
+    debugPrint('updateFavoriteOfArticleOnServer article: $article');
+    var didSuccess = false;
+    if (shouldFavorite) {
+      didSuccess = await _addFavorite(article.id);
+    } else {
+      didSuccess = await _deleteFavorite(article.id);
+    }
+    return didSuccess;
+  }
+
+  Future<bool> _addFavorite(String targetArticleId) async {
+    final didSuccess = await _favoriteRepository.addFavorite(targetArticleId);
+    return didSuccess;
+  }
+
+  Future<bool> _deleteFavorite(String targetArticleId) async {
+    final didSuccess =
+        await _favoriteRepository.deleteFavorite(targetArticleId);
+    return didSuccess;
   }
 }

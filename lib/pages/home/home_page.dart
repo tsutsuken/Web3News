@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:labo_flutter/components/article_bottom_sheet.dart';
 import 'package:labo_flutter/components/article_list_item.dart';
 import 'package:labo_flutter/components/loading_indicator.dart';
 import 'package:labo_flutter/components/refresher_header.dart';
+import 'package:labo_flutter/models/article/article.dart';
 import 'package:labo_flutter/pages/article_detail/article_detail_page.dart';
 import 'package:labo_flutter/pages/home/home_page_notifier.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -67,6 +69,43 @@ class _ArticleList extends HookConsumerWidget {
   const _ArticleList({Key? key, required this.contentType}) : super(key: key);
   final HomePageContentType contentType;
 
+  Future<void> _onTapMenuButton(
+    BuildContext context,
+    HomePageNotifier pageNotifier,
+    Article article,
+  ) async {
+    await showArticleBottomSheet(
+      context: context,
+      isFavorite: article.isFavorite,
+      onTapFavorite: () async {
+        final shouldFavorite = !article.isFavorite;
+
+        // 通信前に表示を切り替える
+        pageNotifier.updateFavoriteOfArticleOnLocal(
+            article: article, shouldFavorite: shouldFavorite);
+
+        // 通信する
+        final didSuccess = await pageNotifier.updateFavoriteOfArticleOnServer(
+          article: article,
+          shouldFavorite: shouldFavorite,
+        );
+
+        // 通信に失敗した場合
+        if (!didSuccess) {
+          // ローカルの変更を元に戻す
+          pageNotifier.updateFavoriteOfArticleOnLocal(
+              article: article, shouldFavorite: !shouldFavorite);
+          // 通知する
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('エラーが発生しました'),
+            ),
+          );
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final _pageNotifier = ref.watch(homePageNotifierProvider(contentType));
@@ -101,6 +140,9 @@ class _ArticleList extends HookConsumerWidget {
                       ),
                     ),
                   );
+                },
+                onTapMenuButton: () async {
+                  await _onTapMenuButton(context, _pageNotifier, article);
                 },
               );
             },
