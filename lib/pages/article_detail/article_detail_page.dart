@@ -43,7 +43,7 @@ class ArticleDetailPage extends HookConsumerWidget {
       final article = await pageNotifier.fetchArticle();
       if (article != null) {
         articleIdNotifier.value = article.id;
-        isFavoriteNotifier.value = article.favorites.isNotEmpty;
+        isFavoriteNotifier.value = article.isFavorite;
       }
     }
 

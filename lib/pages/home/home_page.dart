@@ -91,14 +91,13 @@ class _ArticleList extends HookConsumerWidget {
                 context: context,
                 article: article,
                 onTap: () {
-                  final isFavorite = article.favorites.isNotEmpty;
                   Navigator.push(
                     context,
                     MaterialPageRoute<void>(
                       builder: (context) => ArticleDetailPage(
                         articleId: article.id,
                         articleUrl: article.url,
-                        isFavorite: isFavorite,
+                        isFavorite: article.isFavorite,
                       ),
                     ),
                   );

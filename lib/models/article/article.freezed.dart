@@ -351,14 +351,14 @@ class _$ArticleTearOff {
       String url = '',
       String urlToImage = 'http://placehold.jp/150x150.png',
       String publishedAt = '',
-      List<Favorite> favorites = const <Favorite>[]}) {
+      bool isFavorite = false}) {
     return _Article(
       id: id,
       title: title,
       url: url,
       urlToImage: urlToImage,
       publishedAt: publishedAt,
-      favorites: favorites,
+      isFavorite: isFavorite,
     );
   }
 
@@ -377,7 +377,7 @@ mixin _$Article {
   String get url => throw _privateConstructorUsedError;
   String get urlToImage => throw _privateConstructorUsedError;
   String get publishedAt => throw _privateConstructorUsedError;
-  List<Favorite> get favorites => throw _privateConstructorUsedError;
+  bool get isFavorite => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -394,7 +394,7 @@ abstract class $ArticleCopyWith<$Res> {
       String url,
       String urlToImage,
       String publishedAt,
-      List<Favorite> favorites});
+      bool isFavorite});
 }
 
 /// @nodoc
@@ -412,7 +412,7 @@ class _$ArticleCopyWithImpl<$Res> implements $ArticleCopyWith<$Res> {
     Object? url = freezed,
     Object? urlToImage = freezed,
     Object? publishedAt = freezed,
-    Object? favorites = freezed,
+    Object? isFavorite = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -435,10 +435,10 @@ class _$ArticleCopyWithImpl<$Res> implements $ArticleCopyWith<$Res> {
           ? _value.publishedAt
           : publishedAt // ignore: cast_nullable_to_non_nullable
               as String,
-      favorites: favorites == freezed
-          ? _value.favorites
-          : favorites // ignore: cast_nullable_to_non_nullable
-              as List<Favorite>,
+      isFavorite: isFavorite == freezed
+          ? _value.isFavorite
+          : isFavorite // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -454,7 +454,7 @@ abstract class _$ArticleCopyWith<$Res> implements $ArticleCopyWith<$Res> {
       String url,
       String urlToImage,
       String publishedAt,
-      List<Favorite> favorites});
+      bool isFavorite});
 }
 
 /// @nodoc
@@ -473,7 +473,7 @@ class __$ArticleCopyWithImpl<$Res> extends _$ArticleCopyWithImpl<$Res>
     Object? url = freezed,
     Object? urlToImage = freezed,
     Object? publishedAt = freezed,
-    Object? favorites = freezed,
+    Object? isFavorite = freezed,
   }) {
     return _then(_Article(
       id: id == freezed
@@ -496,10 +496,10 @@ class __$ArticleCopyWithImpl<$Res> extends _$ArticleCopyWithImpl<$Res>
           ? _value.publishedAt
           : publishedAt // ignore: cast_nullable_to_non_nullable
               as String,
-      favorites: favorites == freezed
-          ? _value.favorites
-          : favorites // ignore: cast_nullable_to_non_nullable
-              as List<Favorite>,
+      isFavorite: isFavorite == freezed
+          ? _value.isFavorite
+          : isFavorite // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -514,7 +514,7 @@ class _$_Article implements _Article {
       this.url = '',
       this.urlToImage = 'http://placehold.jp/150x150.png',
       this.publishedAt = '',
-      this.favorites = const <Favorite>[]});
+      this.isFavorite = false});
 
   factory _$_Article.fromJson(Map<String, dynamic> json) =>
       _$$_ArticleFromJson(json);
@@ -534,13 +534,13 @@ class _$_Article implements _Article {
   @JsonKey(defaultValue: '')
   @override
   final String publishedAt;
-  @JsonKey(defaultValue: const <Favorite>[])
+  @JsonKey(defaultValue: false)
   @override
-  final List<Favorite> favorites;
+  final bool isFavorite;
 
   @override
   String toString() {
-    return 'Article(id: $id, title: $title, url: $url, urlToImage: $urlToImage, publishedAt: $publishedAt, favorites: $favorites)';
+    return 'Article(id: $id, title: $title, url: $url, urlToImage: $urlToImage, publishedAt: $publishedAt, isFavorite: $isFavorite)';
   }
 
   @override
@@ -555,12 +555,13 @@ class _$_Article implements _Article {
                 other.urlToImage == urlToImage) &&
             (identical(other.publishedAt, publishedAt) ||
                 other.publishedAt == publishedAt) &&
-            const DeepCollectionEquality().equals(other.favorites, favorites));
+            (identical(other.isFavorite, isFavorite) ||
+                other.isFavorite == isFavorite));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, title, url, urlToImage,
-      publishedAt, const DeepCollectionEquality().hash(favorites));
+  int get hashCode => Object.hash(
+      runtimeType, id, title, url, urlToImage, publishedAt, isFavorite);
 
   @JsonKey(ignore: true)
   @override
@@ -580,7 +581,7 @@ abstract class _Article implements Article {
       String url,
       String urlToImage,
       String publishedAt,
-      List<Favorite> favorites}) = _$_Article;
+      bool isFavorite}) = _$_Article;
 
   factory _Article.fromJson(Map<String, dynamic> json) = _$_Article.fromJson;
 
@@ -595,7 +596,7 @@ abstract class _Article implements Article {
   @override
   String get publishedAt;
   @override
-  List<Favorite> get favorites;
+  bool get isFavorite;
   @override
   @JsonKey(ignore: true)
   _$ArticleCopyWith<_Article> get copyWith =>

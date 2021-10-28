@@ -6,7 +6,7 @@ import 'package:labo_flutter/graphql_api_client.dart';
 import 'package:labo_flutter/models/article/article.dart';
 
 const String popularArticlesQuery = '''
-query MyQuery(\$user_id: String!)
+query MyQuery()
 {
   articles(order_by: {created_at: asc}, limit: 50) {
     id
@@ -14,15 +14,13 @@ query MyQuery(\$user_id: String!)
     title
     url
     url_to_image
-    favorites(where: {user_id: {_eq: \$user_id}}) {
-      id
-    }
+    is_favorite
   }
 }
 ''';
 
 const String newArticlesQuery = '''
-query MyQuery(\$user_id: String!)
+query MyQuery()
 {
   articles(order_by: {created_at: desc}, limit: 50) {
     id
@@ -30,9 +28,7 @@ query MyQuery(\$user_id: String!)
     title
     url
     url_to_image
-    favorites(where: {user_id: {_eq: \$user_id}}) {
-      id
-    }
+    is_favorite
   }
 }
 ''';
@@ -86,13 +82,9 @@ class ArticleRepositoryImpl implements ArticleRepository {
 
   Future<List<Article>> _fetchArticles(String query) async {
     var articles = <Article>[];
-    final userId = FirebaseAuth.instance.currentUser?.uid ?? '';
     final result = await _client.query(
       QueryOptions(
         document: gql(query),
-        variables: <String, dynamic>{
-          'user_id': userId,
-        },
         fetchPolicy: FetchPolicy.cacheAndNetwork,
       ),
     );
