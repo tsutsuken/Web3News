@@ -147,11 +147,21 @@ class ArticleDetailPage extends HookConsumerWidget {
             IconButton(
               color: Theme.of(context).primaryColor,
               onPressed: () async {
-                final response = await pageNotifier.onPushFavoriteButton();
+                // 通信前に表示を切り替える
+                isFavoriteNotifier.value = !isFavoriteNotifier.value;
+                // 通信する
+                final response = await pageNotifier.updateFavorite(
+                    shouldFavorite: isFavoriteNotifier.value);
                 articleIdNotifier.value =
                     response.articleId; // articleを追加した場合に必要
-                if (response.didSuccess) {
+                // 通信に失敗した場合、表示を元に戻す＆通知
+                if (!response.didSuccess) {
                   isFavoriteNotifier.value = !isFavoriteNotifier.value;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('エラーが発生しました'),
+                    ),
+                  );
                 }
               },
               icon: isFavoriteNotifier.value

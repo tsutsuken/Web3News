@@ -60,8 +60,11 @@ class ArticleDetailPageNotifier extends ChangeNotifier {
     return article;
   }
 
-  Future<ResponseOnPushFavoriteButton> onPushFavoriteButton() async {
-    debugPrint('onPushFavoriteButton');
+  Future<ResponseOnPushFavoriteButton> updateFavorite(
+      {required bool shouldFavorite}) async {
+    debugPrint('updateFavorite shouldFavorite: $shouldFavorite');
+
+    // articleIdの指定
     // articleIdがnullの場合、articleをデータベースに追加する
     String? targetArticleId;
     if (articleId == null) {
@@ -78,12 +81,15 @@ class ArticleDetailPageNotifier extends ChangeNotifier {
       );
     }
 
+    // 通信
     var didSuccess = false;
-    if (isFavorite) {
-      didSuccess = await _deleteFavorite(targetArticleId);
-    } else {
+    if (shouldFavorite) {
       didSuccess = await _addFavorite(targetArticleId);
+    } else {
+      didSuccess = await _deleteFavorite(targetArticleId);
     }
+
+    // レスポンスを返す
     // isFavorite、articleIdの更新はpageで行う
     return ResponseOnPushFavoriteButton(
       didSuccess: didSuccess,
