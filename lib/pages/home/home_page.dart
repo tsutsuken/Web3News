@@ -25,12 +25,12 @@ class _HomePageState extends State<HomePage>
 
   final List<Widget> childViews = [
     const Center(
-        child: _ArticlesQuery(
+        child: _ArticleList(
       key: PageStorageKey(0),
       contentType: HomePageContentType.popularArticle,
     )),
     const Center(
-        child: _ArticlesQuery(
+        child: _ArticleList(
       key: PageStorageKey(1),
       contentType: HomePageContentType.newArticle,
     )),
@@ -63,8 +63,8 @@ class _HomePageState extends State<HomePage>
   }
 }
 
-class _ArticlesQuery extends HookConsumerWidget {
-  const _ArticlesQuery({Key? key, required this.contentType}) : super(key: key);
+class _ArticleList extends HookConsumerWidget {
+  const _ArticleList({Key? key, required this.contentType}) : super(key: key);
   final HomePageContentType contentType;
 
   @override
