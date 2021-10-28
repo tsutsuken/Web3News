@@ -1,5 +1,6 @@
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'app_user.dart';
 
@@ -26,7 +27,7 @@ class _$AppUserResponseTearOff {
     );
   }
 
-  AppUserResponse fromJson(Map<String, Object> json) {
+  AppUserResponse fromJson(Map<String, Object?> json) {
     return AppUserResponse.fromJson(json);
   }
 }
@@ -131,7 +132,7 @@ class _$_AppUserResponse implements _AppUserResponse {
   const _$_AppUserResponse({this.usersByPk});
 
   factory _$_AppUserResponse.fromJson(Map<String, dynamic> json) =>
-      _$_$_AppUserResponseFromJson(json);
+      _$$_AppUserResponseFromJson(json);
 
   @override
   final AppUser? usersByPk;
@@ -144,15 +145,14 @@ class _$_AppUserResponse implements _AppUserResponse {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _AppUserResponse &&
+        (other.runtimeType == runtimeType &&
+            other is _AppUserResponse &&
             (identical(other.usersByPk, usersByPk) ||
-                const DeepCollectionEquality()
-                    .equals(other.usersByPk, usersByPk)));
+                other.usersByPk == usersByPk));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(usersByPk);
+  int get hashCode => Object.hash(runtimeType, usersByPk);
 
   @JsonKey(ignore: true)
   @override
@@ -161,7 +161,7 @@ class _$_AppUserResponse implements _AppUserResponse {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$_AppUserResponseToJson(this);
+    return _$$_AppUserResponseToJson(this);
   }
 }
 
@@ -172,7 +172,7 @@ abstract class _AppUserResponse implements AppUserResponse {
       _$_AppUserResponse.fromJson;
 
   @override
-  AppUser? get usersByPk => throw _privateConstructorUsedError;
+  AppUser? get usersByPk;
   @override
   @JsonKey(ignore: true)
   _$AppUserResponseCopyWith<_AppUserResponse> get copyWith =>
@@ -200,7 +200,7 @@ class _$AppUserTearOff {
     );
   }
 
-  AppUser fromJson(Map<String, Object> json) {
+  AppUser fromJson(Map<String, Object?> json) {
     return AppUser.fromJson(json);
   }
 }
@@ -319,7 +319,7 @@ class _$_AppUser implements _AppUser {
       this.profileImageUrl = 'http://placehold.jp/150x150.png'});
 
   factory _$_AppUser.fromJson(Map<String, dynamic> json) =>
-      _$_$_AppUserFromJson(json);
+      _$$_AppUserFromJson(json);
 
   @JsonKey(defaultValue: '')
   @override
@@ -342,26 +342,19 @@ class _$_AppUser implements _AppUser {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _AppUser &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.name, name) ||
-                const DeepCollectionEquality().equals(other.name, name)) &&
+        (other.runtimeType == runtimeType &&
+            other is _AppUser &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.name, name) || other.name == name) &&
             (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality()
-                    .equals(other.createdAt, createdAt)) &&
+                other.createdAt == createdAt) &&
             (identical(other.profileImageUrl, profileImageUrl) ||
-                const DeepCollectionEquality()
-                    .equals(other.profileImageUrl, profileImageUrl)));
+                other.profileImageUrl == profileImageUrl));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(id) ^
-      const DeepCollectionEquality().hash(name) ^
-      const DeepCollectionEquality().hash(createdAt) ^
-      const DeepCollectionEquality().hash(profileImageUrl);
+      Object.hash(runtimeType, id, name, createdAt, profileImageUrl);
 
   @JsonKey(ignore: true)
   @override
@@ -370,7 +363,7 @@ class _$_AppUser implements _AppUser {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$_AppUserToJson(this);
+    return _$$_AppUserToJson(this);
   }
 }
 
@@ -384,13 +377,13 @@ abstract class _AppUser implements AppUser {
   factory _AppUser.fromJson(Map<String, dynamic> json) = _$_AppUser.fromJson;
 
   @override
-  String get id => throw _privateConstructorUsedError;
+  String get id;
   @override
-  String get name => throw _privateConstructorUsedError;
+  String get name;
   @override
-  String get createdAt => throw _privateConstructorUsedError;
+  String get createdAt;
   @override
-  String get profileImageUrl => throw _privateConstructorUsedError;
+  String get profileImageUrl;
   @override
   @JsonKey(ignore: true)
   _$AppUserCopyWith<_AppUser> get copyWith =>

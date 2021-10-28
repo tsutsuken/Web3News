@@ -1,5 +1,6 @@
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'article.dart';
 
@@ -27,7 +28,7 @@ class _$InsertArticlesOneResponseTearOff {
     );
   }
 
-  InsertArticlesOneResponse fromJson(Map<String, Object> json) {
+  InsertArticlesOneResponse fromJson(Map<String, Object?> json) {
     return InsertArticlesOneResponse.fromJson(json);
   }
 }
@@ -133,7 +134,7 @@ class _$_InsertArticlesOneResponse implements _InsertArticlesOneResponse {
   const _$_InsertArticlesOneResponse({this.insertArticlesOne = null});
 
   factory _$_InsertArticlesOneResponse.fromJson(Map<String, dynamic> json) =>
-      _$_$_InsertArticlesOneResponseFromJson(json);
+      _$$_InsertArticlesOneResponseFromJson(json);
 
   @JsonKey(defaultValue: null)
   @override
@@ -147,16 +148,14 @@ class _$_InsertArticlesOneResponse implements _InsertArticlesOneResponse {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _InsertArticlesOneResponse &&
+        (other.runtimeType == runtimeType &&
+            other is _InsertArticlesOneResponse &&
             (identical(other.insertArticlesOne, insertArticlesOne) ||
-                const DeepCollectionEquality()
-                    .equals(other.insertArticlesOne, insertArticlesOne)));
+                other.insertArticlesOne == insertArticlesOne));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(insertArticlesOne);
+  int get hashCode => Object.hash(runtimeType, insertArticlesOne);
 
   @JsonKey(ignore: true)
   @override
@@ -167,7 +166,7 @@ class _$_InsertArticlesOneResponse implements _InsertArticlesOneResponse {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$_InsertArticlesOneResponseToJson(this);
+    return _$$_InsertArticlesOneResponseToJson(this);
   }
 }
 
@@ -179,7 +178,7 @@ abstract class _InsertArticlesOneResponse implements InsertArticlesOneResponse {
       _$_InsertArticlesOneResponse.fromJson;
 
   @override
-  Article? get insertArticlesOne => throw _privateConstructorUsedError;
+  Article? get insertArticlesOne;
   @override
   @JsonKey(ignore: true)
   _$InsertArticlesOneResponseCopyWith<_InsertArticlesOneResponse>
@@ -200,7 +199,7 @@ class _$ArticleListResponseTearOff {
     );
   }
 
-  ArticleListResponse fromJson(Map<String, Object> json) {
+  ArticleListResponse fromJson(Map<String, Object?> json) {
     return ArticleListResponse.fromJson(json);
   }
 }
@@ -288,7 +287,7 @@ class _$_ArticleListResponse implements _ArticleListResponse {
   const _$_ArticleListResponse({this.articles = const <Article>[]});
 
   factory _$_ArticleListResponse.fromJson(Map<String, dynamic> json) =>
-      _$_$_ArticleListResponseFromJson(json);
+      _$$_ArticleListResponseFromJson(json);
 
   @JsonKey(defaultValue: const <Article>[])
   @override
@@ -302,15 +301,14 @@ class _$_ArticleListResponse implements _ArticleListResponse {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _ArticleListResponse &&
-            (identical(other.articles, articles) ||
-                const DeepCollectionEquality()
-                    .equals(other.articles, articles)));
+        (other.runtimeType == runtimeType &&
+            other is _ArticleListResponse &&
+            const DeepCollectionEquality().equals(other.articles, articles));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(articles);
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(articles));
 
   @JsonKey(ignore: true)
   @override
@@ -320,7 +318,7 @@ class _$_ArticleListResponse implements _ArticleListResponse {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$_ArticleListResponseToJson(this);
+    return _$$_ArticleListResponseToJson(this);
   }
 }
 
@@ -332,7 +330,7 @@ abstract class _ArticleListResponse implements ArticleListResponse {
       _$_ArticleListResponse.fromJson;
 
   @override
-  List<Article> get articles => throw _privateConstructorUsedError;
+  List<Article> get articles;
   @override
   @JsonKey(ignore: true)
   _$ArticleListResponseCopyWith<_ArticleListResponse> get copyWith =>
@@ -364,7 +362,7 @@ class _$ArticleTearOff {
     );
   }
 
-  Article fromJson(Map<String, Object> json) {
+  Article fromJson(Map<String, Object?> json) {
     return Article.fromJson(json);
   }
 }
@@ -519,7 +517,7 @@ class _$_Article implements _Article {
       this.favorites = const <Favorite>[]});
 
   factory _$_Article.fromJson(Map<String, dynamic> json) =>
-      _$_$_ArticleFromJson(json);
+      _$$_ArticleFromJson(json);
 
   @JsonKey(defaultValue: '')
   @override
@@ -548,33 +546,21 @@ class _$_Article implements _Article {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _Article &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.title, title) ||
-                const DeepCollectionEquality().equals(other.title, title)) &&
-            (identical(other.url, url) ||
-                const DeepCollectionEquality().equals(other.url, url)) &&
+        (other.runtimeType == runtimeType &&
+            other is _Article &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.url, url) || other.url == url) &&
             (identical(other.urlToImage, urlToImage) ||
-                const DeepCollectionEquality()
-                    .equals(other.urlToImage, urlToImage)) &&
+                other.urlToImage == urlToImage) &&
             (identical(other.publishedAt, publishedAt) ||
-                const DeepCollectionEquality()
-                    .equals(other.publishedAt, publishedAt)) &&
-            (identical(other.favorites, favorites) ||
-                const DeepCollectionEquality()
-                    .equals(other.favorites, favorites)));
+                other.publishedAt == publishedAt) &&
+            const DeepCollectionEquality().equals(other.favorites, favorites));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(id) ^
-      const DeepCollectionEquality().hash(title) ^
-      const DeepCollectionEquality().hash(url) ^
-      const DeepCollectionEquality().hash(urlToImage) ^
-      const DeepCollectionEquality().hash(publishedAt) ^
-      const DeepCollectionEquality().hash(favorites);
+  int get hashCode => Object.hash(runtimeType, id, title, url, urlToImage,
+      publishedAt, const DeepCollectionEquality().hash(favorites));
 
   @JsonKey(ignore: true)
   @override
@@ -583,7 +569,7 @@ class _$_Article implements _Article {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$_ArticleToJson(this);
+    return _$$_ArticleToJson(this);
   }
 }
 
@@ -599,17 +585,17 @@ abstract class _Article implements Article {
   factory _Article.fromJson(Map<String, dynamic> json) = _$_Article.fromJson;
 
   @override
-  String get id => throw _privateConstructorUsedError;
+  String get id;
   @override
-  String get title => throw _privateConstructorUsedError;
+  String get title;
   @override
-  String get url => throw _privateConstructorUsedError;
+  String get url;
   @override
-  String get urlToImage => throw _privateConstructorUsedError;
+  String get urlToImage;
   @override
-  String get publishedAt => throw _privateConstructorUsedError;
+  String get publishedAt;
   @override
-  List<Favorite> get favorites => throw _privateConstructorUsedError;
+  List<Favorite> get favorites;
   @override
   @JsonKey(ignore: true)
   _$ArticleCopyWith<_Article> get copyWith =>

@@ -1,5 +1,6 @@
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'comment.dart';
 
@@ -26,7 +27,7 @@ class _$CommentListResponseTearOff {
     );
   }
 
-  CommentListResponse fromJson(Map<String, Object> json) {
+  CommentListResponse fromJson(Map<String, Object?> json) {
     return CommentListResponse.fromJson(json);
   }
 }
@@ -114,7 +115,7 @@ class _$_CommentListResponse implements _CommentListResponse {
   const _$_CommentListResponse({this.comments = const <Comment>[]});
 
   factory _$_CommentListResponse.fromJson(Map<String, dynamic> json) =>
-      _$_$_CommentListResponseFromJson(json);
+      _$$_CommentListResponseFromJson(json);
 
   @JsonKey(defaultValue: const <Comment>[])
   @override
@@ -128,15 +129,14 @@ class _$_CommentListResponse implements _CommentListResponse {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _CommentListResponse &&
-            (identical(other.comments, comments) ||
-                const DeepCollectionEquality()
-                    .equals(other.comments, comments)));
+        (other.runtimeType == runtimeType &&
+            other is _CommentListResponse &&
+            const DeepCollectionEquality().equals(other.comments, comments));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(comments);
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(comments));
 
   @JsonKey(ignore: true)
   @override
@@ -146,7 +146,7 @@ class _$_CommentListResponse implements _CommentListResponse {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$_CommentListResponseToJson(this);
+    return _$$_CommentListResponseToJson(this);
   }
 }
 
@@ -158,7 +158,7 @@ abstract class _CommentListResponse implements CommentListResponse {
       _$_CommentListResponse.fromJson;
 
   @override
-  List<Comment> get comments => throw _privateConstructorUsedError;
+  List<Comment> get comments;
   @override
   @JsonKey(ignore: true)
   _$CommentListResponseCopyWith<_CommentListResponse> get copyWith =>
@@ -181,7 +181,7 @@ class _$CommentListFilteredResponseTearOff {
     );
   }
 
-  CommentListFilteredResponse fromJson(Map<String, Object> json) {
+  CommentListFilteredResponse fromJson(Map<String, Object?> json) {
     return CommentListFilteredResponse.fromJson(json);
   }
 }
@@ -275,7 +275,7 @@ class _$_CommentListFilteredResponse implements _CommentListFilteredResponse {
       {this.commentsFiltered = const <Comment>[]});
 
   factory _$_CommentListFilteredResponse.fromJson(Map<String, dynamic> json) =>
-      _$_$_CommentListFilteredResponseFromJson(json);
+      _$$_CommentListFilteredResponseFromJson(json);
 
   @JsonKey(defaultValue: const <Comment>[])
   @override
@@ -289,16 +289,15 @@ class _$_CommentListFilteredResponse implements _CommentListFilteredResponse {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _CommentListFilteredResponse &&
-            (identical(other.commentsFiltered, commentsFiltered) ||
-                const DeepCollectionEquality()
-                    .equals(other.commentsFiltered, commentsFiltered)));
+        (other.runtimeType == runtimeType &&
+            other is _CommentListFilteredResponse &&
+            const DeepCollectionEquality()
+                .equals(other.commentsFiltered, commentsFiltered));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(commentsFiltered);
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(commentsFiltered));
 
   @JsonKey(ignore: true)
   @override
@@ -308,7 +307,7 @@ class _$_CommentListFilteredResponse implements _CommentListFilteredResponse {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$_CommentListFilteredResponseToJson(this);
+    return _$$_CommentListFilteredResponseToJson(this);
   }
 }
 
@@ -321,7 +320,7 @@ abstract class _CommentListFilteredResponse
       _$_CommentListFilteredResponse.fromJson;
 
   @override
-  List<Comment> get commentsFiltered => throw _privateConstructorUsedError;
+  List<Comment> get commentsFiltered;
   @override
   @JsonKey(ignore: true)
   _$CommentListFilteredResponseCopyWith<_CommentListFilteredResponse>
@@ -353,7 +352,7 @@ class _$CommentTearOff {
     );
   }
 
-  Comment fromJson(Map<String, Object> json) {
+  Comment fromJson(Map<String, Object?> json) {
     return Comment.fromJson(json);
   }
 }
@@ -526,7 +525,7 @@ class _$_Comment extends _Comment {
       : super._();
 
   factory _$_Comment.fromJson(Map<String, dynamic> json) =>
-      _$_$_CommentFromJson(json);
+      _$$_CommentFromJson(json);
 
   @JsonKey(defaultValue: '')
   @override
@@ -554,32 +553,21 @@ class _$_Comment extends _Comment {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _Comment &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.text, text) ||
-                const DeepCollectionEquality().equals(other.text, text)) &&
-            (identical(other.userId, userId) ||
-                const DeepCollectionEquality().equals(other.userId, userId)) &&
+        (other.runtimeType == runtimeType &&
+            other is _Comment &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.text, text) || other.text == text) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.articleId, articleId) ||
-                const DeepCollectionEquality()
-                    .equals(other.articleId, articleId)) &&
+                other.articleId == articleId) &&
             (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality()
-                    .equals(other.createdAt, createdAt)) &&
-            (identical(other.user, user) ||
-                const DeepCollectionEquality().equals(other.user, user)));
+                other.createdAt == createdAt) &&
+            (identical(other.user, user) || other.user == user));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(id) ^
-      const DeepCollectionEquality().hash(text) ^
-      const DeepCollectionEquality().hash(userId) ^
-      const DeepCollectionEquality().hash(articleId) ^
-      const DeepCollectionEquality().hash(createdAt) ^
-      const DeepCollectionEquality().hash(user);
+      Object.hash(runtimeType, id, text, userId, articleId, createdAt, user);
 
   @JsonKey(ignore: true)
   @override
@@ -588,7 +576,7 @@ class _$_Comment extends _Comment {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$_CommentToJson(this);
+    return _$$_CommentToJson(this);
   }
 }
 
@@ -605,17 +593,17 @@ abstract class _Comment extends Comment {
   factory _Comment.fromJson(Map<String, dynamic> json) = _$_Comment.fromJson;
 
   @override
-  String get id => throw _privateConstructorUsedError;
+  String get id;
   @override
-  String get text => throw _privateConstructorUsedError;
+  String get text;
   @override
-  String get userId => throw _privateConstructorUsedError;
+  String get userId;
   @override
-  String get articleId => throw _privateConstructorUsedError;
+  String get articleId;
   @override
-  String get createdAt => throw _privateConstructorUsedError;
+  String get createdAt;
   @override // TODO: デフォルトでAppUserのコンストラクタを指定する
-  AppUser? get user => throw _privateConstructorUsedError;
+  AppUser? get user;
   @override
   @JsonKey(ignore: true)
   _$CommentCopyWith<_Comment> get copyWith =>

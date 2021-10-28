@@ -1,5 +1,6 @@
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'favorite.dart';
 
@@ -26,7 +27,7 @@ class _$FavoriteListResponseTearOff {
     );
   }
 
-  FavoriteListResponse fromJson(Map<String, Object> json) {
+  FavoriteListResponse fromJson(Map<String, Object?> json) {
     return FavoriteListResponse.fromJson(json);
   }
 }
@@ -114,7 +115,7 @@ class _$_FavoriteListResponse implements _FavoriteListResponse {
   const _$_FavoriteListResponse({this.favorites = const <Favorite>[]});
 
   factory _$_FavoriteListResponse.fromJson(Map<String, dynamic> json) =>
-      _$_$_FavoriteListResponseFromJson(json);
+      _$$_FavoriteListResponseFromJson(json);
 
   @JsonKey(defaultValue: const <Favorite>[])
   @override
@@ -128,15 +129,14 @@ class _$_FavoriteListResponse implements _FavoriteListResponse {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _FavoriteListResponse &&
-            (identical(other.favorites, favorites) ||
-                const DeepCollectionEquality()
-                    .equals(other.favorites, favorites)));
+        (other.runtimeType == runtimeType &&
+            other is _FavoriteListResponse &&
+            const DeepCollectionEquality().equals(other.favorites, favorites));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(favorites);
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(favorites));
 
   @JsonKey(ignore: true)
   @override
@@ -146,7 +146,7 @@ class _$_FavoriteListResponse implements _FavoriteListResponse {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$_FavoriteListResponseToJson(this);
+    return _$$_FavoriteListResponseToJson(this);
   }
 }
 
@@ -158,7 +158,7 @@ abstract class _FavoriteListResponse implements FavoriteListResponse {
       _$_FavoriteListResponse.fromJson;
 
   @override
-  List<Favorite> get favorites => throw _privateConstructorUsedError;
+  List<Favorite> get favorites;
   @override
   @JsonKey(ignore: true)
   _$FavoriteListResponseCopyWith<_FavoriteListResponse> get copyWith =>
@@ -188,7 +188,7 @@ class _$FavoriteTearOff {
     );
   }
 
-  Favorite fromJson(Map<String, Object> json) {
+  Favorite fromJson(Map<String, Object?> json) {
     return Favorite.fromJson(json);
   }
 }
@@ -345,7 +345,7 @@ class _$_Favorite implements _Favorite {
       this.article});
 
   factory _$_Favorite.fromJson(Map<String, dynamic> json) =>
-      _$_$_FavoriteFromJson(json);
+      _$$_FavoriteFromJson(json);
 
   @JsonKey(defaultValue: '')
   @override
@@ -370,29 +370,20 @@ class _$_Favorite implements _Favorite {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _Favorite &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.userId, userId) ||
-                const DeepCollectionEquality().equals(other.userId, userId)) &&
+        (other.runtimeType == runtimeType &&
+            other is _Favorite &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.articleId, articleId) ||
-                const DeepCollectionEquality()
-                    .equals(other.articleId, articleId)) &&
+                other.articleId == articleId) &&
             (identical(other.createdAt, createdAt) ||
-                const DeepCollectionEquality()
-                    .equals(other.createdAt, createdAt)) &&
-            (identical(other.article, article) ||
-                const DeepCollectionEquality().equals(other.article, article)));
+                other.createdAt == createdAt) &&
+            (identical(other.article, article) || other.article == article));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(id) ^
-      const DeepCollectionEquality().hash(userId) ^
-      const DeepCollectionEquality().hash(articleId) ^
-      const DeepCollectionEquality().hash(createdAt) ^
-      const DeepCollectionEquality().hash(article);
+      Object.hash(runtimeType, id, userId, articleId, createdAt, article);
 
   @JsonKey(ignore: true)
   @override
@@ -401,7 +392,7 @@ class _$_Favorite implements _Favorite {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$_FavoriteToJson(this);
+    return _$$_FavoriteToJson(this);
   }
 }
 
@@ -416,15 +407,15 @@ abstract class _Favorite implements Favorite {
   factory _Favorite.fromJson(Map<String, dynamic> json) = _$_Favorite.fromJson;
 
   @override
-  String get id => throw _privateConstructorUsedError;
+  String get id;
   @override
-  String get userId => throw _privateConstructorUsedError;
+  String get userId;
   @override
-  String get articleId => throw _privateConstructorUsedError;
+  String get articleId;
   @override
-  String get createdAt => throw _privateConstructorUsedError;
+  String get createdAt;
   @override
-  Article? get article => throw _privateConstructorUsedError;
+  Article? get article;
   @override
   @JsonKey(ignore: true)
   _$FavoriteCopyWith<_Favorite> get copyWith =>
