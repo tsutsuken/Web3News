@@ -9,6 +9,7 @@ const String favoritesOfUserQuery = '''
     favorites(limit: \$limit, offset: \$offset, order_by: {created_at: desc}, where: {user_id: {_eq: \$user_id}}) {
       id
       created_at
+      article_id
       article {
         id
         published_at

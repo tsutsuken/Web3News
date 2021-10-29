@@ -87,4 +87,16 @@ class FavoriteArticleListPageNotifier extends ChangeNotifier {
     await fetchFavorites();
     refreshController.refreshCompleted();
   }
+
+  void deleteFavoriteOnLocal(Favorite favorite) {
+    debugPrint('deleteFavoriteOnLocal favorite: $favorite');
+    favoritesValue.value.remove(favorite);
+    notifyListeners();
+  }
+
+  Future<bool> deleteFavoriteOnServer(Favorite favorite) async {
+    final didSuccess =
+        await _favoriteRepository.deleteFavorite(favorite.articleId);
+    return didSuccess;
+  }
 }
