@@ -16,6 +16,7 @@ abstract class FavoriteListResponse with _$FavoriteListResponse {
 
 @freezed
 abstract class Favorite with _$Favorite {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory Favorite({
     @Default('') String id,
     @Default('') String userId,
