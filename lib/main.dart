@@ -5,6 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:labo_flutter/components/update_daialog.dart';
 import 'package:labo_flutter/graphql_api_client.dart';
 import 'package:labo_flutter/pages/home/home_page.dart';
 import 'package:labo_flutter/pages/my_profile/my_profile_page.dart';
@@ -14,7 +15,7 @@ import 'package:timeago/timeago.dart' as timeago;
 
 const graphqlEndpoint = 'https://labo-flutter.hasura.app/v1/graphql';
 
-Future main() async {
+Future<void> main() async {
   await dotenv.load(fileName: '.env');
 
   // Firebase
@@ -97,6 +98,14 @@ class _RootViewState extends State<RootView> {
   void onTabTapped(int index) {
     setState(() {
       currentIndex = index;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future(() async {
+      await showUpdateDialogIfNeeded(context);
     });
   }
 
