@@ -86,11 +86,8 @@ class FavoriteRepositoryImpl implements FavoriteRepository {
     final myUserId = FirebaseAuth.instance.currentUser?.uid ?? '';
     final result = await _client.fetchMore(
       FetchMoreOptions(
-        variables: <String, dynamic>{
-          'user_id': myUserId,
-          'limit': limit,
-          'offset': offset,
-        },
+        variables: _queryVariablesFetchMyFavorites(
+            userId: myUserId, limit: limit, offset: offset),
         updateQuery: (previousResultData, fetchMoreResultData) {
           final totalFetchedFavorites = <dynamic>[
             ...previousResultData?['favorites'] as List<dynamic>,
@@ -112,13 +109,22 @@ class FavoriteRepositoryImpl implements FavoriteRepository {
     final userId = FirebaseAuth.instance.currentUser?.uid ?? '';
     return QueryOptions(
       document: gql(favoritesOfUserQuery),
-      variables: <String, dynamic>{
-        'limit': limit,
-        'offset': 0,
-        'user_id': userId,
-      },
+      variables: _queryVariablesFetchMyFavorites(
+          userId: userId, limit: limit, offset: 0),
       fetchPolicy: FetchPolicy.cacheAndNetwork,
     );
+  }
+
+  Map<String, dynamic> _queryVariablesFetchMyFavorites({
+    required String userId,
+    required int limit,
+    required int offset,
+  }) {
+    return <String, dynamic>{
+      'user_id': userId,
+      'limit': limit,
+      'offset': offset,
+    };
   }
 
   @override

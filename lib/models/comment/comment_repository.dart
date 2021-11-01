@@ -74,7 +74,6 @@ abstract class CommentRepository {
   Future<QueryResult> fetchCommentsOfUser({
     required String userId,
     int limit = 20,
-    int offset = 0,
   });
   Future<QueryResult> fetchMoreCommentsOfUser({
     required String userId,
@@ -119,12 +118,12 @@ class CommentRepositoryImpl implements CommentRepository {
     final myUserId = FirebaseAuth.instance.currentUser?.uid ?? '';
     final result = await _client.fetchMore(
       FetchMoreOptions(
-        variables: <String, dynamic>{
-          'viewer_user_id': myUserId,
-          'article_id': articleId,
-          'limit': limit,
-          'offset': offset,
-        },
+        variables: _queryVariablesFetchCommentsOfArticle(
+          articleId: articleId,
+          viewerUserId: myUserId,
+          limit: limit,
+          offset: offset,
+        ),
         updateQuery: (previousResultData, fetchMoreResultData) {
           final totalFetchedComments = <dynamic>[
             ...previousResultData?['comments_filtered'] as List<dynamic>,
@@ -148,32 +147,37 @@ class CommentRepositoryImpl implements CommentRepository {
     final myUserId = FirebaseAuth.instance.currentUser?.uid ?? '';
     return QueryOptions(
       document: gql(commentsFilteredOfArticleQuery),
-      variables: <String, dynamic>{
-        'viewer_user_id': myUserId,
-        'article_id': articleId,
-        'limit': limit,
-        'offset': 0,
-      },
+      variables: _queryVariablesFetchCommentsOfArticle(
+        articleId: articleId,
+        viewerUserId: myUserId,
+        limit: limit,
+        offset: 0,
+      ),
       fetchPolicy: FetchPolicy.cacheAndNetwork,
     );
+  }
+
+  Map<String, dynamic> _queryVariablesFetchCommentsOfArticle({
+    required String articleId,
+    required String viewerUserId,
+    required int limit,
+    required int offset,
+  }) {
+    return <String, dynamic>{
+      'article_id': articleId,
+      'viewer_user_id': viewerUserId,
+      'limit': limit,
+      'offset': offset,
+    };
   }
 
   @override
   Future<QueryResult> fetchCommentsOfUser({
     required String userId,
     int limit = 20,
-    int offset = 0,
   }) async {
     final result = await _client.query(
-      QueryOptions(
-        document: gql(commentsOfUserQuery),
-        variables: <String, dynamic>{
-          'user_id': userId,
-          'limit': limit,
-          'offset': offset,
-        },
-        fetchPolicy: FetchPolicy.cacheAndNetwork,
-      ),
+      _queryOptionsFetchCommentsOfUser(userId: userId, limit: limit),
     );
     return result;
   }
@@ -186,23 +190,12 @@ class CommentRepositoryImpl implements CommentRepository {
     required QueryResult previousResult,
   }) async {
     debugPrint('fetchMoreCommentsOfUser userId: $userId');
-    final originalQueryOptions = QueryOptions(
-      document: gql(commentsOfUserQuery),
-      variables: <String, dynamic>{
-        'user_id': userId,
-        'limit': limit,
-        'offset': 0,
-      },
-      fetchPolicy: FetchPolicy.cacheAndNetwork,
-    );
-
+    final originalQueryOptions =
+        _queryOptionsFetchCommentsOfUser(userId: userId, limit: limit);
     final result = await _client.fetchMore(
       FetchMoreOptions(
-        variables: <String, dynamic>{
-          'user_id': userId,
-          'limit': limit,
-          'offset': offset,
-        },
+        variables: _queryVariablesFetchCommentsOfUser(
+            userId: userId, limit: limit, offset: offset),
         updateQuery: (previousResultData, fetchMoreResultData) {
           final totalFetchedComments = <dynamic>[
             ...previousResultData?['comments'] as List<dynamic>,
@@ -218,6 +211,30 @@ class CommentRepositoryImpl implements CommentRepository {
     );
 
     return result;
+  }
+
+  QueryOptions _queryOptionsFetchCommentsOfUser({
+    required String userId,
+    required int limit,
+  }) {
+    return QueryOptions(
+      document: gql(commentsOfUserQuery),
+      variables: _queryVariablesFetchCommentsOfUser(
+          userId: userId, limit: limit, offset: 0),
+      fetchPolicy: FetchPolicy.cacheAndNetwork,
+    );
+  }
+
+  Map<String, dynamic> _queryVariablesFetchCommentsOfUser({
+    required String userId,
+    required int limit,
+    required int offset,
+  }) {
+    return <String, dynamic>{
+      'user_id': userId,
+      'limit': limit,
+      'offset': offset,
+    };
   }
 
   @override
