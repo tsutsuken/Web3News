@@ -88,7 +88,7 @@ class MyProfilePageLoggedIn extends StatelessWidget {
           return const LoadingIndicator();
         },
         error: (error, stackTrace, _) {
-          return Text('エラーが発生しました: $error');
+          return Text('エラーが発生しました');
         },
       ),
     );

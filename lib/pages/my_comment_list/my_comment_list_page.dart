@@ -57,7 +57,7 @@ class MyCommentListPage extends HookConsumerWidget {
           return const LoadingIndicator();
         },
         error: (error, stackTrace, _) {
-          return Text('エラーが発生しました: $error');
+          return Text('エラーが発生しました');
         },
       ),
     );
@@ -81,7 +81,7 @@ Future<void> _onTapMenuButton(BuildContext context,
       if (didSuccess) {
         message = '削除しました';
       } else {
-        message = 'エラーが発信しました。もう一度お試しください';
+        message = 'エラーが発信しました';
       }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

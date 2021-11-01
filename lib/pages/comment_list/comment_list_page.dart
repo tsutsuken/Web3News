@@ -31,7 +31,7 @@ class CommentListPage extends HookConsumerWidget {
         if (didSuccess) {
           message = '削除しました';
         } else {
-          message = 'エラーが発生しました。もう一度お試しください';
+          message = 'エラーが発生しました';
         }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(message)),
@@ -56,7 +56,7 @@ class CommentListPage extends HookConsumerWidget {
         if (didSuccess) {
           message = '報告しました';
         } else {
-          message = 'エラーが発生しました。もう一度お試しください';
+          message = 'エラーが発生しました';
         }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(message)),
@@ -76,7 +76,7 @@ class CommentListPage extends HookConsumerWidget {
         if (didSuccess) {
           message = 'ユーザをブロックしました';
         } else {
-          message = 'エラーが発生しました。もう一度お試しください';
+          message = 'エラーが発生しました';
         }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(message)),
@@ -152,7 +152,7 @@ class CommentListPage extends HookConsumerWidget {
         return const LoadingIndicator();
       },
       error: (error, stackTrace, _) {
-        return Text('エラーが発生しました: $error');
+        return Text('エラーが発生しました');
       },
     );
   }

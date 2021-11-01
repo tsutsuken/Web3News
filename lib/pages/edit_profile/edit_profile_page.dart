@@ -131,7 +131,7 @@ class EditProfilePage extends HookConsumerWidget {
             return const LoadingIndicator();
           },
           error: (error, stackTrace, _) {
-            return Text('エラーが発生しました: $error');
+            return Text('エラーが発生しました');
           },
         ),
       ),
@@ -154,7 +154,7 @@ class EditProfilePage extends HookConsumerWidget {
               if (didSuccess == false) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('エラーが発生しました。もう一度お試しください'),
+                    content: Text('エラーが発生しました'),
                   ),
                 );
               }

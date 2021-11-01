@@ -36,7 +36,7 @@ class CommentCreatePage extends HookConsumerWidget {
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('エラーが発生しました。もう一度お試しください'),
+                    content: Text('エラーが発生しました'),
                   ),
                 );
               }
