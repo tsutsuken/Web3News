@@ -26,7 +26,7 @@ dependencies:
   cloud_functions: ^3.0.5
   cupertino_icons: ^1.0.2
   firebase_auth: ^3.0.1
-  firebase_core: ^1.4.0
+  firebase_core: ^1.8.0
   firebase_remote_config: ^0.11.0+2
   firebase_storage: ^10.0.3
   flutter:
