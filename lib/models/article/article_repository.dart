@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -34,7 +33,7 @@ query MyQuery()
 ''';
 
 const String articlesByUrlQuery = '''
-query MyQuery(\$url: String!, \$user_id: String!)
+query MyQuery(\$url: String!)
 {
   articles(where: {url: {_eq: \$url}}, limit: 1) {
     id
@@ -42,9 +41,7 @@ query MyQuery(\$url: String!, \$user_id: String!)
     title
     url
     url_to_image
-    favorites(where: {user_id: {_eq: \$user_id}}) {
-      id
-    }
+    is_favorite
   }
 }
 ''';
@@ -105,14 +102,12 @@ class ArticleRepositoryImpl implements ArticleRepository {
   @override
   Future<Article?> fetchArticleByUrl(String url) async {
     debugPrint('fetchArticleByUrl url: $url');
-    final myUserId = FirebaseAuth.instance.currentUser?.uid ?? '';
     final result = await _client.query(
       QueryOptions(
         document: gql(articlesByUrlQuery),
         fetchPolicy: FetchPolicy.cacheAndNetwork,
         variables: <String, dynamic>{
           'url': url,
-          'user_id': myUserId,
         },
       ),
     );
