@@ -1,12 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/graphql_api_client.dart';
 
 const String commentsFilteredOfArticleQuery = '''
-query MyQuery(\$limit: Int!, \$offset: Int!, \$viewer_user_id: String!, \$article_id: uuid!) {
-  comments_filtered(limit: \$limit, offset: \$offset, args: {viewer_user_id: \$viewer_user_id}, where: {is_banned: {_neq: true}, article_id: {_eq: \$article_id}, user: {is_deleted: {_neq: true}}}) {
+query MyQuery(\$limit: Int!, \$offset: Int!, \$article_id: uuid!) {
+  comments_filtered(limit: \$limit, offset: \$offset, where: {is_banned: {_neq: true}, article_id: {_eq: \$article_id}, user: {is_deleted: {_neq: true}}}) {
     id
     text
     created_at
@@ -115,12 +114,10 @@ class CommentRepositoryImpl implements CommentRepository {
     debugPrint('fetchMoreCommentsOfArticle articleId: $articleId');
     final originalQueryOptions =
         _queryOptionsFetchCommentsOfArticle(articleId: articleId, limit: limit);
-    final myUserId = FirebaseAuth.instance.currentUser?.uid ?? '';
     final result = await _client.fetchMore(
       FetchMoreOptions(
         variables: _queryVariablesFetchCommentsOfArticle(
           articleId: articleId,
-          viewerUserId: myUserId,
           limit: limit,
           offset: offset,
         ),
@@ -144,12 +141,10 @@ class CommentRepositoryImpl implements CommentRepository {
     required String articleId,
     required int limit,
   }) {
-    final myUserId = FirebaseAuth.instance.currentUser?.uid ?? '';
     return QueryOptions(
       document: gql(commentsFilteredOfArticleQuery),
       variables: _queryVariablesFetchCommentsOfArticle(
         articleId: articleId,
-        viewerUserId: myUserId,
         limit: limit,
         offset: 0,
       ),
@@ -159,13 +154,11 @@ class CommentRepositoryImpl implements CommentRepository {
 
   Map<String, dynamic> _queryVariablesFetchCommentsOfArticle({
     required String articleId,
-    required String viewerUserId,
     required int limit,
     required int offset,
   }) {
     return <String, dynamic>{
       'article_id': articleId,
-      'viewer_user_id': viewerUserId,
       'limit': limit,
       'offset': offset,
     };
