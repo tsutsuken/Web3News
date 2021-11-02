@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,6 +9,7 @@ import 'package:labo_flutter/pages/article_detail/article_detail_page_notifier.d
 import 'package:labo_flutter/pages/comment_create/comment_create_page.dart';
 import 'package:labo_flutter/pages/comment_list/comment_list_page.dart';
 import 'package:labo_flutter/pages/promote_sign_in_page.dart';
+import 'package:labo_flutter/utils/analytics_service.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ArticleDetailPage extends HookConsumerWidget {
@@ -34,6 +36,7 @@ class ArticleDetailPage extends HookConsumerWidget {
     );
     final pageNotifier =
         ref.watch(articleDetailPageNotifierProvider(pageNotifierParams));
+    final analyticsService = ref.read(analyticsServiceProvider);
 
     Future<void> _fetchArticleIfNeeded() async {
       if (articleId != null) {
@@ -122,6 +125,9 @@ class ArticleDetailPage extends HookConsumerWidget {
             IconButton(
                 color: Theme.of(context).primaryColor,
                 onPressed: () {
+                  unawaited(analyticsService.sendEvent(
+                      event: AnalyticsEvent.onTapAddCommentButton));
+
                   if (FirebaseAuth.instance.currentUser == null) {
                     _showPromoteSignInPage();
                   } else {
@@ -132,6 +138,9 @@ class ArticleDetailPage extends HookConsumerWidget {
             IconButton(
               color: Theme.of(context).primaryColor,
               onPressed: () {
+                unawaited(analyticsService.sendEvent(
+                    event: AnalyticsEvent.onTapCommentListButton));
+
                 Navigator.push(
                   context,
                   MaterialPageRoute<void>(
@@ -147,6 +156,9 @@ class ArticleDetailPage extends HookConsumerWidget {
             IconButton(
               color: Theme.of(context).primaryColor,
               onPressed: () async {
+                unawaited(analyticsService.sendEvent(
+                    event: AnalyticsEvent.onTapFavoriteButton));
+
                 // 通信前に表示を切り替える
                 isFavoriteNotifier.value = !isFavoriteNotifier.value;
                 // 通信する

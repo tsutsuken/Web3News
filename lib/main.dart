@@ -1,3 +1,5 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -23,6 +25,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
   // ローカルエミュレータを使用する場合の設定
   // FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
+  final analytics = FirebaseAnalytics();
 
   // GraphQL
   await initHiveForFlutter();
@@ -31,15 +34,19 @@ Future<void> main() async {
   timeago.setLocaleMessages('ja', timeago.JaMessages());
 
   runApp(
-    const ProviderScope(
-      child: MyApp(),
+    ProviderScope(
+      child: MyApp(
+        analytics: analytics,
+      ),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key, required this.analytics}) : super(key: key);
+
+  final FirebaseAnalytics analytics;
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +72,7 @@ class MyApp extends StatelessWidget {
             (Locale? locale, Iterable<Locale> supportedLocales) {
           return locale;
         },
+        navigatorObservers: [FirebaseAnalyticsObserver(analytics: analytics)],
       ),
     );
   }
