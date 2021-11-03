@@ -56,7 +56,9 @@ class MyApp extends StatelessWidget {
         title: 'MaterialApp',
         theme: AppThemes().lightTheme,
         darkTheme: AppThemes().darkTheme,
-        home: const RootView(),
+        home: RootView(
+          analytics: analytics,
+        ),
         builder: EasyLoading.init(),
         localizationsDelegates: const [
           RefreshLocalizations.delegate,
@@ -79,7 +81,8 @@ class MyApp extends StatelessWidget {
 }
 
 class RootView extends StatefulWidget {
-  const RootView({Key? key}) : super(key: key);
+  const RootView({Key? key, required this.analytics}) : super(key: key);
+  final FirebaseAnalytics analytics;
 
   @override
   _RootViewState createState() => _RootViewState();
@@ -107,6 +110,12 @@ class _RootViewState extends State<RootView> {
     setState(() {
       currentIndex = index;
     });
+    setCurrentScreen(index: index);
+  }
+
+  Future<void> setCurrentScreen({required int index}) async {
+    final screenName = (index == 0) ? 'HomePage' : 'MyProfilePage';
+    await widget.analytics.setCurrentScreen(screenName: screenName);
   }
 
   @override
@@ -115,6 +124,7 @@ class _RootViewState extends State<RootView> {
     Future(() async {
       await showUpdateDialogIfNeeded(context);
     });
+    setCurrentScreen(index: 0);
   }
 
   @override

@@ -135,6 +135,8 @@ class SignUpPage extends HookConsumerWidget {
                                     url:
                                         'https://policies.google.com/terms?hl=ja&fg=1',
                                   ),
+                                  settings: const RouteSettings(
+                                      name: 'CommonWebviewPage'),
                                   fullscreenDialog: true,
                                 ),
                               );
@@ -157,6 +159,8 @@ class SignUpPage extends HookConsumerWidget {
                                     url:
                                         'https://policies.google.com/privacy?hl=ja&fg=1',
                                   ),
+                                  settings: const RouteSettings(
+                                      name: 'CommonWebviewPage'),
                                   fullscreenDialog: true,
                                 ),
                               );

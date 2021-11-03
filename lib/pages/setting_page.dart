@@ -138,6 +138,7 @@ class SettingPage extends StatelessWidget {
                     url:
                         'https://labo-flutter-frontend.vercel.app/policies/terms',
                   ),
+                  settings: const RouteSettings(name: 'CommonWebviewPage'),
                   fullscreenDialog: true,
                 ),
               );
@@ -160,6 +161,7 @@ class SettingPage extends StatelessWidget {
                     url:
                         'https://labo-flutter-frontend.vercel.app/policies/privacy',
                   ),
+                  settings: const RouteSettings(name: 'CommonWebviewPage'),
                   fullscreenDialog: true,
                 ),
               );

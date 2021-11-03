@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/pages/sign_in/sign_in_page.dart';
 import 'package:labo_flutter/pages/sign_up/sign_up_page.dart';
+import 'package:labo_flutter/utils/analytics_service.dart';
 import 'package:labo_flutter/utils/app_colors.dart';
 
-class MyProfilePageNotLoggedIn extends StatelessWidget {
+class MyProfilePageNotLoggedIn extends HookConsumerWidget {
   const MyProfilePageNotLoggedIn({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final analyticsService = ref.read(analyticsServiceProvider);
+
     return Container(
       margin: const EdgeInsets.only(left: 40, right: 40),
       child: Column(
@@ -33,12 +37,15 @@ class MyProfilePageNotLoggedIn extends StatelessWidget {
           SizedBox(
             height: 44,
             child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                await Navigator.push(
                   context,
                   MaterialPageRoute<void>(
-                      builder: (context) => const SignUpPage()),
+                    builder: (context) => const SignUpPage(),
+                    settings: const RouteSettings(name: 'SignUpPage'),
+                  ),
                 );
+                analyticsService.setCurrentScreen(screenName: 'MyProfilePage');
               },
               child: const Text(
                 '新規登録',
@@ -50,12 +57,15 @@ class MyProfilePageNotLoggedIn extends StatelessWidget {
           SizedBox(
             height: 44,
             child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                await Navigator.push(
                   context,
                   MaterialPageRoute<void>(
-                      builder: (context) => const SignInPage()),
+                    builder: (context) => const SignInPage(),
+                    settings: const RouteSettings(name: 'SignInPage'),
+                  ),
                 );
+                analyticsService.setCurrentScreen(screenName: 'MyProfilePage');
               },
               style: ElevatedButton.styleFrom(primary: Colors.white),
               child: const Text(

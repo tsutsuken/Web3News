@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/components/article_bottom_sheet.dart';
@@ -7,6 +9,7 @@ import 'package:labo_flutter/components/refresher_header.dart';
 import 'package:labo_flutter/models/article/article.dart';
 import 'package:labo_flutter/pages/article_detail/article_detail_page.dart';
 import 'package:labo_flutter/pages/home/home_page_notifier.dart';
+import 'package:labo_flutter/utils/analytics_service.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class HomePage extends StatefulWidget {
@@ -109,6 +112,7 @@ class _ArticleList extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final _pageNotifier = ref.watch(homePageNotifierProvider(contentType));
+    final _analyticsService = ref.read(analyticsServiceProvider);
 
     return _pageNotifier.articlesValue.when(
       data: (articles) {
@@ -129,8 +133,8 @@ class _ArticleList extends HookConsumerWidget {
                 key: ValueKey(index),
                 context: context,
                 article: article,
-                onTap: () {
-                  Navigator.push(
+                onTap: () async {
+                  await Navigator.push(
                     context,
                     MaterialPageRoute<void>(
                       builder: (context) => ArticleDetailPage(
@@ -138,8 +142,10 @@ class _ArticleList extends HookConsumerWidget {
                         articleUrl: article.url,
                         isFavorite: article.isFavorite,
                       ),
+                      settings: const RouteSettings(name: 'ArticleDetailPage'),
                     ),
                   );
+                  _analyticsService.setCurrentScreen(screenName: 'HomePage');
                 },
                 onTapMenuButton: () async {
                   await _onTapMenuButton(context, _pageNotifier, article);
@@ -153,7 +159,7 @@ class _ArticleList extends HookConsumerWidget {
         return const LoadingIndicator();
       },
       error: (error, stackTrace, _) {
-        return Text('エラーが発生しました');
+        return const Text('エラーが発生しました');
       },
     );
   }

@@ -84,6 +84,7 @@ class ArticleDetailPage extends HookConsumerWidget {
             articleId: articleIdNotifier.value,
             articleUrl: pageNotifier.articleUrl,
           ),
+          settings: const RouteSettings(name: 'CommentCreatePage'),
           fullscreenDialog: true,
         ),
       );
@@ -110,6 +111,7 @@ class ArticleDetailPage extends HookConsumerWidget {
                   articleUrl: _navigationRequest.url,
                   isFavorite: false,
                 ),
+                settings: const RouteSettings(name: 'ArticleDetailPage'),
               ),
             );
             return NavigationDecision.prevent;
@@ -147,6 +149,7 @@ class ArticleDetailPage extends HookConsumerWidget {
                     builder: (context) => CommentListPage(
                       articleId: articleIdNotifier.value,
                     ),
+                    settings: const RouteSettings(name: 'CommentListPage'),
                     fullscreenDialog: true,
                   ),
                 );

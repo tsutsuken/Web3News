@@ -60,6 +60,7 @@ class PromoteSignInPage extends StatelessWidget {
                   context,
                   MaterialPageRoute<bool>(
                     builder: (context) => const SignUpPage(),
+                    settings: const RouteSettings(name: 'SignUpPage'),
                   ),
                 );
 
@@ -82,6 +83,7 @@ class PromoteSignInPage extends StatelessWidget {
                   context,
                   MaterialPageRoute<bool>(
                     builder: (context) => const SignInPage(),
+                    settings: const RouteSettings(name: 'SignInPage'),
                   ),
                 );
 

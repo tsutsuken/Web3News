@@ -92,6 +92,8 @@ class FavoriteArticleListPage extends HookConsumerWidget {
                           articleUrl: article.url,
                           isFavorite: true,
                         ),
+                        settings:
+                            const RouteSettings(name: 'ArticleDetailPage'),
                       ),
                     );
                   },

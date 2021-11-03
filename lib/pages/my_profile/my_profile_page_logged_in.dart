@@ -8,27 +8,34 @@ import 'package:labo_flutter/pages/favorite_article_list/favorite_article_list_p
 import 'package:labo_flutter/pages/my_comment_list/my_comment_list_page.dart';
 import 'package:labo_flutter/pages/my_profile/my_profile_page_notifier.dart';
 import 'package:labo_flutter/pages/setting_page.dart';
+import 'package:labo_flutter/utils/analytics_service.dart';
 import 'package:labo_flutter/utils/app_colors.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class MyProfilePageLoggedIn extends StatelessWidget {
+class MyProfilePageLoggedIn extends HookConsumerWidget {
   const MyProfilePageLoggedIn({Key? key, required this.pageNotifier})
       : super(key: key);
 
   final MyProfilePageNotifier pageNotifier;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final analyticsService = ref.read(analyticsServiceProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('マイページ'),
         actions: [
           IconButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                      builder: (context) => const SettingPage()));
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (context) => const SettingPage(),
+                  settings: const RouteSettings(name: 'SettingPage'),
+                ),
+              );
+              analyticsService.setCurrentScreen(screenName: 'MyProfilePage');
             },
             icon: const Icon(Icons.settings),
           )
@@ -49,13 +56,17 @@ class MyProfilePageLoggedIn extends StatelessWidget {
                   appUser: appUser,
                 ),
                 ListTile(
-                  onTap: () {
-                    Navigator.push(
+                  onTap: () async {
+                    await Navigator.push(
                       context,
                       MaterialPageRoute<void>(
                         builder: (context) => const MyCommentListPage(),
+                        settings:
+                            const RouteSettings(name: 'MyCommentListPage'),
                       ),
                     );
+                    analyticsService.setCurrentScreen(
+                        screenName: 'MyProfilePage');
                   },
                   leading: const Icon(Icons.chat),
                   title: Text(
@@ -66,13 +77,17 @@ class MyProfilePageLoggedIn extends StatelessWidget {
                   ),
                 ),
                 ListTile(
-                  onTap: () {
-                    Navigator.push(
+                  onTap: () async {
+                    await Navigator.push(
                       context,
                       MaterialPageRoute<void>(
                         builder: (context) => const FavoriteArticleListPage(),
+                        settings: const RouteSettings(
+                            name: 'FavoriteArticleListPage'),
                       ),
                     );
+                    analyticsService.setCurrentScreen(
+                        screenName: 'MyProfilePage');
                   },
                   leading: const Icon(Icons.favorite),
                   title: Text(
@@ -88,14 +103,14 @@ class MyProfilePageLoggedIn extends StatelessWidget {
           return const LoadingIndicator();
         },
         error: (error, stackTrace, _) {
-          return Text('エラーが発生しました');
+          return const Text('エラーが発生しました');
         },
       ),
     );
   }
 }
 
-class ProfileHeaderWidget extends StatelessWidget {
+class ProfileHeaderWidget extends HookConsumerWidget {
   const ProfileHeaderWidget({
     Key? key,
     required this.pageNotifier,
@@ -106,7 +121,9 @@ class ProfileHeaderWidget extends StatelessWidget {
   final AppUser? appUser;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final analyticsService = ref.read(analyticsServiceProvider);
+
     return SizedBox(
       width: double.infinity,
       height: 192,
@@ -141,6 +158,8 @@ class ProfileHeaderWidget extends StatelessWidget {
                         context,
                         MaterialPageRoute<bool>(
                           builder: (context) => const EditProfilePage(),
+                          settings:
+                              const RouteSettings(name: 'EditProfilePage'),
                           fullscreenDialog: true,
                         ),
                       );
@@ -149,6 +168,9 @@ class ProfileHeaderWidget extends StatelessWidget {
                       if (didEditProfile != null) {
                         await pageNotifier.onRefresh();
                       }
+
+                      analyticsService.setCurrentScreen(
+                          screenName: 'MyProfilePage');
                     },
                     style: ElevatedButton.styleFrom(primary: Colors.white),
                     child: const Text('プロフィールを編集',

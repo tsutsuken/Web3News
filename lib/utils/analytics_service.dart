@@ -29,4 +29,9 @@ class AnalyticsService {
     debugPrint('sendEvent eventName: $eventName, parameterMap: $parameterMap');
     await analytics.logEvent(name: eventName, parameters: parameterMap);
   }
+
+  void setCurrentScreen({required String screenName}) {
+    debugPrint('setCurrentScreen screenName: $screenName');
+    analytics.setCurrentScreen(screenName: screenName);
+  }
 }
