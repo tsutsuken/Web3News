@@ -161,6 +161,11 @@ class ArticleDetailPage extends HookConsumerWidget {
                 unawaited(analyticsService.sendEvent(
                     event: AnalyticsEvent.onTapFavoriteButton));
 
+                if (FirebaseAuth.instance.currentUser == null) {
+                  _showPromoteSignInPage();
+                  return;
+                }
+
                 // 通信前に表示を切り替える
                 isFavoriteNotifier.value = !isFavoriteNotifier.value;
                 // 通信する
