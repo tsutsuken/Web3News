@@ -105,11 +105,11 @@ class FavoriteArticleListPage extends HookConsumerWidget {
             ),
           );
         },
-        loading: (_) {
+        loading: () {
           return const LoadingIndicator();
         },
-        error: (error, stackTrace, _) {
-          return Text('エラーが発生しました');
+        error: (error, stackTrace) {
+          return const Text('エラーが発生しました');
         },
       ),
     );

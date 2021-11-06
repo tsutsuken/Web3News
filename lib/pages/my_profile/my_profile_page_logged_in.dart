@@ -99,10 +99,10 @@ class MyProfilePageLoggedIn extends HookConsumerWidget {
             ),
           );
         },
-        loading: (_) {
+        loading: () {
           return const LoadingIndicator();
         },
-        error: (error, stackTrace, _) {
+        error: (error, stackTrace) {
           return const Text('エラーが発生しました');
         },
       ),

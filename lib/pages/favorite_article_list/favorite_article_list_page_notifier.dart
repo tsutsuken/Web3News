@@ -90,7 +90,7 @@ class FavoriteArticleListPageNotifier extends ChangeNotifier {
 
   void deleteFavoriteOnLocal(Favorite favorite) {
     debugPrint('deleteFavoriteOnLocal favorite: $favorite');
-    favoritesValue.value.remove(favorite);
+    favoritesValue.value?.remove(favorite);
     notifyListeners();
   }
 

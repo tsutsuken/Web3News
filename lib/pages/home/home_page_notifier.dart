@@ -54,8 +54,12 @@ class HomePageNotifier extends ChangeNotifier {
     required bool shouldFavorite,
   }) {
     debugPrint('updateFavoriteOfArticleOnLocal article: $article');
-    final updatedArticle = article.copyWith(isFavorite: shouldFavorite);
     final articles = articlesValue.value;
+    if (articles == null) {
+      return;
+    }
+
+    final updatedArticle = article.copyWith(isFavorite: shouldFavorite);
     articles[
             articles.indexWhere((element) => element.id == updatedArticle.id)] =
         updatedArticle;
