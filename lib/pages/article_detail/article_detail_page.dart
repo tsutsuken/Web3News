@@ -60,7 +60,6 @@ class ArticleDetailPage extends HookConsumerWidget {
 
     void _showPromoteSignInPage() {
       showGeneralDialog(
-        transitionDuration: const Duration(milliseconds: 400),
         context: context,
         pageBuilder: (context, anim1, anim2) {
           return const PromoteSignInPage();
