@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/pages/article_detail/article_detail_page_notifier.dart';
@@ -168,6 +169,8 @@ class ArticleDetailPage extends HookConsumerWidget {
 
                 // 通信前に表示を切り替える
                 isFavoriteNotifier.value = !isFavoriteNotifier.value;
+                // ハプティクス
+                unawaited(HapticFeedback.mediumImpact());
                 // 通信する
                 final response = await pageNotifier.updateFavorite(
                     shouldFavorite: isFavoriteNotifier.value);
