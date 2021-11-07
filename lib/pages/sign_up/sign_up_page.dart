@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/pages/common_webview_page.dart';
 import 'package:labo_flutter/pages/sign_up/sign_up_page_notifier.dart';
@@ -9,13 +10,14 @@ import 'package:labo_flutter/utils/app_colors.dart';
 
 class SignUpPage extends HookConsumerWidget {
   const SignUpPage({Key? key}) : super(key: key);
+  static final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final signUpPageNotifier = ref.watch(signUpPageNotifierProvider);
     final _userNotifier = ref.watch(userChangeNotifierProvider);
-    final _formKey = GlobalKey<FormState>();
-    final _passwordFocusNode = FocusNode();
+    final passwordFocusNode = useFocusNode();
+    final emailFocusNode = useFocusNode();
 
     return Scaffold(
       appBar: AppBar(
@@ -31,6 +33,7 @@ class SignUpPage extends HookConsumerWidget {
                 children: <Widget>[
                   TextFormField(
                     initialValue: signUpPageNotifier.email,
+                    focusNode: emailFocusNode,
                     style: TextStyle(
                       color: AppColors().textPrimary,
                     ),
@@ -42,15 +45,15 @@ class SignUpPage extends HookConsumerWidget {
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (_) {
                       FocusScope.of(context)
-                          .requestFocus(_passwordFocusNode); // 変更
+                          .requestFocus(passwordFocusNode); // 変更
                     },
-                    onSaved: (value) {
+                    onChanged: (value) {
                       signUpPageNotifier.email = value ?? '';
                     },
                   ),
                   TextFormField(
                     initialValue: signUpPageNotifier.password,
-                    focusNode: _passwordFocusNode,
+                    focusNode: passwordFocusNode,
                     obscureText: !signUpPageNotifier.shouldShowPassword,
                     style: TextStyle(
                       color: AppColors().textPrimary,
@@ -66,7 +69,7 @@ class SignUpPage extends HookConsumerWidget {
                       ),
                     ),
                     validator: signUpPageNotifier.emptyValidator,
-                    onSaved: (value) {
+                    onChanged: (value) {
                       signUpPageNotifier.password = value ?? '';
                     },
                   ),
@@ -88,8 +91,6 @@ class SignUpPage extends HookConsumerWidget {
                       child: ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-
                             await EasyLoading.show(
                                 maskType: EasyLoadingMaskType.black);
                             await signUpPageNotifier.signUpAndRefreshToken(

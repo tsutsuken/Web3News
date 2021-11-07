@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/pages/sign_in/sign_in_page_notifier.dart';
 import 'package:labo_flutter/utils/app_colors.dart';
 
 class SignInPage extends HookConsumerWidget {
   const SignInPage({Key? key}) : super(key: key);
+  static final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pageNotifier = ref.watch(signInPageNotifierProvider);
-    final _formKey = GlobalKey<FormState>();
-    final _passwordFocusNode = FocusNode();
+    final passwordFocusNode = useFocusNode();
+    final emailFocusNode = useFocusNode();
 
     return Scaffold(
       appBar: AppBar(
@@ -25,6 +27,7 @@ class SignInPage extends HookConsumerWidget {
               child: Column(children: <Widget>[
                 TextFormField(
                   initialValue: pageNotifier.email,
+                  focusNode: emailFocusNode,
                   style: TextStyle(
                     color: AppColors().textPrimary,
                   ),
@@ -36,15 +39,15 @@ class SignInPage extends HookConsumerWidget {
                   textInputAction: TextInputAction.next,
                   onFieldSubmitted: (_) {
                     FocusScope.of(context)
-                        .requestFocus(_passwordFocusNode); // 変更
+                        .requestFocus(passwordFocusNode); // 変更
                   },
-                  onSaved: (value) {
+                  onChanged: (value) {
                     pageNotifier.email = value ?? '';
                   },
                 ),
                 TextFormField(
                   initialValue: pageNotifier.password,
-                  focusNode: _passwordFocusNode,
+                  focusNode: passwordFocusNode,
                   obscureText: !pageNotifier.shouldShowPassword,
                   style: TextStyle(
                     color: AppColors().textPrimary,
@@ -60,7 +63,7 @@ class SignInPage extends HookConsumerWidget {
                     ),
                   ),
                   validator: pageNotifier.emptyValidator,
-                  onSaved: (value) {
+                  onChanged: (value) {
                     pageNotifier.password = value ?? '';
                   },
                 ),
@@ -82,7 +85,6 @@ class SignInPage extends HookConsumerWidget {
                         child: ElevatedButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
                               final errorMessage = await pageNotifier
                                   .signinWithEmailAndPassword();
 
