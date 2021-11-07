@@ -13,6 +13,16 @@ class SignInPageNotifier extends ChangeNotifier {
   String message = '';
   bool shouldShowPassword = false;
 
+  void setEmail(String newEmail) {
+    email = newEmail;
+    notifyListeners();
+  }
+
+  void setPassword(String newPassword) {
+    password = newPassword;
+    notifyListeners();
+  }
+
   void setMessage(String value) {
     //エラーメッセージ設定
     message = value;

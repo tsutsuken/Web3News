@@ -14,10 +14,18 @@ class SignUpPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final signUpPageNotifier = ref.watch(signUpPageNotifierProvider);
+    final pageNotifier = ref.read(signUpPageNotifierProvider);
     final _userNotifier = ref.watch(userChangeNotifierProvider);
-    final passwordFocusNode = useFocusNode();
+    final email =
+        ref.watch(signUpPageNotifierProvider.select((value) => value.email));
     final emailFocusNode = useFocusNode();
+    final password =
+        ref.watch(signUpPageNotifierProvider.select((value) => value.password));
+    final shouldShowPassword = ref.watch(
+        signUpPageNotifierProvider.select((value) => value.shouldShowPassword));
+    final passwordFocusNode = useFocusNode();
+    final message =
+        ref.watch(signUpPageNotifierProvider.select((value) => value.message));
 
     return Scaffold(
       appBar: AppBar(
@@ -32,7 +40,7 @@ class SignUpPage extends HookConsumerWidget {
               child: Column(
                 children: <Widget>[
                   TextFormField(
-                    initialValue: signUpPageNotifier.email,
+                    initialValue: email,
                     focusNode: emailFocusNode,
                     style: TextStyle(
                       color: AppColors().textPrimary,
@@ -41,20 +49,20 @@ class SignUpPage extends HookConsumerWidget {
                       labelText: 'メールアドレス',
                       hintText: 'メールアドレスを入力してください',
                     ),
-                    validator: signUpPageNotifier.emptyValidator,
+                    validator: pageNotifier.emptyValidator,
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (_) {
                       FocusScope.of(context)
                           .requestFocus(passwordFocusNode); // 変更
                     },
                     onChanged: (value) {
-                      signUpPageNotifier.email = value ?? '';
+                      pageNotifier.setEmail(value);
                     },
                   ),
                   TextFormField(
-                    initialValue: signUpPageNotifier.password,
+                    initialValue: password,
                     focusNode: passwordFocusNode,
-                    obscureText: !signUpPageNotifier.shouldShowPassword,
+                    obscureText: !shouldShowPassword,
                     style: TextStyle(
                       color: AppColors().textPrimary,
                     ),
@@ -62,22 +70,22 @@ class SignUpPage extends HookConsumerWidget {
                       labelText: 'パスワード',
                       hintText: 'パスワードを入力してください',
                       suffixIcon: IconButton(
-                        icon: Icon(signUpPageNotifier.shouldShowPassword
+                        icon: Icon(shouldShowPassword
                             ? Icons.visibility
                             : Icons.visibility_off),
-                        onPressed: signUpPageNotifier.togglePasswordVisible,
+                        onPressed: pageNotifier.togglePasswordVisible,
                       ),
                     ),
-                    validator: signUpPageNotifier.emptyValidator,
+                    validator: pageNotifier.emptyValidator,
                     onChanged: (value) {
-                      signUpPageNotifier.password = value ?? '';
+                      pageNotifier.setPassword(value);
                     },
                   ),
                   Container(
                     // エラー文言表示エリア
                     margin: const EdgeInsets.fromLTRB(0, 16, 0, 8),
                     child: Text(
-                      signUpPageNotifier.message,
+                      message,
                       style: const TextStyle(
                         fontSize: 16,
                         color: Colors.red,
@@ -93,7 +101,7 @@ class SignUpPage extends HookConsumerWidget {
                           if (_formKey.currentState!.validate()) {
                             await EasyLoading.show(
                                 maskType: EasyLoadingMaskType.black);
-                            await signUpPageNotifier.signUpAndRefreshToken(
+                            await pageNotifier.signUpAndRefreshToken(
                               onSuccess: () async {
                                 await EasyLoading.dismiss();
                                 _userNotifier.refreshCurrentUser();
@@ -106,7 +114,7 @@ class SignUpPage extends HookConsumerWidget {
                               },
                               onError: (errorMessage) async {
                                 await EasyLoading.dismiss();
-                                signUpPageNotifier.setMessage(errorMessage);
+                                pageNotifier.setMessage(errorMessage);
                               },
                             );
                           }
