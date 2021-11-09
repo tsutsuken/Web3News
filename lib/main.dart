@@ -7,6 +7,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:labo_flutter/components/maintenance_dialog.dart';
 import 'package:labo_flutter/components/update_dialog.dart';
 import 'package:labo_flutter/graphql_api_client.dart';
 import 'package:labo_flutter/pages/home/home_page.dart';
@@ -126,6 +127,7 @@ class _RootViewState extends State<RootView> {
     super.initState();
     Future(() async {
       await showUpdateDialogIfNeeded(context);
+      await showMaintenanceDialogIfNeeded(context);
     });
     setCurrentScreen(index: 0);
   }

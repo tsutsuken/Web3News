@@ -27,6 +27,19 @@ class RemoteConfigService {
         ? 'minimum_support_app_build_number_android'
         : 'minimum_support_app_build_number_ios';
     final buildNumber = _remoteConfig.getInt(keyMinimumSupportBuild);
+    debugPrint('minimumSupportAppBuildNumber: $buildNumber');
     return buildNumber;
+  }
+
+  Future<bool> isUnderMaintenance() async {
+    final isUnderMaintenance = _remoteConfig.getBool('is_under_maintenance');
+    debugPrint('isUnderMaintenance: $isUnderMaintenance');
+    return isUnderMaintenance;
+  }
+
+  Future<String> maintenanceMessage() async {
+    final maintenanceMessage = _remoteConfig.getString('maintenance_message');
+    debugPrint('maintenanceMessage: $maintenanceMessage');
+    return maintenanceMessage;
   }
 }
