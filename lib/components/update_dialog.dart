@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
+import 'package:labo_flutter/utils/remote_config_service.dart';
 import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -17,34 +17,16 @@ Future<void> showUpdateDialogIfNeeded(BuildContext context) async {
 Future<bool> _shouldUpdateApp() async {
   final info = await PackageInfo.fromPlatform();
   final currentBuildNumber = int.parse(info.buildNumber);
-  final minimumSupportBuildNumber = await _minimumSupportAppBuildNumber();
+
+  final remoteConfigService = RemoteConfigService();
+  final minimumSupportBuildNumber =
+      await remoteConfigService.minimumSupportAppBuildNumber();
+
   debugPrint('currentBuild: $currentBuildNumber, '
       'minimumSupportBuild: $minimumSupportBuildNumber');
   final shouldUpdate = currentBuildNumber < minimumSupportBuildNumber;
   debugPrint('shouldUpdateApp: $shouldUpdate');
   return shouldUpdate;
-}
-
-Future<int> _minimumSupportAppBuildNumber() async {
-  final remoteConfig = RemoteConfig.instance;
-  try {
-    await remoteConfig.setConfigSettings(
-      RemoteConfigSettings(
-        fetchTimeout: const Duration(minutes: 1),
-        minimumFetchInterval: const Duration(hours: 1),
-      ),
-    );
-    await remoteConfig.fetchAndActivate();
-  } on Exception catch (exception) {
-    debugPrint('exception: $exception');
-    return 1; // すべてのビルドをサポート対象にする
-  }
-
-  final keyMinimumSupportBuild = Platform.isAndroid
-      ? 'minimum_support_app_build_number_android'
-      : 'minimum_support_app_build_number_ios';
-  final buildNumber = remoteConfig.getInt(keyMinimumSupportBuild);
-  return buildNumber;
 }
 
 void _showUpdateDialog(BuildContext context) {

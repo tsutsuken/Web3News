@@ -12,6 +12,7 @@ import 'package:labo_flutter/graphql_api_client.dart';
 import 'package:labo_flutter/pages/home/home_page.dart';
 import 'package:labo_flutter/pages/my_profile/my_profile_page.dart';
 import 'package:labo_flutter/utils/app_themes.dart';
+import 'package:labo_flutter/utils/remote_config_service.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -23,6 +24,8 @@ Future<void> main() async {
   // Firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  final remoteConfigService = RemoteConfigService();
+  await remoteConfigService.initialize();
   // ローカルエミュレータを使用する場合の設定
   // FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
   final analytics = FirebaseAnalytics();
