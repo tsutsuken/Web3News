@@ -8,17 +8,22 @@ class RemoteConfigService {
 
   Future<void> initialize() async {
     try {
-      // TODO: デフォルトをローカルで定義する
       await _remoteConfig.setConfigSettings(
         RemoteConfigSettings(
           fetchTimeout: const Duration(minutes: 1),
           minimumFetchInterval: const Duration(hours: 1),
         ),
       );
+      await _remoteConfig.setDefaults(<String, dynamic>{
+        'is_under_maintenance': false,
+        'maintenance_message': 'メンテナンス終了まで、今しばらくお待ち下さい。',
+        'minimum_support_app_build_number_android': 1,
+        'minimum_support_app_build_number_ios': 1,
+      });
       await _remoteConfig.fetchAndActivate();
     } on Exception catch (e) {
       debugPrint(
-          'RemoteConfigService initialize Exception. Cached or default values will be used');
+          'RemoteConfigService initialize Exception: $e. Cached or default values will be used');
     }
   }
 
