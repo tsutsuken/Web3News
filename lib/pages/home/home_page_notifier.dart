@@ -53,16 +53,19 @@ class HomePageNotifier extends ChangeNotifier {
     required Article article,
     required bool shouldFavorite,
   }) {
-    debugPrint('updateFavoriteOfArticleOnLocal article: $article');
+    debugPrint('updateFavoriteOfArticleOnLocal article: $article, '
+        'shouldFavorite: $shouldFavorite');
     final articles = articlesValue.value;
     if (articles == null) {
       return;
     }
 
+    final newArticles = [...articles];
     final updatedArticle = article.copyWith(isFavorite: shouldFavorite);
-    articles[
+    newArticles[
             articles.indexWhere((element) => element.id == updatedArticle.id)] =
         updatedArticle;
+    articlesValue = AsyncValue.data(newArticles);
     notifyListeners();
   }
 
@@ -70,7 +73,8 @@ class HomePageNotifier extends ChangeNotifier {
     required Article article,
     required bool shouldFavorite,
   }) async {
-    debugPrint('updateFavoriteOfArticleOnServer article: $article');
+    debugPrint('updateFavoriteOfArticleOnServer article: $article, '
+        'shouldFavorite: $shouldFavorite');
     var didSuccess = false;
     if (shouldFavorite) {
       didSuccess = await _addFavorite(article.id);

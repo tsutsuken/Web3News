@@ -11,12 +11,14 @@ class EditProfilePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _pageNotifier = ref.watch(editProfilePageNotifierProvider);
+    final _pageNotifier = ref.read(editProfilePageNotifierProvider);
+    final _editingAppUserValue = ref.watch(editProfilePageNotifierProvider
+        .select((value) => value.editingAppUserValue));
     final _formKey = GlobalKey<FormState>();
 
     return Scaffold(
       appBar: _buildAppBar(context, _pageNotifier),
-      body: _buildBody(_formKey, _pageNotifier, context),
+      body: _buildBody(_formKey, _pageNotifier, _editingAppUserValue, context),
     );
   }
 
@@ -115,12 +117,13 @@ class EditProfilePage extends HookConsumerWidget {
   Center _buildBody(
     GlobalKey<FormState> _formKey,
     EditProfilePageNotifier _pageNotifier,
+    AsyncValue<AppUser?> _editingAppUserValue,
     BuildContext context,
   ) {
     return Center(
       child: Container(
         padding: const EdgeInsets.all(24),
-        child: _pageNotifier.editingAppUserValue.when(
+        child: _editingAppUserValue.when(
           data: (appUser) {
             if (appUser == null) {
               return const Text('エラーが発生しました');

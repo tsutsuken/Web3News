@@ -16,6 +16,8 @@ class FavoriteArticleListPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pageNotifier = ref.watch(favoriteArticleListPageNotifierProvider);
+    final favoritesValue = ref.watch(favoriteArticleListPageNotifierProvider
+        .select((value) => value.favoritesValue));
 
     Future<void> _onTapMenuButton(
       BuildContext context,
@@ -53,7 +55,7 @@ class FavoriteArticleListPage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('お気に入りした記事')),
-      body: pageNotifier.favoritesValue.when(
+      body: favoritesValue.when(
         data: (favorites) {
           return SmartRefresher(
             controller: pageNotifier.refreshController,

@@ -100,13 +100,15 @@ class CommentListPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageNotifier = ref.watch(commentListPageNotifierProvider(articleId));
+    final pageNotifier = ref.read(commentListPageNotifierProvider(articleId));
+    final commentsValue = ref.watch(commentListPageNotifierProvider(articleId)
+        .select((value) => value.commentsValue));
 
     return Scaffold(
       appBar: AppBar(title: const Text('CommentListPage')),
       body: (articleId == null)
           ? _buildEmptyBody()
-          : _buildCommentsQuery(pageNotifier),
+          : _buildCommentsQuery(pageNotifier, commentsValue),
     );
   }
 
@@ -114,8 +116,11 @@ class CommentListPage extends HookConsumerWidget {
     return const Text('最初のコメントを投稿しましょう');
   }
 
-  Widget _buildCommentsQuery(CommentListPageNotifier pageNotifier) {
-    return pageNotifier.commentsValue.when(
+  Widget _buildCommentsQuery(
+    CommentListPageNotifier pageNotifier,
+    AsyncValue<List<Comment>> commentsValue,
+  ) {
+    return commentsValue.when(
       data: (comments) {
         if (comments.isEmpty) {
           return _buildEmptyBody();

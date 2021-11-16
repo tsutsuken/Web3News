@@ -13,13 +13,13 @@ import 'package:labo_flutter/utils/app_colors.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class MyProfilePageLoggedIn extends HookConsumerWidget {
-  const MyProfilePageLoggedIn({Key? key, required this.pageNotifier})
-      : super(key: key);
-
-  final MyProfilePageNotifier pageNotifier;
+  const MyProfilePageLoggedIn({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final pageNotifier = ref.read(myProfilePageNotifierProvider);
+    final myAppUserValue = ref.watch(
+        myProfilePageNotifierProvider.select((value) => value.myAppUserValue));
     final analyticsService = ref.read(analyticsServiceProvider);
 
     return Scaffold(
@@ -41,7 +41,7 @@ class MyProfilePageLoggedIn extends HookConsumerWidget {
           )
         ],
       ),
-      body: pageNotifier.myAppUserValue.when(
+      body: myAppUserValue.when(
         data: (appUser) {
           return SmartRefresher(
             controller: pageNotifier.refreshController,

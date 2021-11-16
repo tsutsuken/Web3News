@@ -14,13 +14,15 @@ class MyCommentListPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageNotifier = ref.watch(myCommentListPageNotifierProvider);
+    final pageNotifier = ref.read(myCommentListPageNotifierProvider);
+    final commentsValue = ref.watch(myCommentListPageNotifierProvider
+        .select((value) => value.commentsValue));
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('コメント一覧'),
       ),
-      body: pageNotifier.commentsValue.when(
+      body: commentsValue.when(
         data: (comments) {
           if (comments.isEmpty) {
             return _buildEmptyBody();

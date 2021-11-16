@@ -111,10 +111,12 @@ class _ArticleList extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _pageNotifier = ref.watch(homePageNotifierProvider(contentType));
+    final _pageNotifier = ref.read(homePageNotifierProvider(contentType));
+    final _articlesValue = ref.watch(homePageNotifierProvider(contentType)
+        .select((value) => value.articlesValue));
     final _analyticsService = ref.read(analyticsServiceProvider);
 
-    return _pageNotifier.articlesValue.when(
+    return _articlesValue.when(
       data: (articles) {
         return SmartRefresher(
           controller: _pageNotifier.refreshController,
