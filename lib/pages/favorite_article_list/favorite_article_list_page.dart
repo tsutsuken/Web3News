@@ -41,7 +41,7 @@ class FavoriteArticleListPage extends HookConsumerWidget {
               await pageNotifier.deleteFavoriteOnServer(favorite);
 
           // 通信に失敗した場合
-          if (didSuccess) {
+          if (!didSuccess) {
             // 通知する
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
