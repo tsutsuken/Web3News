@@ -17,10 +17,10 @@ class MyProfilePageLoggedIn extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageNotifier = ref.read(myProfilePageNotifierProvider);
+    final pageNotifier = ref.watch(myProfilePageNotifierProvider);
     final myAppUserValue = ref.watch(
         myProfilePageNotifierProvider.select((value) => value.myAppUserValue));
-    final analyticsService = ref.read(analyticsServiceProvider);
+    final analyticsService = ref.watch(analyticsServiceProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -122,7 +122,7 @@ class ProfileHeaderWidget extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final analyticsService = ref.read(analyticsServiceProvider);
+    final analyticsService = ref.watch(analyticsServiceProvider);
 
     return SizedBox(
       width: double.infinity,

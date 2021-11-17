@@ -14,7 +14,7 @@ class CommentCreatePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageNotifier = ref.read(commentCreatePageNotifierProvider);
+    final pageNotifier = ref.watch(commentCreatePageNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(

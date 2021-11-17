@@ -14,7 +14,7 @@ class SignUpPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageNotifier = ref.read(signUpPageNotifierProvider);
+    final pageNotifier = ref.watch(signUpPageNotifierProvider);
     final _userNotifier = ref.watch(userChangeNotifierProvider);
     final email =
         ref.watch(signUpPageNotifierProvider.select((value) => value.email));

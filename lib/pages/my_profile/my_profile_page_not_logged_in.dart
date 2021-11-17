@@ -12,7 +12,7 @@ class MyProfilePageNotLoggedIn extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final analyticsService = ref.read(analyticsServiceProvider);
+    final analyticsService = ref.watch(analyticsServiceProvider);
 
     return Container(
       margin: const EdgeInsets.only(left: 40, right: 40),

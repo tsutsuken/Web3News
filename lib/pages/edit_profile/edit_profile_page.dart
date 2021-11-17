@@ -11,7 +11,7 @@ class EditProfilePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _pageNotifier = ref.read(editProfilePageNotifierProvider);
+    final _pageNotifier = ref.watch(editProfilePageNotifierProvider);
     final _editingAppUserValue = ref.watch(editProfilePageNotifierProvider
         .select((value) => value.editingAppUserValue));
     final _formKey = GlobalKey<FormState>();

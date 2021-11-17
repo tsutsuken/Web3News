@@ -37,7 +37,7 @@ class ArticleDetailPage extends HookConsumerWidget {
     );
     final pageNotifier =
         ref.watch(articleDetailPageNotifierProvider(pageNotifierParams));
-    final analyticsService = ref.read(analyticsServiceProvider);
+    final analyticsService = ref.watch(analyticsServiceProvider);
 
     Future<void> _fetchArticleIfNeeded() async {
       if (articleId != null) {

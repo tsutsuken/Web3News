@@ -10,7 +10,7 @@ class SignInPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageNotifier = ref.read(signInPageNotifierProvider);
+    final pageNotifier = ref.watch(signInPageNotifierProvider);
     final email =
         ref.watch(signInPageNotifierProvider.select((value) => value.email));
     final emailFocusNode = useFocusNode();
