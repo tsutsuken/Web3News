@@ -14,7 +14,7 @@ class MyCommentListPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageNotifier = ref.watch(myCommentListPageNotifierProvider);
+    final pageNotifier = ref.watch(myCommentListPageNotifierProvider.notifier);
     final commentsValue = ref.watch(myCommentListPageNotifierProvider
         .select((value) => value.commentsValue));
 

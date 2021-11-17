@@ -1,19 +1,29 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/models/comment/comment.dart';
 import 'package:labo_flutter/models/comment/comment_repository.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-final myCommentListPageNotifierProvider = ChangeNotifierProvider.autoDispose(
-  (ref) {
-    return MyCommentListPageNotifier(ref.read);
-  },
-);
+part 'my_comment_list_page_notifier.freezed.dart';
 
-class MyCommentListPageNotifier extends ChangeNotifier {
-  MyCommentListPageNotifier(this._reader) {
+final myCommentListPageNotifierProvider = StateNotifierProvider.autoDispose<
+    MyCommentListPageNotifier,
+    MyCommentListPageState>((ref) => MyCommentListPageNotifier(ref.read));
+
+@freezed
+abstract class MyCommentListPageState with _$MyCommentListPageState {
+  const factory MyCommentListPageState({
+    @Default(AsyncValue<List<Comment>>.loading())
+        AsyncValue<List<Comment>> commentsValue,
+  }) = _MyCommentListPageState;
+}
+
+class MyCommentListPageNotifier extends StateNotifier<MyCommentListPageState> {
+  MyCommentListPageNotifier(this._reader)
+      : super(const MyCommentListPageState()) {
     fetchMyComments();
   }
 
@@ -31,8 +41,9 @@ class MyCommentListPageNotifier extends ChangeNotifier {
     debugPrint('fetchMyComments');
     final userId = FirebaseAuth.instance.currentUser?.uid;
     if (userId == null) {
-      commentsValue = const AsyncValue.data([]);
-      notifyListeners();
+      state = state.copyWith(
+        commentsValue: const AsyncValue.data([]),
+      );
       return;
     }
 
@@ -42,8 +53,9 @@ class MyCommentListPageNotifier extends ChangeNotifier {
     if (result.hasException) {
       final exception = result.exception.toString();
       debugPrint('fetchMyComments exception: $exception');
-      commentsValue = AsyncValue.error(exception);
-      notifyListeners();
+      state = state.copyWith(
+        commentsValue: AsyncValue.error(exception),
+      );
       return;
     }
 
@@ -52,8 +64,9 @@ class MyCommentListPageNotifier extends ChangeNotifier {
     if (resultData != null) {
       comments = CommentListResponse.fromJson(resultData).comments;
     }
-    commentsValue = AsyncValue.data(comments);
-    notifyListeners();
+    state = state.copyWith(
+      commentsValue: AsyncValue.data(comments),
+    );
     setVariablesForLoadMore(result, comments.length);
   }
 
@@ -75,8 +88,9 @@ class MyCommentListPageNotifier extends ChangeNotifier {
     if (result.hasException) {
       final exception = result.exception.toString();
       debugPrint('onLoadMore exception: $exception');
-      commentsValue = AsyncValue.error(exception);
-      notifyListeners();
+      state = state.copyWith(
+        commentsValue: AsyncValue.error(exception),
+      );
       refreshController.loadComplete();
       return;
     }
@@ -86,8 +100,9 @@ class MyCommentListPageNotifier extends ChangeNotifier {
     if (resultData != null) {
       comments = CommentListResponse.fromJson(resultData).comments;
     }
-    commentsValue = AsyncValue.data(comments);
-    notifyListeners();
+    state = state.copyWith(
+      commentsValue: AsyncValue.data(comments),
+    );
     setVariablesForLoadMore(result, comments.length);
     refreshController.loadComplete();
   }
