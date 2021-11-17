@@ -3,7 +3,6 @@
 // Do not manually edit this file.
 
 import 'dart:async' as _i6;
-import 'dart:ui' as _i8;
 
 import 'package:graphql_flutter/graphql_flutter.dart' as _i7;
 import 'package:hooks_riverpod/hooks_riverpod.dart' as _i3;
@@ -12,6 +11,7 @@ import 'package:labo_flutter/pages/favorite_article_list/favorite_article_list_p
     as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:pull_to_refresh/pull_to_refresh.dart' as _i2;
+import 'package:state_notifier/state_notifier.dart' as _i8;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: avoid_setters_without_getters
@@ -26,6 +26,9 @@ class _FakeRefreshController_0 extends _i1.Fake
     implements _i2.RefreshController {}
 
 class _FakeAsyncValue_1<T> extends _i1.Fake implements _i3.AsyncValue<T> {}
+
+class _FakeFavoriteArticleListPageState_2 extends _i1.Fake
+    implements _i4.FavoriteArticleListPageState {}
 
 /// A class which mocks [FavoriteArticleListPageNotifier].
 ///
@@ -49,6 +52,33 @@ class MockFavoriteArticleListPageNotifier extends _i1.Mock
   set favoritesValue(_i3.AsyncValue<List<_i5.Favorite>>? _favoritesValue) =>
       super.noSuchMethod(Invocation.setter(#favoritesValue, _favoritesValue),
           returnValueForMissingStub: null);
+  @override
+  set onError(_i3.ErrorListener? _onError) =>
+      super.noSuchMethod(Invocation.setter(#onError, _onError),
+          returnValueForMissingStub: null);
+  @override
+  bool get mounted =>
+      (super.noSuchMethod(Invocation.getter(#mounted), returnValue: false)
+          as bool);
+  @override
+  _i6.Stream<_i4.FavoriteArticleListPageState> get stream =>
+      (super.noSuchMethod(Invocation.getter(#stream),
+              returnValue: Stream<_i4.FavoriteArticleListPageState>.empty())
+          as _i6.Stream<_i4.FavoriteArticleListPageState>);
+  @override
+  _i4.FavoriteArticleListPageState get state =>
+      (super.noSuchMethod(Invocation.getter(#state),
+              returnValue: _FakeFavoriteArticleListPageState_2())
+          as _i4.FavoriteArticleListPageState);
+  @override
+  set state(_i4.FavoriteArticleListPageState? value) =>
+      super.noSuchMethod(Invocation.setter(#state, value),
+          returnValueForMissingStub: null);
+  @override
+  _i4.FavoriteArticleListPageState get debugState =>
+      (super.noSuchMethod(Invocation.getter(#debugState),
+              returnValue: _FakeFavoriteArticleListPageState_2())
+          as _i4.FavoriteArticleListPageState);
   @override
   bool get hasListeners =>
       (super.noSuchMethod(Invocation.getter(#hasListeners), returnValue: false)
@@ -82,20 +112,16 @@ class MockFavoriteArticleListPageNotifier extends _i1.Mock
       .noSuchMethod(Invocation.method(#deleteFavoriteOnServer, [favorite]),
           returnValue: Future<bool>.value(false)) as _i6.Future<bool>);
   @override
-  void addListener(_i8.VoidCallback? listener) =>
-      super.noSuchMethod(Invocation.method(#addListener, [listener]),
-          returnValueForMissingStub: null);
-  @override
-  void removeListener(_i8.VoidCallback? listener) =>
-      super.noSuchMethod(Invocation.method(#removeListener, [listener]),
-          returnValueForMissingStub: null);
+  _i3.RemoveListener addListener(
+          _i8.Listener<_i4.FavoriteArticleListPageState>? listener,
+          {bool? fireImmediately = true}) =>
+      (super.noSuchMethod(
+          Invocation.method(
+              #addListener, [listener], {#fireImmediately: fireImmediately}),
+          returnValue: () {}) as _i3.RemoveListener);
   @override
   void dispose() => super.noSuchMethod(Invocation.method(#dispose, []),
       returnValueForMissingStub: null);
-  @override
-  void notifyListeners() =>
-      super.noSuchMethod(Invocation.method(#notifyListeners, []),
-          returnValueForMissingStub: null);
   @override
   String toString() => super.toString();
 }

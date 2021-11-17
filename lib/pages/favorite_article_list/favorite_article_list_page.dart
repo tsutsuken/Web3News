@@ -15,7 +15,8 @@ class FavoriteArticleListPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageNotifier = ref.watch(favoriteArticleListPageNotifierProvider);
+    final pageNotifier =
+        ref.watch(favoriteArticleListPageNotifierProvider.notifier);
     final favoritesValue = ref.watch(favoriteArticleListPageNotifierProvider
         .select((value) => value.favoritesValue));
 

@@ -1,19 +1,34 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/models/favorite/favorite.dart';
 import 'package:labo_flutter/models/favorite/favorite_repository.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-final favoriteArticleListPageNotifierProvider =
-    ChangeNotifierProvider.autoDispose(
+part 'favorite_article_list_page_notifier.freezed.dart';
+
+final favoriteArticleListPageNotifierProvider = StateNotifierProvider
+    .autoDispose<FavoriteArticleListPageNotifier, FavoriteArticleListPageState>(
   (ref) {
     return FavoriteArticleListPageNotifier(ref.read);
   },
 );
 
-class FavoriteArticleListPageNotifier extends ChangeNotifier {
-  FavoriteArticleListPageNotifier(this._reader) {
+@freezed
+abstract class FavoriteArticleListPageState
+    with _$FavoriteArticleListPageState {
+  const factory FavoriteArticleListPageState({
+    @Default(AsyncValue<List<Favorite>>.loading())
+        AsyncValue<List<Favorite>> favoritesValue,
+  }) = _FavoriteArticleListPageState;
+}
+
+class FavoriteArticleListPageNotifier
+    extends StateNotifier<FavoriteArticleListPageState> {
+  FavoriteArticleListPageNotifier(this._reader)
+      : super(const FavoriteArticleListPageState()) {
     fetchFavorites();
   }
 
@@ -21,7 +36,6 @@ class FavoriteArticleListPageNotifier extends ChangeNotifier {
 
   late final _favoriteRepository = _reader(favoriteRepositoryProvider);
   final RefreshController refreshController = RefreshController();
-  AsyncValue<List<Favorite>> favoritesValue = const AsyncValue.loading();
   final int _limitFetchFavorites = 20;
   int _offsetFetchFavorites = 0;
   late QueryResult? _previousResultFetchFavorites;
@@ -34,8 +48,9 @@ class FavoriteArticleListPageNotifier extends ChangeNotifier {
     if (result.hasException) {
       final exception = result.exception.toString();
       debugPrint('fetchFavorites exception: $exception');
-      favoritesValue = AsyncValue.error(exception);
-      notifyListeners();
+      state = state.copyWith(
+        favoritesValue: AsyncValue.error(exception),
+      );
       return;
     }
 
@@ -44,8 +59,9 @@ class FavoriteArticleListPageNotifier extends ChangeNotifier {
     if (resultData != null) {
       favorites = FavoriteListResponse.fromJson(resultData).favorites;
     }
-    favoritesValue = AsyncValue.data(favorites);
-    notifyListeners();
+    state = state.copyWith(
+      favoritesValue: AsyncValue.data(favorites),
+    );
     setVariablesForLoadMore(result, favorites.length);
   }
 
@@ -61,8 +77,9 @@ class FavoriteArticleListPageNotifier extends ChangeNotifier {
     if (result.hasException) {
       final exception = result.exception.toString();
       debugPrint('onLoadMore exception: $exception');
-      favoritesValue = AsyncValue.error(exception);
-      notifyListeners();
+      state = state.copyWith(
+        favoritesValue: AsyncValue.error(exception),
+      );
       refreshController.loadComplete();
       return;
     }
@@ -72,8 +89,9 @@ class FavoriteArticleListPageNotifier extends ChangeNotifier {
     if (resultData != null) {
       favorites = FavoriteListResponse.fromJson(resultData).favorites;
     }
-    favoritesValue = AsyncValue.data(favorites);
-    notifyListeners();
+    state = state.copyWith(
+      favoritesValue: AsyncValue.data(favorites),
+    );
     setVariablesForLoadMore(result, favorites.length);
     refreshController.loadComplete();
   }
@@ -90,8 +108,14 @@ class FavoriteArticleListPageNotifier extends ChangeNotifier {
 
   void deleteFavoriteOnLocal(Favorite favorite) {
     debugPrint('deleteFavoriteOnLocal favorite: $favorite');
-    favoritesValue.value?.remove(favorite);
-    notifyListeners();
+    final favorites = state.favoritesValue.value;
+    if (favorites == null) {
+      return;
+    }
+    final newFavorites = [...favorites]..remove(favorite);
+    state = state.copyWith(
+      favoritesValue: AsyncValue.data(newFavorites),
+    );
   }
 
   Future<bool> deleteFavoriteOnServer(Favorite favorite) async {
