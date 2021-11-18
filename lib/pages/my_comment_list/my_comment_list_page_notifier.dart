@@ -32,7 +32,6 @@ class MyCommentListPageNotifier extends StateNotifier<MyCommentListPageState> {
   late final CommentRepository _commentRepository =
       _reader(commentRepositoryProvider);
   final RefreshController refreshController = RefreshController();
-  AsyncValue<List<Comment>> commentsValue = const AsyncValue.loading();
   QueryResult? _previousResultFetchComments;
   final int _limitFetchComments = 20;
   int _offsetFetchComments = 0;
