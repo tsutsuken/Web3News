@@ -14,7 +14,7 @@ class CommentCreatePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageNotifier = ref.watch(commentCreatePageNotifierProvider);
+    final pageNotifier = ref.watch(commentCreatePageNotifierProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -62,7 +62,7 @@ class CommentCreatePage extends HookConsumerWidget {
             hintText: 'コメントを書く',
           ),
           onChanged: (text) {
-            pageNotifier.commentText = text;
+            pageNotifier.setCommentText(text);
           },
         ),
       ]),
