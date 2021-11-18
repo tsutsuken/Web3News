@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/models/block/block_repository.dart';
@@ -7,16 +9,27 @@ import 'package:labo_flutter/models/comment/comment_repository.dart';
 import 'package:labo_flutter/models/report/report_repository.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-final commentListPageNotifierProvider = ChangeNotifierProvider.family
-    .autoDispose<CommentListPageNotifier, String?>((ref, articleId) {
+part 'comment_list_page_notifier.freezed.dart';
+
+final commentListPageNotifierProvider = StateNotifierProvider.family
+    .autoDispose<CommentListPageNotifier, CommentListPageState, String?>(
+        (ref, articleId) {
   return CommentListPageNotifier(ref.read, articleId);
 });
 
-class CommentListPageNotifier extends ChangeNotifier {
+@freezed
+abstract class CommentListPageState with _$CommentListPageState {
+  const factory CommentListPageState({
+    @Default(AsyncValue<List<Comment>>.loading())
+        AsyncValue<List<Comment>> commentsValue,
+  }) = _CommentListPageState;
+}
+
+class CommentListPageNotifier extends StateNotifier<CommentListPageState> {
   CommentListPageNotifier(
     this._reader,
     this._articleId,
-  ) {
+  ) : super(const CommentListPageState()) {
     fetchCommentsOfArticle();
   }
 
@@ -30,7 +43,6 @@ class CommentListPageNotifier extends ChangeNotifier {
   late final BlockRepository _blockRepository =
       _reader(blockRepositoryProvider);
   final RefreshController refreshController = RefreshController();
-  AsyncValue<List<Comment>> commentsValue = const AsyncValue.loading();
   late QueryResult? _previousResultFetchComments;
   final int _limitFetchComments = 20;
   int _offsetFetchComments = 0;
@@ -38,8 +50,9 @@ class CommentListPageNotifier extends ChangeNotifier {
   Future<void> fetchCommentsOfArticle() async {
     debugPrint('fetchCommentsOfArticle articleId: $_articleId');
     if (_articleId == null) {
-      commentsValue = const AsyncValue.data([]);
-      notifyListeners();
+      state = state.copyWith(
+        commentsValue: const AsyncValue.data([]),
+      );
       return;
     }
 
@@ -49,8 +62,9 @@ class CommentListPageNotifier extends ChangeNotifier {
     if (result.hasException) {
       final exception = result.exception.toString();
       debugPrint('fetchCommentsOfArticle exception: $exception');
-      commentsValue = AsyncValue.error(exception);
-      notifyListeners();
+      state = state.copyWith(
+        commentsValue: AsyncValue.error(exception),
+      );
       return;
     }
 
@@ -60,8 +74,9 @@ class CommentListPageNotifier extends ChangeNotifier {
       comments =
           CommentListFilteredResponse.fromJson(resultData).commentsFiltered;
     }
-    commentsValue = AsyncValue.data(comments);
-    notifyListeners();
+    state = state.copyWith(
+      commentsValue: AsyncValue.data(comments),
+    );
     setVariablesForLoadMore(result, comments.length);
   }
 
@@ -82,8 +97,9 @@ class CommentListPageNotifier extends ChangeNotifier {
     if (result.hasException) {
       final exception = result.exception.toString();
       debugPrint('onLoadMore exception: $exception');
-      commentsValue = AsyncValue.error(exception);
-      notifyListeners();
+      state = state.copyWith(
+        commentsValue: AsyncValue.error(exception),
+      );
       refreshController.loadComplete();
       return;
     }
@@ -94,8 +110,9 @@ class CommentListPageNotifier extends ChangeNotifier {
       comments =
           CommentListFilteredResponse.fromJson(resultData).commentsFiltered;
     }
-    commentsValue = AsyncValue.data(comments);
-    notifyListeners();
+    state = state.copyWith(
+      commentsValue: AsyncValue.data(comments),
+    );
     setVariablesForLoadMore(result, comments.length);
     refreshController.loadComplete();
   }
