@@ -17,7 +17,7 @@ class MyProfilePageLoggedIn extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageNotifier = ref.watch(myProfilePageNotifierProvider);
+    final pageNotifier = ref.watch(myProfilePageNotifierProvider.notifier);
     final myAppUserValue = ref.watch(
         myProfilePageNotifierProvider.select((value) => value.myAppUserValue));
     final analyticsService = ref.watch(analyticsServiceProvider);
