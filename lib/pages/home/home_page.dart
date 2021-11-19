@@ -137,9 +137,9 @@ class _ArticleList extends HookConsumerWidget {
                 context: context,
                 article: article,
                 onTap: () async {
-                  await Navigator.push(
+                  final isFavorite = await Navigator.push(
                     context,
-                    MaterialPageRoute<void>(
+                    MaterialPageRoute<bool>(
                       builder: (context) => ArticleDetailPage(
                         articleId: article.id,
                         articleUrl: article.url,
@@ -148,6 +148,11 @@ class _ArticleList extends HookConsumerWidget {
                       settings: const RouteSettings(name: 'ArticleDetailPage'),
                     ),
                   );
+                  if (isFavorite != null) {
+                    // 記事詳細でのisFavoriteの変更をローカルの記事一覧に反映させる
+                    _pageNotifier.updateFavoriteOfArticleOnLocal(
+                        article: article, shouldFavorite: isFavorite);
+                  }
                   _analyticsService.setCurrentScreen(screenName: 'HomePage');
                 },
                 onTapMenuButton: () async {

@@ -91,106 +91,114 @@ class ArticleDetailPage extends HookConsumerWidget {
       articleIdNotifier.value = articleId;
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('ArticleDetailPage'),
-      ),
-      body: WebView(
-        initialUrl: pageNotifier.articleUrl,
-        javascriptMode: JavascriptMode.unrestricted,
-        gestureNavigationEnabled: true,
-        navigationDelegate: (_navigationRequest) {
-          // ページ遷移が発生する場合、新しい画面を開く
-          if (_navigationRequest.isForMainFrame &&
-              _navigationRequest.url != pageNotifier.articleUrl) {
-            Navigator.push(
-              context,
-              MaterialPageRoute<void>(
-                builder: (context) => ArticleDetailPage(
-                  articleId: null,
-                  articleUrl: _navigationRequest.url,
-                  isFavorite: false,
+    return WillPopScope(
+      onWillPop: () async {
+        // 記事一覧画面にisFavoriteの変更を反映させる
+        Navigator.of(context).pop<bool>(isFavoriteNotifier.value);
+        // 通常の画面遷移は禁止する
+        return Future.value(false);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('ArticleDetailPage'),
+        ),
+        body: WebView(
+          initialUrl: pageNotifier.articleUrl,
+          javascriptMode: JavascriptMode.unrestricted,
+          gestureNavigationEnabled: true,
+          navigationDelegate: (_navigationRequest) {
+            // ページ遷移が発生する場合、新しい画面を開く
+            if (_navigationRequest.isForMainFrame &&
+                _navigationRequest.url != pageNotifier.articleUrl) {
+              Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (context) => ArticleDetailPage(
+                    articleId: null,
+                    articleUrl: _navigationRequest.url,
+                    isFavorite: false,
+                  ),
+                  settings: const RouteSettings(name: 'ArticleDetailPage'),
                 ),
-                settings: const RouteSettings(name: 'ArticleDetailPage'),
-              ),
-            );
-            return NavigationDecision.prevent;
-          } else {
-            return NavigationDecision.navigate;
-          }
-        },
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            IconButton(
+              );
+              return NavigationDecision.prevent;
+            } else {
+              return NavigationDecision.navigate;
+            }
+          },
+        ),
+        bottomNavigationBar: BottomAppBar(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                  color: Theme.of(context).primaryColor,
+                  onPressed: () {
+                    unawaited(analyticsService.sendEvent(
+                        event: AnalyticsEvent.onTapAddCommentButton));
+
+                    if (FirebaseAuth.instance.currentUser == null) {
+                      _showPromoteSignInPage();
+                    } else {
+                      _showCommentCreatePage();
+                    }
+                  },
+                  icon: const Icon(Icons.add_comment)),
+              IconButton(
                 color: Theme.of(context).primaryColor,
                 onPressed: () {
                   unawaited(analyticsService.sendEvent(
-                      event: AnalyticsEvent.onTapAddCommentButton));
+                      event: AnalyticsEvent.onTapCommentListButton));
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (context) => CommentListPage(
+                        articleId: articleIdNotifier.value,
+                      ),
+                      settings: const RouteSettings(name: 'CommentListPage'),
+                      fullscreenDialog: true,
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.chat),
+              ),
+              IconButton(
+                color: Theme.of(context).primaryColor,
+                onPressed: () async {
+                  unawaited(analyticsService.sendEvent(
+                      event: AnalyticsEvent.onTapFavoriteButton));
 
                   if (FirebaseAuth.instance.currentUser == null) {
                     _showPromoteSignInPage();
-                  } else {
-                    _showCommentCreatePage();
+                    return;
+                  }
+
+                  // 通信前に表示を切り替える
+                  isFavoriteNotifier.value = !isFavoriteNotifier.value;
+                  // ハプティクス
+                  unawaited(HapticFeedback.mediumImpact());
+                  // 通信する
+                  final response = await pageNotifier.updateFavorite(
+                      shouldFavorite: isFavoriteNotifier.value);
+                  articleIdNotifier.value =
+                      response.articleId; // articleを追加した場合に必要
+                  // 通信に失敗した場合、表示を元に戻す＆通知
+                  if (!response.didSuccess) {
+                    isFavoriteNotifier.value = !isFavoriteNotifier.value;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('エラーが発生しました'),
+                      ),
+                    );
                   }
                 },
-                icon: const Icon(Icons.add_comment)),
-            IconButton(
-              color: Theme.of(context).primaryColor,
-              onPressed: () {
-                unawaited(analyticsService.sendEvent(
-                    event: AnalyticsEvent.onTapCommentListButton));
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (context) => CommentListPage(
-                      articleId: articleIdNotifier.value,
-                    ),
-                    settings: const RouteSettings(name: 'CommentListPage'),
-                    fullscreenDialog: true,
-                  ),
-                );
-              },
-              icon: const Icon(Icons.chat),
-            ),
-            IconButton(
-              color: Theme.of(context).primaryColor,
-              onPressed: () async {
-                unawaited(analyticsService.sendEvent(
-                    event: AnalyticsEvent.onTapFavoriteButton));
-
-                if (FirebaseAuth.instance.currentUser == null) {
-                  _showPromoteSignInPage();
-                  return;
-                }
-
-                // 通信前に表示を切り替える
-                isFavoriteNotifier.value = !isFavoriteNotifier.value;
-                // ハプティクス
-                unawaited(HapticFeedback.mediumImpact());
-                // 通信する
-                final response = await pageNotifier.updateFavorite(
-                    shouldFavorite: isFavoriteNotifier.value);
-                articleIdNotifier.value =
-                    response.articleId; // articleを追加した場合に必要
-                // 通信に失敗した場合、表示を元に戻す＆通知
-                if (!response.didSuccess) {
-                  isFavoriteNotifier.value = !isFavoriteNotifier.value;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('エラーが発生しました'),
-                    ),
-                  );
-                }
-              },
-              icon: isFavoriteNotifier.value
-                  ? const Icon(Icons.favorite)
-                  : const Icon(Icons.favorite_border),
-            ),
-          ],
+                icon: isFavoriteNotifier.value
+                    ? const Icon(Icons.favorite)
+                    : const Icon(Icons.favorite_border),
+              ),
+            ],
+          ),
         ),
       ),
     );
