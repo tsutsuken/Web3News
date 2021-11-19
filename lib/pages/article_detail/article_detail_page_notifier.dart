@@ -1,12 +1,17 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:labo_flutter/models/article/article.dart';
 import 'package:labo_flutter/models/article/article_repository.dart';
 import 'package:labo_flutter/models/cloud_functions_repository.dart';
 import 'package:labo_flutter/models/favorite/favorite_repository.dart';
 
-final articleDetailPageNotifierProvider = ChangeNotifierProvider.family
-    .autoDispose<ArticleDetailPageNotifier, ArticleDetailPageNotifierParams>(
+part 'article_detail_page_notifier.freezed.dart';
+
+final articleDetailPageNotifierProvider = StateNotifierProvider.family
+    .autoDispose<ArticleDetailPageNotifier, ArticleDetailPageState,
+        ArticleDetailPageNotifierParams>(
   (ref, params) {
     return ArticleDetailPageNotifier(
       reader: ref.read,
@@ -16,6 +21,11 @@ final articleDetailPageNotifierProvider = ChangeNotifierProvider.family
     );
   },
 );
+
+@freezed
+abstract class ArticleDetailPageState with _$ArticleDetailPageState {
+  const factory ArticleDetailPageState() = _ArticleDetailPageState;
+}
 
 class ArticleDetailPageNotifierParams {
   ArticleDetailPageNotifierParams({
@@ -35,13 +45,13 @@ class ResponseOnPushFavoriteButton {
   final String? articleId;
 }
 
-class ArticleDetailPageNotifier extends ChangeNotifier {
+class ArticleDetailPageNotifier extends StateNotifier<ArticleDetailPageState> {
   ArticleDetailPageNotifier({
     required this.reader,
     required this.articleUrl,
     required this.articleId,
     required this.isFavorite,
-  });
+  }) : super(const ArticleDetailPageState());
 
   final Reader reader;
   final String articleUrl;
