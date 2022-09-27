@@ -114,7 +114,7 @@ class EditProfilePageNotifier extends ChangeNotifier {
   }
 
   Future<File?> _cropImage(XFile imageFile) async {
-    final croppedImageFile = await ImageCropper.cropImage(
+    final croppedImageFile = await ImageCropper().cropImage(
       sourcePath: imageFile.path,
       cropStyle: CropStyle.circle,
       aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
