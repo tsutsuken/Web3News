@@ -2,7 +2,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -20,8 +19,6 @@ import 'package:timeago/timeago.dart' as timeago;
 const graphqlEndpoint = 'https://labo-flutter.hasura.app/v1/graphql';
 
 Future<void> main() async {
-  await dotenv.load(fileName: '.env');
-
   // Firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

@@ -34,7 +34,6 @@ dependencies:
   firebase_storage: ^10.0.3
   flutter:
     sdk: flutter
-  flutter_dotenv: ^5.0.0
   flutter_easyloading: ^3.0.3
   flutter_hooks: ^0.18.0
   flutter_localizations:
@@ -73,7 +72,6 @@ flutter:
   uses-material-design: true
 
   assets:
-    - .env
     - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
