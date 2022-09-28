@@ -7,7 +7,7 @@ import 'package:labo_flutter/models/article/article.dart';
 const String popularArticlesQuery = '''
 query MyQuery()
 {
-  articles(order_by: {created_at: asc}, limit: 50) {
+  articles(order_by: {created_at: desc}, limit: 50) {
     id
     published_at
     title
