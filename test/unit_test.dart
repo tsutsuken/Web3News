@@ -20,14 +20,15 @@ void main() {
   test(
     'test articleRepository',
     () async {
-      when(_client.query(any)).thenAnswer((_) async => QueryResult.unexecuted);
+      when(_client.query<dynamic>(any))
+          .thenAnswer((_) async => QueryResult.unexecuted);
 
       final articles = await _articleRepository.fetchPopularArticles();
       expect(
         articles,
         isA<List<Article>>().having((list) => list.length, 'length', 0),
       );
-      verify(_client.query(any)).called(1);
+      verify(_client.query<dynamic>(any)).called(1);
     },
   );
 }

@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'my_profile_page_notifier.dart';
@@ -11,23 +12,7 @@ part of 'my_profile_page_notifier.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$MyProfilePageStateTearOff {
-  const _$MyProfilePageStateTearOff();
-
-  _MyProfilePageState call(
-      {AsyncValue<AppUser?> myAppUserValue =
-          const AsyncValue<AppUser?>.loading()}) {
-    return _MyProfilePageState(
-      myAppUserValue: myAppUserValue,
-    );
-  }
-}
-
-/// @nodoc
-const $MyProfilePageState = _$MyProfilePageStateTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$MyProfilePageState {
@@ -69,31 +54,31 @@ class _$MyProfilePageStateCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$MyProfilePageStateCopyWith<$Res>
+abstract class _$$_MyProfilePageStateCopyWith<$Res>
     implements $MyProfilePageStateCopyWith<$Res> {
-  factory _$MyProfilePageStateCopyWith(
-          _MyProfilePageState value, $Res Function(_MyProfilePageState) then) =
-      __$MyProfilePageStateCopyWithImpl<$Res>;
+  factory _$$_MyProfilePageStateCopyWith(_$_MyProfilePageState value,
+          $Res Function(_$_MyProfilePageState) then) =
+      __$$_MyProfilePageStateCopyWithImpl<$Res>;
   @override
   $Res call({AsyncValue<AppUser?> myAppUserValue});
 }
 
 /// @nodoc
-class __$MyProfilePageStateCopyWithImpl<$Res>
+class __$$_MyProfilePageStateCopyWithImpl<$Res>
     extends _$MyProfilePageStateCopyWithImpl<$Res>
-    implements _$MyProfilePageStateCopyWith<$Res> {
-  __$MyProfilePageStateCopyWithImpl(
-      _MyProfilePageState _value, $Res Function(_MyProfilePageState) _then)
-      : super(_value, (v) => _then(v as _MyProfilePageState));
+    implements _$$_MyProfilePageStateCopyWith<$Res> {
+  __$$_MyProfilePageStateCopyWithImpl(
+      _$_MyProfilePageState _value, $Res Function(_$_MyProfilePageState) _then)
+      : super(_value, (v) => _then(v as _$_MyProfilePageState));
 
   @override
-  _MyProfilePageState get _value => super._value as _MyProfilePageState;
+  _$_MyProfilePageState get _value => super._value as _$_MyProfilePageState;
 
   @override
   $Res call({
     Object? myAppUserValue = freezed,
   }) {
-    return _then(_MyProfilePageState(
+    return _then(_$_MyProfilePageState(
       myAppUserValue: myAppUserValue == freezed
           ? _value.myAppUserValue
           : myAppUserValue // ignore: cast_nullable_to_non_nullable
@@ -104,55 +89,47 @@ class __$MyProfilePageStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_MyProfilePageState
-    with DiagnosticableTreeMixin
-    implements _MyProfilePageState {
+class _$_MyProfilePageState implements _MyProfilePageState {
   const _$_MyProfilePageState(
       {this.myAppUserValue = const AsyncValue<AppUser?>.loading()});
 
-  @JsonKey(defaultValue: const AsyncValue<AppUser?>.loading())
   @override
+  @JsonKey()
   final AsyncValue<AppUser?> myAppUserValue;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'MyProfilePageState(myAppUserValue: $myAppUserValue)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'MyProfilePageState'))
-      ..add(DiagnosticsProperty('myAppUserValue', myAppUserValue));
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _MyProfilePageState &&
-            (identical(other.myAppUserValue, myAppUserValue) ||
-                other.myAppUserValue == myAppUserValue));
+            other is _$_MyProfilePageState &&
+            const DeepCollectionEquality()
+                .equals(other.myAppUserValue, myAppUserValue));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, myAppUserValue);
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(myAppUserValue));
 
   @JsonKey(ignore: true)
   @override
-  _$MyProfilePageStateCopyWith<_MyProfilePageState> get copyWith =>
-      __$MyProfilePageStateCopyWithImpl<_MyProfilePageState>(this, _$identity);
+  _$$_MyProfilePageStateCopyWith<_$_MyProfilePageState> get copyWith =>
+      __$$_MyProfilePageStateCopyWithImpl<_$_MyProfilePageState>(
+          this, _$identity);
 }
 
 abstract class _MyProfilePageState implements MyProfilePageState {
-  const factory _MyProfilePageState({AsyncValue<AppUser?> myAppUserValue}) =
-      _$_MyProfilePageState;
+  const factory _MyProfilePageState(
+      {final AsyncValue<AppUser?> myAppUserValue}) = _$_MyProfilePageState;
 
   @override
   AsyncValue<AppUser?> get myAppUserValue;
   @override
   @JsonKey(ignore: true)
-  _$MyProfilePageStateCopyWith<_MyProfilePageState> get copyWith =>
+  _$$_MyProfilePageStateCopyWith<_$_MyProfilePageState> get copyWith =>
       throw _privateConstructorUsedError;
 }

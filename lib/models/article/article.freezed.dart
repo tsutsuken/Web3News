@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'article.dart';
@@ -11,30 +12,12 @@ part of 'article.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 InsertArticlesOneResponse _$InsertArticlesOneResponseFromJson(
     Map<String, dynamic> json) {
   return _InsertArticlesOneResponse.fromJson(json);
 }
-
-/// @nodoc
-class _$InsertArticlesOneResponseTearOff {
-  const _$InsertArticlesOneResponseTearOff();
-
-  _InsertArticlesOneResponse call({Article? insertArticlesOne = null}) {
-    return _InsertArticlesOneResponse(
-      insertArticlesOne: insertArticlesOne,
-    );
-  }
-
-  InsertArticlesOneResponse fromJson(Map<String, Object?> json) {
-    return InsertArticlesOneResponse.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $InsertArticlesOneResponse = _$InsertArticlesOneResponseTearOff();
 
 /// @nodoc
 mixin _$InsertArticlesOneResponse {
@@ -90,11 +73,12 @@ class _$InsertArticlesOneResponseCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$InsertArticlesOneResponseCopyWith<$Res>
+abstract class _$$_InsertArticlesOneResponseCopyWith<$Res>
     implements $InsertArticlesOneResponseCopyWith<$Res> {
-  factory _$InsertArticlesOneResponseCopyWith(_InsertArticlesOneResponse value,
-          $Res Function(_InsertArticlesOneResponse) then) =
-      __$InsertArticlesOneResponseCopyWithImpl<$Res>;
+  factory _$$_InsertArticlesOneResponseCopyWith(
+          _$_InsertArticlesOneResponse value,
+          $Res Function(_$_InsertArticlesOneResponse) then) =
+      __$$_InsertArticlesOneResponseCopyWithImpl<$Res>;
   @override
   $Res call({Article? insertArticlesOne});
 
@@ -103,22 +87,23 @@ abstract class _$InsertArticlesOneResponseCopyWith<$Res>
 }
 
 /// @nodoc
-class __$InsertArticlesOneResponseCopyWithImpl<$Res>
+class __$$_InsertArticlesOneResponseCopyWithImpl<$Res>
     extends _$InsertArticlesOneResponseCopyWithImpl<$Res>
-    implements _$InsertArticlesOneResponseCopyWith<$Res> {
-  __$InsertArticlesOneResponseCopyWithImpl(_InsertArticlesOneResponse _value,
-      $Res Function(_InsertArticlesOneResponse) _then)
-      : super(_value, (v) => _then(v as _InsertArticlesOneResponse));
+    implements _$$_InsertArticlesOneResponseCopyWith<$Res> {
+  __$$_InsertArticlesOneResponseCopyWithImpl(
+      _$_InsertArticlesOneResponse _value,
+      $Res Function(_$_InsertArticlesOneResponse) _then)
+      : super(_value, (v) => _then(v as _$_InsertArticlesOneResponse));
 
   @override
-  _InsertArticlesOneResponse get _value =>
-      super._value as _InsertArticlesOneResponse;
+  _$_InsertArticlesOneResponse get _value =>
+      super._value as _$_InsertArticlesOneResponse;
 
   @override
   $Res call({
     Object? insertArticlesOne = freezed,
   }) {
-    return _then(_InsertArticlesOneResponse(
+    return _then(_$_InsertArticlesOneResponse(
       insertArticlesOne: insertArticlesOne == freezed
           ? _value.insertArticlesOne
           : insertArticlesOne // ignore: cast_nullable_to_non_nullable
@@ -136,8 +121,8 @@ class _$_InsertArticlesOneResponse implements _InsertArticlesOneResponse {
   factory _$_InsertArticlesOneResponse.fromJson(Map<String, dynamic> json) =>
       _$$_InsertArticlesOneResponseFromJson(json);
 
-  @JsonKey(defaultValue: null)
   @override
+  @JsonKey()
   final Article? insertArticlesOne;
 
   @override
@@ -149,29 +134,32 @@ class _$_InsertArticlesOneResponse implements _InsertArticlesOneResponse {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _InsertArticlesOneResponse &&
-            (identical(other.insertArticlesOne, insertArticlesOne) ||
-                other.insertArticlesOne == insertArticlesOne));
+            other is _$_InsertArticlesOneResponse &&
+            const DeepCollectionEquality()
+                .equals(other.insertArticlesOne, insertArticlesOne));
   }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, insertArticlesOne);
 
   @JsonKey(ignore: true)
   @override
-  _$InsertArticlesOneResponseCopyWith<_InsertArticlesOneResponse>
-      get copyWith =>
-          __$InsertArticlesOneResponseCopyWithImpl<_InsertArticlesOneResponse>(
-              this, _$identity);
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(insertArticlesOne));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_InsertArticlesOneResponseCopyWith<_$_InsertArticlesOneResponse>
+      get copyWith => __$$_InsertArticlesOneResponseCopyWithImpl<
+          _$_InsertArticlesOneResponse>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_InsertArticlesOneResponseToJson(this);
+    return _$$_InsertArticlesOneResponseToJson(
+      this,
+    );
   }
 }
 
 abstract class _InsertArticlesOneResponse implements InsertArticlesOneResponse {
-  const factory _InsertArticlesOneResponse({Article? insertArticlesOne}) =
+  const factory _InsertArticlesOneResponse({final Article? insertArticlesOne}) =
       _$_InsertArticlesOneResponse;
 
   factory _InsertArticlesOneResponse.fromJson(Map<String, dynamic> json) =
@@ -181,31 +169,13 @@ abstract class _InsertArticlesOneResponse implements InsertArticlesOneResponse {
   Article? get insertArticlesOne;
   @override
   @JsonKey(ignore: true)
-  _$InsertArticlesOneResponseCopyWith<_InsertArticlesOneResponse>
+  _$$_InsertArticlesOneResponseCopyWith<_$_InsertArticlesOneResponse>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 ArticleListResponse _$ArticleListResponseFromJson(Map<String, dynamic> json) {
   return _ArticleListResponse.fromJson(json);
 }
-
-/// @nodoc
-class _$ArticleListResponseTearOff {
-  const _$ArticleListResponseTearOff();
-
-  _ArticleListResponse call({List<Article> articles = const <Article>[]}) {
-    return _ArticleListResponse(
-      articles: articles,
-    );
-  }
-
-  ArticleListResponse fromJson(Map<String, Object?> json) {
-    return ArticleListResponse.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $ArticleListResponse = _$ArticleListResponseTearOff();
 
 /// @nodoc
 mixin _$ArticleListResponse {
@@ -248,33 +218,33 @@ class _$ArticleListResponseCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$ArticleListResponseCopyWith<$Res>
+abstract class _$$_ArticleListResponseCopyWith<$Res>
     implements $ArticleListResponseCopyWith<$Res> {
-  factory _$ArticleListResponseCopyWith(_ArticleListResponse value,
-          $Res Function(_ArticleListResponse) then) =
-      __$ArticleListResponseCopyWithImpl<$Res>;
+  factory _$$_ArticleListResponseCopyWith(_$_ArticleListResponse value,
+          $Res Function(_$_ArticleListResponse) then) =
+      __$$_ArticleListResponseCopyWithImpl<$Res>;
   @override
   $Res call({List<Article> articles});
 }
 
 /// @nodoc
-class __$ArticleListResponseCopyWithImpl<$Res>
+class __$$_ArticleListResponseCopyWithImpl<$Res>
     extends _$ArticleListResponseCopyWithImpl<$Res>
-    implements _$ArticleListResponseCopyWith<$Res> {
-  __$ArticleListResponseCopyWithImpl(
-      _ArticleListResponse _value, $Res Function(_ArticleListResponse) _then)
-      : super(_value, (v) => _then(v as _ArticleListResponse));
+    implements _$$_ArticleListResponseCopyWith<$Res> {
+  __$$_ArticleListResponseCopyWithImpl(_$_ArticleListResponse _value,
+      $Res Function(_$_ArticleListResponse) _then)
+      : super(_value, (v) => _then(v as _$_ArticleListResponse));
 
   @override
-  _ArticleListResponse get _value => super._value as _ArticleListResponse;
+  _$_ArticleListResponse get _value => super._value as _$_ArticleListResponse;
 
   @override
   $Res call({
     Object? articles = freezed,
   }) {
-    return _then(_ArticleListResponse(
+    return _then(_$_ArticleListResponse(
       articles: articles == freezed
-          ? _value.articles
+          ? _value._articles
           : articles // ignore: cast_nullable_to_non_nullable
               as List<Article>,
     ));
@@ -284,14 +254,20 @@ class __$ArticleListResponseCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_ArticleListResponse implements _ArticleListResponse {
-  const _$_ArticleListResponse({this.articles = const <Article>[]});
+  const _$_ArticleListResponse(
+      {final List<Article> articles = const <Article>[]})
+      : _articles = articles;
 
   factory _$_ArticleListResponse.fromJson(Map<String, dynamic> json) =>
       _$$_ArticleListResponseFromJson(json);
 
-  @JsonKey(defaultValue: const <Article>[])
+  final List<Article> _articles;
   @override
-  final List<Article> articles;
+  @JsonKey()
+  List<Article> get articles {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_articles);
+  }
 
   @override
   String toString() {
@@ -302,28 +278,31 @@ class _$_ArticleListResponse implements _ArticleListResponse {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _ArticleListResponse &&
-            const DeepCollectionEquality().equals(other.articles, articles));
+            other is _$_ArticleListResponse &&
+            const DeepCollectionEquality().equals(other._articles, _articles));
   }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(articles));
 
   @JsonKey(ignore: true)
   @override
-  _$ArticleListResponseCopyWith<_ArticleListResponse> get copyWith =>
-      __$ArticleListResponseCopyWithImpl<_ArticleListResponse>(
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_articles));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_ArticleListResponseCopyWith<_$_ArticleListResponse> get copyWith =>
+      __$$_ArticleListResponseCopyWithImpl<_$_ArticleListResponse>(
           this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ArticleListResponseToJson(this);
+    return _$$_ArticleListResponseToJson(
+      this,
+    );
   }
 }
 
 abstract class _ArticleListResponse implements ArticleListResponse {
-  const factory _ArticleListResponse({List<Article> articles}) =
+  const factory _ArticleListResponse({final List<Article> articles}) =
       _$_ArticleListResponse;
 
   factory _ArticleListResponse.fromJson(Map<String, dynamic> json) =
@@ -333,42 +312,13 @@ abstract class _ArticleListResponse implements ArticleListResponse {
   List<Article> get articles;
   @override
   @JsonKey(ignore: true)
-  _$ArticleListResponseCopyWith<_ArticleListResponse> get copyWith =>
+  _$$_ArticleListResponseCopyWith<_$_ArticleListResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 Article _$ArticleFromJson(Map<String, dynamic> json) {
   return _Article.fromJson(json);
 }
-
-/// @nodoc
-class _$ArticleTearOff {
-  const _$ArticleTearOff();
-
-  _Article call(
-      {String id = '',
-      String title = '',
-      String url = '',
-      String urlToImage = 'http://placehold.jp/150x150.png',
-      String publishedAt = '',
-      bool isFavorite = false}) {
-    return _Article(
-      id: id,
-      title: title,
-      url: url,
-      urlToImage: urlToImage,
-      publishedAt: publishedAt,
-      isFavorite: isFavorite,
-    );
-  }
-
-  Article fromJson(Map<String, Object?> json) {
-    return Article.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $Article = _$ArticleTearOff();
 
 /// @nodoc
 mixin _$Article {
@@ -444,9 +394,10 @@ class _$ArticleCopyWithImpl<$Res> implements $ArticleCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$ArticleCopyWith<$Res> implements $ArticleCopyWith<$Res> {
-  factory _$ArticleCopyWith(_Article value, $Res Function(_Article) then) =
-      __$ArticleCopyWithImpl<$Res>;
+abstract class _$$_ArticleCopyWith<$Res> implements $ArticleCopyWith<$Res> {
+  factory _$$_ArticleCopyWith(
+          _$_Article value, $Res Function(_$_Article) then) =
+      __$$_ArticleCopyWithImpl<$Res>;
   @override
   $Res call(
       {String id,
@@ -458,13 +409,13 @@ abstract class _$ArticleCopyWith<$Res> implements $ArticleCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$ArticleCopyWithImpl<$Res> extends _$ArticleCopyWithImpl<$Res>
-    implements _$ArticleCopyWith<$Res> {
-  __$ArticleCopyWithImpl(_Article _value, $Res Function(_Article) _then)
-      : super(_value, (v) => _then(v as _Article));
+class __$$_ArticleCopyWithImpl<$Res> extends _$ArticleCopyWithImpl<$Res>
+    implements _$$_ArticleCopyWith<$Res> {
+  __$$_ArticleCopyWithImpl(_$_Article _value, $Res Function(_$_Article) _then)
+      : super(_value, (v) => _then(v as _$_Article));
 
   @override
-  _Article get _value => super._value as _Article;
+  _$_Article get _value => super._value as _$_Article;
 
   @override
   $Res call({
@@ -475,7 +426,7 @@ class __$ArticleCopyWithImpl<$Res> extends _$ArticleCopyWithImpl<$Res>
     Object? publishedAt = freezed,
     Object? isFavorite = freezed,
   }) {
-    return _then(_Article(
+    return _then(_$_Article(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -519,23 +470,23 @@ class _$_Article implements _Article {
   factory _$_Article.fromJson(Map<String, dynamic> json) =>
       _$$_ArticleFromJson(json);
 
-  @JsonKey(defaultValue: '')
   @override
+  @JsonKey()
   final String id;
-  @JsonKey(defaultValue: '')
   @override
+  @JsonKey()
   final String title;
-  @JsonKey(defaultValue: '')
   @override
+  @JsonKey()
   final String url;
-  @JsonKey(defaultValue: 'http://placehold.jp/150x150.png')
   @override
+  @JsonKey()
   final String urlToImage;
-  @JsonKey(defaultValue: '')
   @override
+  @JsonKey()
   final String publishedAt;
-  @JsonKey(defaultValue: false)
   @override
+  @JsonKey()
   final bool isFavorite;
 
   @override
@@ -547,41 +498,50 @@ class _$_Article implements _Article {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Article &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.title, title) || other.title == title) &&
-            (identical(other.url, url) || other.url == url) &&
-            (identical(other.urlToImage, urlToImage) ||
-                other.urlToImage == urlToImage) &&
-            (identical(other.publishedAt, publishedAt) ||
-                other.publishedAt == publishedAt) &&
-            (identical(other.isFavorite, isFavorite) ||
-                other.isFavorite == isFavorite));
+            other is _$_Article &&
+            const DeepCollectionEquality().equals(other.id, id) &&
+            const DeepCollectionEquality().equals(other.title, title) &&
+            const DeepCollectionEquality().equals(other.url, url) &&
+            const DeepCollectionEquality()
+                .equals(other.urlToImage, urlToImage) &&
+            const DeepCollectionEquality()
+                .equals(other.publishedAt, publishedAt) &&
+            const DeepCollectionEquality()
+                .equals(other.isFavorite, isFavorite));
   }
-
-  @override
-  int get hashCode => Object.hash(
-      runtimeType, id, title, url, urlToImage, publishedAt, isFavorite);
 
   @JsonKey(ignore: true)
   @override
-  _$ArticleCopyWith<_Article> get copyWith =>
-      __$ArticleCopyWithImpl<_Article>(this, _$identity);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(id),
+      const DeepCollectionEquality().hash(title),
+      const DeepCollectionEquality().hash(url),
+      const DeepCollectionEquality().hash(urlToImage),
+      const DeepCollectionEquality().hash(publishedAt),
+      const DeepCollectionEquality().hash(isFavorite));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_ArticleCopyWith<_$_Article> get copyWith =>
+      __$$_ArticleCopyWithImpl<_$_Article>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ArticleToJson(this);
+    return _$$_ArticleToJson(
+      this,
+    );
   }
 }
 
 abstract class _Article implements Article {
   const factory _Article(
-      {String id,
-      String title,
-      String url,
-      String urlToImage,
-      String publishedAt,
-      bool isFavorite}) = _$_Article;
+      {final String id,
+      final String title,
+      final String url,
+      final String urlToImage,
+      final String publishedAt,
+      final bool isFavorite}) = _$_Article;
 
   factory _Article.fromJson(Map<String, dynamic> json) = _$_Article.fromJson;
 
@@ -599,6 +559,6 @@ abstract class _Article implements Article {
   bool get isFavorite;
   @override
   @JsonKey(ignore: true)
-  _$ArticleCopyWith<_Article> get copyWith =>
+  _$$_ArticleCopyWith<_$_Article> get copyWith =>
       throw _privateConstructorUsedError;
 }

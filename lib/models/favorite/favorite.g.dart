@@ -12,7 +12,7 @@ _$_FavoriteListResponse _$$_FavoriteListResponseFromJson(
       favorites: (json['favorites'] as List<dynamic>?)
               ?.map((e) => Favorite.fromJson(e as Map<String, dynamic>))
               .toList() ??
-          [],
+          const <Favorite>[],
     );
 
 Map<String, dynamic> _$$_FavoriteListResponseToJson(

@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'favorite_article_list_page_notifier.dart';
@@ -11,23 +12,7 @@ part of 'favorite_article_list_page_notifier.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$FavoriteArticleListPageStateTearOff {
-  const _$FavoriteArticleListPageStateTearOff();
-
-  _FavoriteArticleListPageState call(
-      {AsyncValue<List<Favorite>> favoritesValue =
-          const AsyncValue<List<Favorite>>.loading()}) {
-    return _FavoriteArticleListPageState(
-      favoritesValue: favoritesValue,
-    );
-  }
-}
-
-/// @nodoc
-const $FavoriteArticleListPageState = _$FavoriteArticleListPageStateTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$FavoriteArticleListPageState {
@@ -71,34 +56,34 @@ class _$FavoriteArticleListPageStateCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$FavoriteArticleListPageStateCopyWith<$Res>
+abstract class _$$_FavoriteArticleListPageStateCopyWith<$Res>
     implements $FavoriteArticleListPageStateCopyWith<$Res> {
-  factory _$FavoriteArticleListPageStateCopyWith(
-          _FavoriteArticleListPageState value,
-          $Res Function(_FavoriteArticleListPageState) then) =
-      __$FavoriteArticleListPageStateCopyWithImpl<$Res>;
+  factory _$$_FavoriteArticleListPageStateCopyWith(
+          _$_FavoriteArticleListPageState value,
+          $Res Function(_$_FavoriteArticleListPageState) then) =
+      __$$_FavoriteArticleListPageStateCopyWithImpl<$Res>;
   @override
   $Res call({AsyncValue<List<Favorite>> favoritesValue});
 }
 
 /// @nodoc
-class __$FavoriteArticleListPageStateCopyWithImpl<$Res>
+class __$$_FavoriteArticleListPageStateCopyWithImpl<$Res>
     extends _$FavoriteArticleListPageStateCopyWithImpl<$Res>
-    implements _$FavoriteArticleListPageStateCopyWith<$Res> {
-  __$FavoriteArticleListPageStateCopyWithImpl(
-      _FavoriteArticleListPageState _value,
-      $Res Function(_FavoriteArticleListPageState) _then)
-      : super(_value, (v) => _then(v as _FavoriteArticleListPageState));
+    implements _$$_FavoriteArticleListPageStateCopyWith<$Res> {
+  __$$_FavoriteArticleListPageStateCopyWithImpl(
+      _$_FavoriteArticleListPageState _value,
+      $Res Function(_$_FavoriteArticleListPageState) _then)
+      : super(_value, (v) => _then(v as _$_FavoriteArticleListPageState));
 
   @override
-  _FavoriteArticleListPageState get _value =>
-      super._value as _FavoriteArticleListPageState;
+  _$_FavoriteArticleListPageState get _value =>
+      super._value as _$_FavoriteArticleListPageState;
 
   @override
   $Res call({
     Object? favoritesValue = freezed,
   }) {
-    return _then(_FavoriteArticleListPageState(
+    return _then(_$_FavoriteArticleListPageState(
       favoritesValue: favoritesValue == freezed
           ? _value.favoritesValue
           : favoritesValue // ignore: cast_nullable_to_non_nullable
@@ -109,58 +94,49 @@ class __$FavoriteArticleListPageStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_FavoriteArticleListPageState
-    with DiagnosticableTreeMixin
-    implements _FavoriteArticleListPageState {
+class _$_FavoriteArticleListPageState implements _FavoriteArticleListPageState {
   const _$_FavoriteArticleListPageState(
       {this.favoritesValue = const AsyncValue<List<Favorite>>.loading()});
 
-  @JsonKey(defaultValue: const AsyncValue<List<Favorite>>.loading())
   @override
+  @JsonKey()
   final AsyncValue<List<Favorite>> favoritesValue;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'FavoriteArticleListPageState(favoritesValue: $favoritesValue)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'FavoriteArticleListPageState'))
-      ..add(DiagnosticsProperty('favoritesValue', favoritesValue));
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _FavoriteArticleListPageState &&
-            (identical(other.favoritesValue, favoritesValue) ||
-                other.favoritesValue == favoritesValue));
+            other is _$_FavoriteArticleListPageState &&
+            const DeepCollectionEquality()
+                .equals(other.favoritesValue, favoritesValue));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, favoritesValue);
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(favoritesValue));
 
   @JsonKey(ignore: true)
   @override
-  _$FavoriteArticleListPageStateCopyWith<_FavoriteArticleListPageState>
-      get copyWith => __$FavoriteArticleListPageStateCopyWithImpl<
-          _FavoriteArticleListPageState>(this, _$identity);
+  _$$_FavoriteArticleListPageStateCopyWith<_$_FavoriteArticleListPageState>
+      get copyWith => __$$_FavoriteArticleListPageStateCopyWithImpl<
+          _$_FavoriteArticleListPageState>(this, _$identity);
 }
 
 abstract class _FavoriteArticleListPageState
     implements FavoriteArticleListPageState {
   const factory _FavoriteArticleListPageState(
-          {AsyncValue<List<Favorite>> favoritesValue}) =
+          {final AsyncValue<List<Favorite>> favoritesValue}) =
       _$_FavoriteArticleListPageState;
 
   @override
   AsyncValue<List<Favorite>> get favoritesValue;
   @override
   @JsonKey(ignore: true)
-  _$FavoriteArticleListPageStateCopyWith<_FavoriteArticleListPageState>
+  _$$_FavoriteArticleListPageStateCopyWith<_$_FavoriteArticleListPageState>
       get copyWith => throw _privateConstructorUsedError;
 }

@@ -27,7 +27,7 @@ _$_ArticleListResponse _$$_ArticleListResponseFromJson(
       articles: (json['articles'] as List<dynamic>?)
               ?.map((e) => Article.fromJson(e as Map<String, dynamic>))
               .toList() ??
-          [],
+          const <Article>[],
     );
 
 Map<String, dynamic> _$$_ArticleListResponseToJson(

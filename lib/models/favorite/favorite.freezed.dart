@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'favorite.dart';
@@ -11,29 +12,11 @@ part of 'favorite.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 FavoriteListResponse _$FavoriteListResponseFromJson(Map<String, dynamic> json) {
   return _FavoriteListResponse.fromJson(json);
 }
-
-/// @nodoc
-class _$FavoriteListResponseTearOff {
-  const _$FavoriteListResponseTearOff();
-
-  _FavoriteListResponse call({List<Favorite> favorites = const <Favorite>[]}) {
-    return _FavoriteListResponse(
-      favorites: favorites,
-    );
-  }
-
-  FavoriteListResponse fromJson(Map<String, Object?> json) {
-    return FavoriteListResponse.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $FavoriteListResponse = _$FavoriteListResponseTearOff();
 
 /// @nodoc
 mixin _$FavoriteListResponse {
@@ -76,33 +59,33 @@ class _$FavoriteListResponseCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$FavoriteListResponseCopyWith<$Res>
+abstract class _$$_FavoriteListResponseCopyWith<$Res>
     implements $FavoriteListResponseCopyWith<$Res> {
-  factory _$FavoriteListResponseCopyWith(_FavoriteListResponse value,
-          $Res Function(_FavoriteListResponse) then) =
-      __$FavoriteListResponseCopyWithImpl<$Res>;
+  factory _$$_FavoriteListResponseCopyWith(_$_FavoriteListResponse value,
+          $Res Function(_$_FavoriteListResponse) then) =
+      __$$_FavoriteListResponseCopyWithImpl<$Res>;
   @override
   $Res call({List<Favorite> favorites});
 }
 
 /// @nodoc
-class __$FavoriteListResponseCopyWithImpl<$Res>
+class __$$_FavoriteListResponseCopyWithImpl<$Res>
     extends _$FavoriteListResponseCopyWithImpl<$Res>
-    implements _$FavoriteListResponseCopyWith<$Res> {
-  __$FavoriteListResponseCopyWithImpl(
-      _FavoriteListResponse _value, $Res Function(_FavoriteListResponse) _then)
-      : super(_value, (v) => _then(v as _FavoriteListResponse));
+    implements _$$_FavoriteListResponseCopyWith<$Res> {
+  __$$_FavoriteListResponseCopyWithImpl(_$_FavoriteListResponse _value,
+      $Res Function(_$_FavoriteListResponse) _then)
+      : super(_value, (v) => _then(v as _$_FavoriteListResponse));
 
   @override
-  _FavoriteListResponse get _value => super._value as _FavoriteListResponse;
+  _$_FavoriteListResponse get _value => super._value as _$_FavoriteListResponse;
 
   @override
   $Res call({
     Object? favorites = freezed,
   }) {
-    return _then(_FavoriteListResponse(
+    return _then(_$_FavoriteListResponse(
       favorites: favorites == freezed
-          ? _value.favorites
+          ? _value._favorites
           : favorites // ignore: cast_nullable_to_non_nullable
               as List<Favorite>,
     ));
@@ -112,14 +95,20 @@ class __$FavoriteListResponseCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_FavoriteListResponse implements _FavoriteListResponse {
-  const _$_FavoriteListResponse({this.favorites = const <Favorite>[]});
+  const _$_FavoriteListResponse(
+      {final List<Favorite> favorites = const <Favorite>[]})
+      : _favorites = favorites;
 
   factory _$_FavoriteListResponse.fromJson(Map<String, dynamic> json) =>
       _$$_FavoriteListResponseFromJson(json);
 
-  @JsonKey(defaultValue: const <Favorite>[])
+  final List<Favorite> _favorites;
   @override
-  final List<Favorite> favorites;
+  @JsonKey()
+  List<Favorite> get favorites {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_favorites);
+  }
 
   @override
   String toString() {
@@ -130,28 +119,32 @@ class _$_FavoriteListResponse implements _FavoriteListResponse {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _FavoriteListResponse &&
-            const DeepCollectionEquality().equals(other.favorites, favorites));
+            other is _$_FavoriteListResponse &&
+            const DeepCollectionEquality()
+                .equals(other._favorites, _favorites));
   }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(favorites));
 
   @JsonKey(ignore: true)
   @override
-  _$FavoriteListResponseCopyWith<_FavoriteListResponse> get copyWith =>
-      __$FavoriteListResponseCopyWithImpl<_FavoriteListResponse>(
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_favorites));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_FavoriteListResponseCopyWith<_$_FavoriteListResponse> get copyWith =>
+      __$$_FavoriteListResponseCopyWithImpl<_$_FavoriteListResponse>(
           this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_FavoriteListResponseToJson(this);
+    return _$$_FavoriteListResponseToJson(
+      this,
+    );
   }
 }
 
 abstract class _FavoriteListResponse implements FavoriteListResponse {
-  const factory _FavoriteListResponse({List<Favorite> favorites}) =
+  const factory _FavoriteListResponse({final List<Favorite> favorites}) =
       _$_FavoriteListResponse;
 
   factory _FavoriteListResponse.fromJson(Map<String, dynamic> json) =
@@ -161,40 +154,13 @@ abstract class _FavoriteListResponse implements FavoriteListResponse {
   List<Favorite> get favorites;
   @override
   @JsonKey(ignore: true)
-  _$FavoriteListResponseCopyWith<_FavoriteListResponse> get copyWith =>
+  _$$_FavoriteListResponseCopyWith<_$_FavoriteListResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 Favorite _$FavoriteFromJson(Map<String, dynamic> json) {
   return _Favorite.fromJson(json);
 }
-
-/// @nodoc
-class _$FavoriteTearOff {
-  const _$FavoriteTearOff();
-
-  _Favorite call(
-      {String id = '',
-      String userId = '',
-      String articleId = '',
-      String createdAt = '',
-      Article? article}) {
-    return _Favorite(
-      id: id,
-      userId: userId,
-      articleId: articleId,
-      createdAt: createdAt,
-      article: article,
-    );
-  }
-
-  Favorite fromJson(Map<String, Object?> json) {
-    return Favorite.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $Favorite = _$FavoriteTearOff();
 
 /// @nodoc
 mixin _$Favorite {
@@ -277,9 +243,10 @@ class _$FavoriteCopyWithImpl<$Res> implements $FavoriteCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$FavoriteCopyWith<$Res> implements $FavoriteCopyWith<$Res> {
-  factory _$FavoriteCopyWith(_Favorite value, $Res Function(_Favorite) then) =
-      __$FavoriteCopyWithImpl<$Res>;
+abstract class _$$_FavoriteCopyWith<$Res> implements $FavoriteCopyWith<$Res> {
+  factory _$$_FavoriteCopyWith(
+          _$_Favorite value, $Res Function(_$_Favorite) then) =
+      __$$_FavoriteCopyWithImpl<$Res>;
   @override
   $Res call(
       {String id,
@@ -293,13 +260,14 @@ abstract class _$FavoriteCopyWith<$Res> implements $FavoriteCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$FavoriteCopyWithImpl<$Res> extends _$FavoriteCopyWithImpl<$Res>
-    implements _$FavoriteCopyWith<$Res> {
-  __$FavoriteCopyWithImpl(_Favorite _value, $Res Function(_Favorite) _then)
-      : super(_value, (v) => _then(v as _Favorite));
+class __$$_FavoriteCopyWithImpl<$Res> extends _$FavoriteCopyWithImpl<$Res>
+    implements _$$_FavoriteCopyWith<$Res> {
+  __$$_FavoriteCopyWithImpl(
+      _$_Favorite _value, $Res Function(_$_Favorite) _then)
+      : super(_value, (v) => _then(v as _$_Favorite));
 
   @override
-  _Favorite get _value => super._value as _Favorite;
+  _$_Favorite get _value => super._value as _$_Favorite;
 
   @override
   $Res call({
@@ -309,7 +277,7 @@ class __$FavoriteCopyWithImpl<$Res> extends _$FavoriteCopyWithImpl<$Res>
     Object? createdAt = freezed,
     Object? article = freezed,
   }) {
-    return _then(_Favorite(
+    return _then(_$_Favorite(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -348,17 +316,17 @@ class _$_Favorite implements _Favorite {
   factory _$_Favorite.fromJson(Map<String, dynamic> json) =>
       _$$_FavoriteFromJson(json);
 
-  @JsonKey(defaultValue: '')
   @override
+  @JsonKey()
   final String id;
-  @JsonKey(defaultValue: '')
   @override
+  @JsonKey()
   final String userId;
-  @JsonKey(defaultValue: '')
   @override
+  @JsonKey()
   final String articleId;
-  @JsonKey(defaultValue: '')
   @override
+  @JsonKey()
   final String createdAt;
   @override
   final Article? article;
@@ -372,38 +340,44 @@ class _$_Favorite implements _Favorite {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Favorite &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.userId, userId) || other.userId == userId) &&
-            (identical(other.articleId, articleId) ||
-                other.articleId == articleId) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.article, article) || other.article == article));
+            other is _$_Favorite &&
+            const DeepCollectionEquality().equals(other.id, id) &&
+            const DeepCollectionEquality().equals(other.userId, userId) &&
+            const DeepCollectionEquality().equals(other.articleId, articleId) &&
+            const DeepCollectionEquality().equals(other.createdAt, createdAt) &&
+            const DeepCollectionEquality().equals(other.article, article));
   }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, userId, articleId, createdAt, article);
 
   @JsonKey(ignore: true)
   @override
-  _$FavoriteCopyWith<_Favorite> get copyWith =>
-      __$FavoriteCopyWithImpl<_Favorite>(this, _$identity);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(id),
+      const DeepCollectionEquality().hash(userId),
+      const DeepCollectionEquality().hash(articleId),
+      const DeepCollectionEquality().hash(createdAt),
+      const DeepCollectionEquality().hash(article));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_FavoriteCopyWith<_$_Favorite> get copyWith =>
+      __$$_FavoriteCopyWithImpl<_$_Favorite>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_FavoriteToJson(this);
+    return _$$_FavoriteToJson(
+      this,
+    );
   }
 }
 
 abstract class _Favorite implements Favorite {
   const factory _Favorite(
-      {String id,
-      String userId,
-      String articleId,
-      String createdAt,
-      Article? article}) = _$_Favorite;
+      {final String id,
+      final String userId,
+      final String articleId,
+      final String createdAt,
+      final Article? article}) = _$_Favorite;
 
   factory _Favorite.fromJson(Map<String, dynamic> json) = _$_Favorite.fromJson;
 
@@ -419,6 +393,6 @@ abstract class _Favorite implements Favorite {
   Article? get article;
   @override
   @JsonKey(ignore: true)
-  _$FavoriteCopyWith<_Favorite> get copyWith =>
+  _$$_FavoriteCopyWith<_$_Favorite> get copyWith =>
       throw _privateConstructorUsedError;
 }

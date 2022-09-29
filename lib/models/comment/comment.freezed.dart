@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'comment.dart';
@@ -11,29 +12,11 @@ part of 'comment.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 CommentListResponse _$CommentListResponseFromJson(Map<String, dynamic> json) {
   return _CommentListResponse.fromJson(json);
 }
-
-/// @nodoc
-class _$CommentListResponseTearOff {
-  const _$CommentListResponseTearOff();
-
-  _CommentListResponse call({List<Comment> comments = const <Comment>[]}) {
-    return _CommentListResponse(
-      comments: comments,
-    );
-  }
-
-  CommentListResponse fromJson(Map<String, Object?> json) {
-    return CommentListResponse.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $CommentListResponse = _$CommentListResponseTearOff();
 
 /// @nodoc
 mixin _$CommentListResponse {
@@ -76,33 +59,33 @@ class _$CommentListResponseCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$CommentListResponseCopyWith<$Res>
+abstract class _$$_CommentListResponseCopyWith<$Res>
     implements $CommentListResponseCopyWith<$Res> {
-  factory _$CommentListResponseCopyWith(_CommentListResponse value,
-          $Res Function(_CommentListResponse) then) =
-      __$CommentListResponseCopyWithImpl<$Res>;
+  factory _$$_CommentListResponseCopyWith(_$_CommentListResponse value,
+          $Res Function(_$_CommentListResponse) then) =
+      __$$_CommentListResponseCopyWithImpl<$Res>;
   @override
   $Res call({List<Comment> comments});
 }
 
 /// @nodoc
-class __$CommentListResponseCopyWithImpl<$Res>
+class __$$_CommentListResponseCopyWithImpl<$Res>
     extends _$CommentListResponseCopyWithImpl<$Res>
-    implements _$CommentListResponseCopyWith<$Res> {
-  __$CommentListResponseCopyWithImpl(
-      _CommentListResponse _value, $Res Function(_CommentListResponse) _then)
-      : super(_value, (v) => _then(v as _CommentListResponse));
+    implements _$$_CommentListResponseCopyWith<$Res> {
+  __$$_CommentListResponseCopyWithImpl(_$_CommentListResponse _value,
+      $Res Function(_$_CommentListResponse) _then)
+      : super(_value, (v) => _then(v as _$_CommentListResponse));
 
   @override
-  _CommentListResponse get _value => super._value as _CommentListResponse;
+  _$_CommentListResponse get _value => super._value as _$_CommentListResponse;
 
   @override
   $Res call({
     Object? comments = freezed,
   }) {
-    return _then(_CommentListResponse(
+    return _then(_$_CommentListResponse(
       comments: comments == freezed
-          ? _value.comments
+          ? _value._comments
           : comments // ignore: cast_nullable_to_non_nullable
               as List<Comment>,
     ));
@@ -112,14 +95,20 @@ class __$CommentListResponseCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_CommentListResponse implements _CommentListResponse {
-  const _$_CommentListResponse({this.comments = const <Comment>[]});
+  const _$_CommentListResponse(
+      {final List<Comment> comments = const <Comment>[]})
+      : _comments = comments;
 
   factory _$_CommentListResponse.fromJson(Map<String, dynamic> json) =>
       _$$_CommentListResponseFromJson(json);
 
-  @JsonKey(defaultValue: const <Comment>[])
+  final List<Comment> _comments;
   @override
-  final List<Comment> comments;
+  @JsonKey()
+  List<Comment> get comments {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_comments);
+  }
 
   @override
   String toString() {
@@ -130,28 +119,31 @@ class _$_CommentListResponse implements _CommentListResponse {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _CommentListResponse &&
-            const DeepCollectionEquality().equals(other.comments, comments));
+            other is _$_CommentListResponse &&
+            const DeepCollectionEquality().equals(other._comments, _comments));
   }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(comments));
 
   @JsonKey(ignore: true)
   @override
-  _$CommentListResponseCopyWith<_CommentListResponse> get copyWith =>
-      __$CommentListResponseCopyWithImpl<_CommentListResponse>(
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_comments));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_CommentListResponseCopyWith<_$_CommentListResponse> get copyWith =>
+      __$$_CommentListResponseCopyWithImpl<_$_CommentListResponse>(
           this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_CommentListResponseToJson(this);
+    return _$$_CommentListResponseToJson(
+      this,
+    );
   }
 }
 
 abstract class _CommentListResponse implements CommentListResponse {
-  const factory _CommentListResponse({List<Comment> comments}) =
+  const factory _CommentListResponse({final List<Comment> comments}) =
       _$_CommentListResponse;
 
   factory _CommentListResponse.fromJson(Map<String, dynamic> json) =
@@ -161,7 +153,7 @@ abstract class _CommentListResponse implements CommentListResponse {
   List<Comment> get comments;
   @override
   @JsonKey(ignore: true)
-  _$CommentListResponseCopyWith<_CommentListResponse> get copyWith =>
+  _$$_CommentListResponseCopyWith<_$_CommentListResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -169,25 +161,6 @@ CommentListFilteredResponse _$CommentListFilteredResponseFromJson(
     Map<String, dynamic> json) {
   return _CommentListFilteredResponse.fromJson(json);
 }
-
-/// @nodoc
-class _$CommentListFilteredResponseTearOff {
-  const _$CommentListFilteredResponseTearOff();
-
-  _CommentListFilteredResponse call(
-      {List<Comment> commentsFiltered = const <Comment>[]}) {
-    return _CommentListFilteredResponse(
-      commentsFiltered: commentsFiltered,
-    );
-  }
-
-  CommentListFilteredResponse fromJson(Map<String, Object?> json) {
-    return CommentListFilteredResponse.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $CommentListFilteredResponse = _$CommentListFilteredResponseTearOff();
 
 /// @nodoc
 mixin _$CommentListFilteredResponse {
@@ -231,36 +204,36 @@ class _$CommentListFilteredResponseCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$CommentListFilteredResponseCopyWith<$Res>
+abstract class _$$_CommentListFilteredResponseCopyWith<$Res>
     implements $CommentListFilteredResponseCopyWith<$Res> {
-  factory _$CommentListFilteredResponseCopyWith(
-          _CommentListFilteredResponse value,
-          $Res Function(_CommentListFilteredResponse) then) =
-      __$CommentListFilteredResponseCopyWithImpl<$Res>;
+  factory _$$_CommentListFilteredResponseCopyWith(
+          _$_CommentListFilteredResponse value,
+          $Res Function(_$_CommentListFilteredResponse) then) =
+      __$$_CommentListFilteredResponseCopyWithImpl<$Res>;
   @override
   $Res call({List<Comment> commentsFiltered});
 }
 
 /// @nodoc
-class __$CommentListFilteredResponseCopyWithImpl<$Res>
+class __$$_CommentListFilteredResponseCopyWithImpl<$Res>
     extends _$CommentListFilteredResponseCopyWithImpl<$Res>
-    implements _$CommentListFilteredResponseCopyWith<$Res> {
-  __$CommentListFilteredResponseCopyWithImpl(
-      _CommentListFilteredResponse _value,
-      $Res Function(_CommentListFilteredResponse) _then)
-      : super(_value, (v) => _then(v as _CommentListFilteredResponse));
+    implements _$$_CommentListFilteredResponseCopyWith<$Res> {
+  __$$_CommentListFilteredResponseCopyWithImpl(
+      _$_CommentListFilteredResponse _value,
+      $Res Function(_$_CommentListFilteredResponse) _then)
+      : super(_value, (v) => _then(v as _$_CommentListFilteredResponse));
 
   @override
-  _CommentListFilteredResponse get _value =>
-      super._value as _CommentListFilteredResponse;
+  _$_CommentListFilteredResponse get _value =>
+      super._value as _$_CommentListFilteredResponse;
 
   @override
   $Res call({
     Object? commentsFiltered = freezed,
   }) {
-    return _then(_CommentListFilteredResponse(
+    return _then(_$_CommentListFilteredResponse(
       commentsFiltered: commentsFiltered == freezed
-          ? _value.commentsFiltered
+          ? _value._commentsFiltered
           : commentsFiltered // ignore: cast_nullable_to_non_nullable
               as List<Comment>,
     ));
@@ -272,14 +245,19 @@ class __$CommentListFilteredResponseCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$_CommentListFilteredResponse implements _CommentListFilteredResponse {
   const _$_CommentListFilteredResponse(
-      {this.commentsFiltered = const <Comment>[]});
+      {final List<Comment> commentsFiltered = const <Comment>[]})
+      : _commentsFiltered = commentsFiltered;
 
   factory _$_CommentListFilteredResponse.fromJson(Map<String, dynamic> json) =>
       _$$_CommentListFilteredResponseFromJson(json);
 
-  @JsonKey(defaultValue: const <Comment>[])
+  final List<Comment> _commentsFiltered;
   @override
-  final List<Comment> commentsFiltered;
+  @JsonKey()
+  List<Comment> get commentsFiltered {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_commentsFiltered);
+  }
 
   @override
   String toString() {
@@ -290,31 +268,34 @@ class _$_CommentListFilteredResponse implements _CommentListFilteredResponse {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _CommentListFilteredResponse &&
+            other is _$_CommentListFilteredResponse &&
             const DeepCollectionEquality()
-                .equals(other.commentsFiltered, commentsFiltered));
+                .equals(other._commentsFiltered, _commentsFiltered));
   }
-
-  @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(commentsFiltered));
 
   @JsonKey(ignore: true)
   @override
-  _$CommentListFilteredResponseCopyWith<_CommentListFilteredResponse>
-      get copyWith => __$CommentListFilteredResponseCopyWithImpl<
-          _CommentListFilteredResponse>(this, _$identity);
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_commentsFiltered));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_CommentListFilteredResponseCopyWith<_$_CommentListFilteredResponse>
+      get copyWith => __$$_CommentListFilteredResponseCopyWithImpl<
+          _$_CommentListFilteredResponse>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_CommentListFilteredResponseToJson(this);
+    return _$$_CommentListFilteredResponseToJson(
+      this,
+    );
   }
 }
 
 abstract class _CommentListFilteredResponse
     implements CommentListFilteredResponse {
-  const factory _CommentListFilteredResponse({List<Comment> commentsFiltered}) =
-      _$_CommentListFilteredResponse;
+  const factory _CommentListFilteredResponse(
+      {final List<Comment> commentsFiltered}) = _$_CommentListFilteredResponse;
 
   factory _CommentListFilteredResponse.fromJson(Map<String, dynamic> json) =
       _$_CommentListFilteredResponse.fromJson;
@@ -323,42 +304,13 @@ abstract class _CommentListFilteredResponse
   List<Comment> get commentsFiltered;
   @override
   @JsonKey(ignore: true)
-  _$CommentListFilteredResponseCopyWith<_CommentListFilteredResponse>
+  _$$_CommentListFilteredResponseCopyWith<_$_CommentListFilteredResponse>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 Comment _$CommentFromJson(Map<String, dynamic> json) {
   return _Comment.fromJson(json);
 }
-
-/// @nodoc
-class _$CommentTearOff {
-  const _$CommentTearOff();
-
-  _Comment call(
-      {String id = '',
-      String text = '',
-      String userId = '',
-      String articleId = '',
-      String createdAt = '',
-      AppUser? user}) {
-    return _Comment(
-      id: id,
-      text: text,
-      userId: userId,
-      articleId: articleId,
-      createdAt: createdAt,
-      user: user,
-    );
-  }
-
-  Comment fromJson(Map<String, Object?> json) {
-    return Comment.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $Comment = _$CommentTearOff();
 
 /// @nodoc
 mixin _$Comment {
@@ -448,9 +400,10 @@ class _$CommentCopyWithImpl<$Res> implements $CommentCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$CommentCopyWith<$Res> implements $CommentCopyWith<$Res> {
-  factory _$CommentCopyWith(_Comment value, $Res Function(_Comment) then) =
-      __$CommentCopyWithImpl<$Res>;
+abstract class _$$_CommentCopyWith<$Res> implements $CommentCopyWith<$Res> {
+  factory _$$_CommentCopyWith(
+          _$_Comment value, $Res Function(_$_Comment) then) =
+      __$$_CommentCopyWithImpl<$Res>;
   @override
   $Res call(
       {String id,
@@ -465,13 +418,13 @@ abstract class _$CommentCopyWith<$Res> implements $CommentCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$CommentCopyWithImpl<$Res> extends _$CommentCopyWithImpl<$Res>
-    implements _$CommentCopyWith<$Res> {
-  __$CommentCopyWithImpl(_Comment _value, $Res Function(_Comment) _then)
-      : super(_value, (v) => _then(v as _Comment));
+class __$$_CommentCopyWithImpl<$Res> extends _$CommentCopyWithImpl<$Res>
+    implements _$$_CommentCopyWith<$Res> {
+  __$$_CommentCopyWithImpl(_$_Comment _value, $Res Function(_$_Comment) _then)
+      : super(_value, (v) => _then(v as _$_Comment));
 
   @override
-  _Comment get _value => super._value as _Comment;
+  _$_Comment get _value => super._value as _$_Comment;
 
   @override
   $Res call({
@@ -482,7 +435,7 @@ class __$CommentCopyWithImpl<$Res> extends _$CommentCopyWithImpl<$Res>
     Object? createdAt = freezed,
     Object? user = freezed,
   }) {
-    return _then(_Comment(
+    return _then(_$_Comment(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -527,22 +480,23 @@ class _$_Comment extends _Comment {
   factory _$_Comment.fromJson(Map<String, dynamic> json) =>
       _$$_CommentFromJson(json);
 
-  @JsonKey(defaultValue: '')
   @override
+  @JsonKey()
   final String id;
-  @JsonKey(defaultValue: '')
   @override
+  @JsonKey()
   final String text;
-  @JsonKey(defaultValue: '')
   @override
+  @JsonKey()
   final String userId;
-  @JsonKey(defaultValue: '')
   @override
+  @JsonKey()
   final String articleId;
-  @JsonKey(defaultValue: '')
   @override
+  @JsonKey()
   final String createdAt;
-  @override // TODO: デフォルトでAppUserのコンストラクタを指定する
+// TODO: デフォルトでAppUserのコンストラクタを指定する
+  @override
   final AppUser? user;
 
   @override
@@ -554,40 +508,47 @@ class _$_Comment extends _Comment {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Comment &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.text, text) || other.text == text) &&
-            (identical(other.userId, userId) || other.userId == userId) &&
-            (identical(other.articleId, articleId) ||
-                other.articleId == articleId) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.user, user) || other.user == user));
+            other is _$_Comment &&
+            const DeepCollectionEquality().equals(other.id, id) &&
+            const DeepCollectionEquality().equals(other.text, text) &&
+            const DeepCollectionEquality().equals(other.userId, userId) &&
+            const DeepCollectionEquality().equals(other.articleId, articleId) &&
+            const DeepCollectionEquality().equals(other.createdAt, createdAt) &&
+            const DeepCollectionEquality().equals(other.user, user));
   }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, text, userId, articleId, createdAt, user);
 
   @JsonKey(ignore: true)
   @override
-  _$CommentCopyWith<_Comment> get copyWith =>
-      __$CommentCopyWithImpl<_Comment>(this, _$identity);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(id),
+      const DeepCollectionEquality().hash(text),
+      const DeepCollectionEquality().hash(userId),
+      const DeepCollectionEquality().hash(articleId),
+      const DeepCollectionEquality().hash(createdAt),
+      const DeepCollectionEquality().hash(user));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_CommentCopyWith<_$_Comment> get copyWith =>
+      __$$_CommentCopyWithImpl<_$_Comment>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_CommentToJson(this);
+    return _$$_CommentToJson(
+      this,
+    );
   }
 }
 
 abstract class _Comment extends Comment {
   const factory _Comment(
-      {String id,
-      String text,
-      String userId,
-      String articleId,
-      String createdAt,
-      AppUser? user}) = _$_Comment;
+      {final String id,
+      final String text,
+      final String userId,
+      final String articleId,
+      final String createdAt,
+      final AppUser? user}) = _$_Comment;
   const _Comment._() : super._();
 
   factory _Comment.fromJson(Map<String, dynamic> json) = _$_Comment.fromJson;
@@ -606,6 +567,6 @@ abstract class _Comment extends Comment {
   AppUser? get user;
   @override
   @JsonKey(ignore: true)
-  _$CommentCopyWith<_Comment> get copyWith =>
+  _$$_CommentCopyWith<_$_Comment> get copyWith =>
       throw _privateConstructorUsedError;
 }
