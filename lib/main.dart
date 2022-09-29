@@ -76,6 +76,7 @@ class MyApp extends StatelessWidget {
           return locale;
         },
         navigatorObservers: [FirebaseAnalyticsObserver(analytics: analytics)],
+        debugShowCheckedModeBanner: false,
       ),
     );
   }
