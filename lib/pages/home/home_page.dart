@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('LaboFlutter'),
+        title: const Text('Web3News'),
         bottom: PreferredSize(
             preferredSize: const Size.fromHeight(30),
             child: TabBar(
